@@ -43,7 +43,6 @@ body {
 
 .hide {
     opacity: 0;
-    transition: opacity 500ms ease;
     pointer-events: none;
 }
 
@@ -72,8 +71,16 @@ body {
 }
 
 .current-ep-label {
-    font-weight: 400;
     font-size: 1.75rem;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-end;
+}
+
+.current-ep-label > .current-ep-watched {
+    color:rgba(255, 255, 255, 0.5);
+    font-size: 0.75rem;
+    padding: 0.25rem 0;
 }
 
 .player-select {

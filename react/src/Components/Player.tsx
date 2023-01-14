@@ -1,60 +1,57 @@
-import { Listbox, Transition } from '@headlessui/react';
-import { FC, useState, Fragment } from 'react';
-import { SlArrowDown, SlArrowLeft, SlArrowRight } from 'react-icons/sl'
+import { FC, useState } from 'react';
+import { SlArrowLeft, SlArrowRight } from 'react-icons/sl';
+import PlayerSelect from './PlayerSelect';
+import { isSinglePagePlayer } from '../misc';
+import { useAnimeJoyLegacyStore } from "../Hooks/useAnimeJoyLegacyStore";
+
+
+export type playerData = { name: string, files: string[] }
 
 type PlayerProps = {
-    availablePlayers: { name: string, files: string[] }[]
+    availablePlayers: playerData[]
 }
 
 const Player: FC<PlayerProps> = ({ availablePlayers }) => {
 
     const [currentPlayerId, setCurrentPlayerId] = useState(0);
     const [currentEpisodeId, setCurrentEpisodeId] = useState(0);
-    
+
     const currentPlayer = availablePlayers[currentPlayerId];
-    
+
+    const [watchedEpisodes] = useAnimeJoyLegacyStore(availablePlayers)
+
     const changeEpisodeId = (to: "next" | "prev" | number) => {
         let newId = to;
         if (to === "next") newId = currentEpisodeId + 1;
         else if (to === "prev") newId = currentEpisodeId - 1;
-        
+
         if (currentPlayer.files[+newId])
             setCurrentEpisodeId(_ => +newId);
     }
-    
+
     const canChangeEpisodeId = (to: "next" | "prev" | number) => {
         let newId = to;
         if (to === "next") newId = currentEpisodeId + 1;
         else if (to === "prev") newId = currentEpisodeId - 1;
-        
+
         return (currentPlayer.files[+newId] !== undefined)
     }
 
-    const epLabel = currentPlayer.name === "Kodik" ? "Kodik" : currentPlayer.name === "Alloha" ? "Alloha" : `Серия ${currentEpisodeId + 1}`;
+    const epLabel = isSinglePagePlayer(currentPlayer.name) ? currentPlayer.name : `Серия ${currentEpisodeId + 1}`;
+
+
 
     return (
         <section className="player">
             <div className="player-top-section">
-                <div className="current-ep-label" children={epLabel} />
-                <Listbox as={"div"} className="player-select" value={currentPlayerId} onChange={setCurrentPlayerId}>
-                    <Listbox.Button className="select-btn">
-                        <span>{currentPlayer.name}</span>
-                        <SlArrowDown />
-                    </Listbox.Button>
-                    <Transition as={Fragment}>
-                        <Listbox.Options className={"select-options"}>
-                            {availablePlayers.map((p, i) => <Listbox.Option
-                                key={i}
-                                className={({ active, selected }) => `select-option${active ? " active" : ""}${selected ? " selected" : ""}`}
-                                value={i}
-                                children={p.name}
-                            />)
-                            }
-                        </Listbox.Options>
-                    </Transition>
-                </Listbox>
+                <div className={`current-ep-label${isSinglePagePlayer(currentPlayer.name) ? " hide" : " show"}`}>
+                    <span children={epLabel} />
+                    {watchedEpisodes.has(currentEpisodeId) &&
+                        <span className="current-ep-watched" children={"Посмотрено"} />}
+                </div>
+                <PlayerSelect availablePlayers={availablePlayers} currentPlayerId={currentPlayerId} setCurrentPlayerId={setCurrentPlayerId} />
             </div>
-            <button className={`player-left-section${!canChangeEpisodeId("prev") ? " hide": " show"}`} onClick={() => changeEpisodeId("prev")}>
+            <button className={`player-left-section${!canChangeEpisodeId("prev") ? " hide" : " show"}`} onClick={() => changeEpisodeId("prev")}>
                 <div className="wrapper">
                     <SlArrowLeft />
                     <div className="hint" children={"Предыдущая серия"} />
@@ -65,7 +62,7 @@ const Player: FC<PlayerProps> = ({ availablePlayers }) => {
                 src={currentPlayer.files[currentEpisodeId]}
                 allowFullScreen={true}
             />
-            <button className={`player-right-section${!canChangeEpisodeId("next") ? " hide": " show"}`} onClick={() => changeEpisodeId("next")}>
+            <button className={`player-right-section${!canChangeEpisodeId("next") ? " hide" : " show"}`} onClick={() => changeEpisodeId("next")}>
                 <div className="wrapper">
                     <SlArrowRight />
                     <div className="hint" children={"Следующая серия"} />
