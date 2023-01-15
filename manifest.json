@@ -4,7 +4,8 @@
     "manifest_version": 3,
     "permissions": [
         "storage",
-        "scripting"
+        "scripting",
+        "tabs"
     ],
     "host_permissions": [
         "https://*.animejoy.ru/*"

@@ -33,7 +33,17 @@ chrome.storage.onChanged.addListener((changes, area) => {
     console.log({changes, area});
     if (changes.enabled.newValue === true) {
         injectScript();
+        refreshAnimeJoyTabs();
     } else if (changes.enabled.newValue === false) {
         ejectScript();
+        refreshAnimeJoyTabs();
     }
 })
+
+async function refreshAnimeJoyTabs() {
+    let queryOptions = { url: "https://animejoy.ru/*" };
+    let tabs = await chrome.tabs.query(queryOptions);
+    if (tabs) {
+        tabs.forEach(tab => chrome.tabs.reload(tab.id));
+    }
+}
