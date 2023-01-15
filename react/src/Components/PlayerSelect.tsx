@@ -15,7 +15,7 @@ const PlayerSelect: FC<PlayerSelectProps> = ({ availablePlayers, currentPlayerId
     const currentPlayer = availablePlayers[currentPlayerId];
 
     return (
-        <Listbox as={"div"} className="player-select" value={currentPlayerId} onChange={setCurrentPlayerId}>
+        <Listbox as={"div"} className="select player-select" value={currentPlayerId} onChange={setCurrentPlayerId}>
             <Listbox.Button className="select-btn">
                 <span>{currentPlayer.name}</span>
                 <SlArrowDown />
