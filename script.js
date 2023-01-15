@@ -1,17 +1,17 @@
-console.log("ext started")
 
-const preparationsInterval = setInterval(() => {
-    if (!document.body) return;
+window.addEventListener("DOMContentLoaded", () => {
+    document.documentElement.classList.add("shikijoy");
 
-    clearInterval(preparationsInterval);
+    const toDelete = [];
 
     document.head.childNodes.forEach(c => {
         if (c.tagName === "STYLE" || (c.tagName === "LINK" && c.getAttribute("type") === "text/css")) {
-            document.head.removeChild(c);
+            toDelete.push(c);
         }
     })
 
-}, 50);
+    toDelete.forEach(c => document.head.removeChild(c))
+})
 
 const interval = setInterval(() => {
 
@@ -39,12 +39,12 @@ const interval = setInterval(() => {
     const appEL = document.createElement("div");
     appEL.setAttribute("id", "app");
     document.body.appendChild(appEL);
-    console.log(JSON.stringify(players));
+    // console.log(JSON.stringify(players));
 
     (async () => {
-        
         const react = await import(chrome.runtime.getURL("react/dist/index.js"));
-        
     })();
 
-}, 100);
+}, 50);
+
+

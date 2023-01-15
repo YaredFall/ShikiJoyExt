@@ -2,21 +2,24 @@
     "name": "ShikiJoy",
     "version": "0.0.1",
     "manifest_version": 3,
+    "permissions": [
+        "storage",
+        "scripting"
+    ],
+    "host_permissions": [
+        "https://*.animejoy.ru/*"
+    ],
     "icons": {
         "128": "logo.png"
     },
-    "content_scripts": [
-        {
-            "matches": [
-                "https://*.animejoy.ru/*"
-            ],
-            "run_at": "document_start",
-            "js": [
-                "script.js"
-            ],
-            "css" : ["index.css"]
-        }
-    ],
+    "action": {
+        "default_popup": "popup.html",
+        "default_title": "ShikiJoy settings"
+    },
+    "background": {
+        "service_worker": "background.js",
+        "type": "module"
+    },
     "web_accessible_resources": [
         {
             "matches": [
