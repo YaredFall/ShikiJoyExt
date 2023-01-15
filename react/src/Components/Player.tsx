@@ -3,22 +3,23 @@ import { SlArrowLeft, SlArrowRight } from 'react-icons/sl';
 import PlayerSelect from './PlayerSelect';
 import { isSinglePagePlayer } from '../misc';
 import { useAnimeJoyLegacyStore } from "../Hooks/useAnimeJoyLegacyStore";
+import {AnimeData} from "../types";
 
-
-export type playerData = { name: string, files: string[] }
 
 type PlayerProps = {
-    availablePlayers: playerData[]
+    animeData: AnimeData
 }
 
-const Player: FC<PlayerProps> = ({ availablePlayers }) => {
+const Player: FC<PlayerProps> = ({ animeData }) => {
+    //TODO get rid of this variable
+    const availablePlayers = animeData.players;
 
     const [currentPlayerId, setCurrentPlayerId] = useState(0);
     const [currentEpisodeId, setCurrentEpisodeId] = useState(0);
 
     const currentPlayer = availablePlayers[currentPlayerId];
 
-    const [watchedEpisodes] = useAnimeJoyLegacyStore(availablePlayers)
+    const [watchedEpisodes] = useAnimeJoyLegacyStore(animeData);
 
     const changeEpisodeId = (to: "next" | "prev" | number) => {
         let newId = to;

@@ -1,7 +1,7 @@
 import { Listbox, Transition } from '@headlessui/react';
 import React, { FC, Fragment } from 'react';
 import { SlArrowDown } from 'react-icons/sl';
-import { playerData } from './Player';
+import {playerData} from "../types";
 
 
 type PlayerSelectProps = {
@@ -11,7 +11,7 @@ type PlayerSelectProps = {
 }
 
 const PlayerSelect: FC<PlayerSelectProps> = ({ availablePlayers, currentPlayerId, setCurrentPlayerId }) => {
-    
+
     const currentPlayer = availablePlayers[currentPlayerId];
 
     return (

@@ -19,7 +19,9 @@ const AnimePage: FC<AnimePageProps> = ({ }) => {
         <main>
             <h1 className="anime-title-ru" children={"Title ru"} />
             <h2 className="anime-title-romaji" children={"Title romaji"} />
-            <Player availablePlayers={animeData.players} />
+
+            <Player animeData={animeData} />
+
         </main>
     );
 };
