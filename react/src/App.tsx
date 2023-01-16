@@ -17,10 +17,11 @@ function App() {
 
             <Routes>
                 <Route path={"/tv-serialy"} >
-                    <Route index element={"Сериалы"}/>
-                    <Route path={":id"} element={<AnimePage/>}/>
+                    <Route index element={"Сериалы"} />
+                    <Route path={":id"} element={<AnimePage/>} />
                 </Route>
-                <Route path={"/"} element={<div>Home Page</div>}/>
+                <Route path={"/"} element={<div>Home Page</div>} />
+                <Route path={"*"} element={<div>Not found</div>} />
             </Routes>
         </BrowserRouter>
     )
