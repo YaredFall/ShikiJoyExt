@@ -15,12 +15,15 @@ const MemoizedRightIcon = memo(SlArrowRight);
 
 const Player: FC<PlayerProps> = memo(({ animeData }) => {
 
-    const [currentPlayerId, setCurrentPlayerId] = useState(0);
-    const [currentEpisodeId, setCurrentEpisodeId] = useState(0);
+    const [watchedEpisodes, playersUsage] = useAnimeJoyLegacyStore(animeData);
+
+    const lastNotWatched = watchedEpisodes.size > 1 ? Math.max(...watchedEpisodes) + 1 : 0;
+    const mostUsedPlayerId = playersUsage.indexOf(Math.max(...playersUsage))
+
+    const [currentPlayerId, setCurrentPlayerId] = useState(mostUsedPlayerId);
+    const [currentEpisodeId, setCurrentEpisodeId] = useState(lastNotWatched);
 
     const currentPlayer = animeData.players[currentPlayerId];
-
-    const [watchedEpisodes] = useAnimeJoyLegacyStore(animeData);
 
     const changeEpisodeId = (to: "next" | "prev" | number) => {
         let newId = to;
