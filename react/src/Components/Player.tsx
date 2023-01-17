@@ -71,7 +71,7 @@ const Player: FC<PlayerProps> = memo(({ animeData }) => {
             </button>
             <iframe
                 className="player-iframe"
-                src={currentPlayer.files[currentEpisodeId]}
+                src={currentPlayer.files[isSinglePagePlayer(currentPlayer.name) ? 0 : currentEpisodeId]}
                 allowFullScreen={true}
             />
             <button className={`player-right-section${!canChangeEpisodeId("next") ? " hide" : " show"}`}
