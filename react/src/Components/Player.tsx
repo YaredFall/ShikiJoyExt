@@ -31,6 +31,8 @@ const Player: FC<PlayerProps> = memo(({ animeData }) => {
     }
 
     const canChangeEpisodeId = (to: "next" | "prev" | number) => {
+        if (isSinglePagePlayer(currentPlayer.name)) return false;
+
         let newId = to;
         if (to === "next") {
             newId = currentEpisodeId + 1;
