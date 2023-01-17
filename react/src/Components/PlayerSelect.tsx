@@ -1,11 +1,11 @@
 import { Listbox, Transition } from '@headlessui/react';
 import React, { FC, Fragment } from 'react';
 import { SlArrowDown } from 'react-icons/sl';
-import {playerData} from "../types";
+import {PlayerData} from "../types";
 
 
 type PlayerSelectProps = {
-    availablePlayers: playerData[]
+    availablePlayers: PlayerData[]
     currentPlayerId: number;
     setCurrentPlayerId: React.Dispatch<React.SetStateAction<number>>
 }

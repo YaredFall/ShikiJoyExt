@@ -1,6 +1,6 @@
-export type playerData = { name: string, files: string[] }
+export type PlayerData = { name: string, files: string[] }
 
 export type AnimeData = {
-    id: number,
-    players: playerData[]
+    id: string,
+    players: PlayerData[]
 }

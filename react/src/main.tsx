@@ -1,10 +1,11 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App'
+import {prepareAndRender, Render} from "./Utils/init";
+import mockupData from './devMockupData.json';
 
+console.log("ShikiJoy React app starting!");
 
-ReactDOM.createRoot(document.getElementById('app') as HTMLElement).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-)
+if (!document.querySelector("#app")) {
+    prepareAndRender();
+} else {
+    Render(mockupData)
+}
+

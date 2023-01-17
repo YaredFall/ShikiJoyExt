@@ -6,6 +6,7 @@ chrome.runtime.onInstalled.addListener( async (details) => {
         const enabled = (await chrome.storage.local.get(["enabled"])).enabled;
         if (enabled) {
             injectScript();
+            refreshAnimeJoyTabs();
         }
     }
 });
@@ -15,7 +16,7 @@ const injectScript = async () => {
         id: "shikijoyScript",
         matches: ["https://*.animejoy.ru/*"],
         runAt: "document_start",
-        js: ["script.js"],
+        js: ["react/dist/index.js"],
         css: ["react/dist/index.scss"]
     }
     return await chrome.scripting.registerContentScripts([script], () => {

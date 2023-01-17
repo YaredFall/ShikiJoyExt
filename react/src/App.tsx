@@ -1,11 +1,10 @@
+import {FC} from "react";
+import {BrowserRouter, Link, Route, Routes} from "react-router-dom";
+import AnimePage from './Components/AnimePage';
+import {AnimeData} from "./types";
 import "./index.scss"
 
-import AnimePage from './Components/AnimePage';
-import {BrowserRouter, Link, Route, Routes} from "react-router-dom";
-
-function App() {
-
-
+const App: FC<{data: AnimeData}> = ({data}) => {
 
     return (
         <BrowserRouter>
