@@ -30,7 +30,10 @@ export function getPlayersWithFiles(playlistsHTML: Element) {
     const playersHTML = playlistsHTML.querySelectorAll(".playlists-player .playlists-lists .playlists-items ul li");
     let players = Array<{playerId: string, name: string}>();
     playersHTML.forEach(e => {
-        players.push({ playerId: e.getAttribute("data-id")!.split("_").at(-1)!, name: e.textContent! });
+        players.push({
+            playerId: e.getAttribute("data-id")!.split("_").at(-1)!,
+            name: e.textContent === "Наш плеер" ? "AnimeJoy" : e.textContent!
+        });
     })
 
     const filesHTML = playlistsHTML.querySelectorAll(".playlists-player .playlists-videos .playlists-items ul li");
