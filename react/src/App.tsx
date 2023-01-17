@@ -3,8 +3,12 @@ import {BrowserRouter, Link, Route, Routes} from "react-router-dom";
 import AnimePage from './Components/AnimePage';
 import {AnimeData} from "./types";
 import "./index.scss"
+import {useAnimeDataStore} from "./Store/animeDataStore";
 
 const App: FC<{data: AnimeData}> = ({data}) => {
+
+    const setAnimeData = useAnimeDataStore(state => state.set);
+    setAnimeData(data);
 
     return (
         <BrowserRouter>

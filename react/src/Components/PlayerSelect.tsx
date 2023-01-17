@@ -1,7 +1,7 @@
 import { Listbox, Transition } from '@headlessui/react';
-import React, { FC, Fragment } from 'react';
+import React, { FC, Fragment, memo, useRef } from 'react';
 import { SlArrowDown } from 'react-icons/sl';
-import {PlayerData} from "../types";
+import { PlayerData } from "../types";
 
 
 type PlayerSelectProps = {
@@ -10,7 +10,7 @@ type PlayerSelectProps = {
     setCurrentPlayerId: React.Dispatch<React.SetStateAction<number>>
 }
 
-const PlayerSelect: FC<PlayerSelectProps> = ({ availablePlayers, currentPlayerId, setCurrentPlayerId }) => {
+const PlayerSelect: FC<PlayerSelectProps> = memo(({ availablePlayers, currentPlayerId, setCurrentPlayerId }) => {
 
     const currentPlayer = availablePlayers[currentPlayerId];
 
@@ -24,7 +24,9 @@ const PlayerSelect: FC<PlayerSelectProps> = ({ availablePlayers, currentPlayerId
                 <Listbox.Options className={"select-options"}>
                     {availablePlayers.map((p, i) => <Listbox.Option
                         key={i}
-                        className={({ active, selected }) => `select-option${active ? " active" : ""}${selected ? " selected" : ""}`}
+                        className={({ active, selected }) =>
+                            `select-option${active ? " active" : ""}${selected ? " selected" : ""}`
+                        }
                         value={i}
                         children={p.name}
                     />)
@@ -33,6 +35,6 @@ const PlayerSelect: FC<PlayerSelectProps> = ({ availablePlayers, currentPlayerId
             </Transition>
         </Listbox>
     );
-};
+});
 
 export default PlayerSelect;

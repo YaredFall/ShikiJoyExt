@@ -1,29 +1,25 @@
-import { FC } from 'react';
+import { FC, memo } from 'react';
 import Player from './Player';
-import {useParams} from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { useAnimeDataStore } from "../Store/animeDataStore";
 
-import mockupData from '../devMockupData.json';
+type AnimePageProps = {}
 
-type AnimePageProps = {
+const AnimePage: FC<AnimePageProps> = memo(({}) => {
 
-}
+    const { id } = useParams<{ id: string }>();
 
-const AnimePage: FC<AnimePageProps> = ({ }) => {
-
-    const { id } = useParams<{id: string}>();
-
-    // @ts-ignore
-    const animeData = window.shikijoyData || mockupData;
+    const animeData = useAnimeDataStore(state => state.data)
 
     return (
         <main>
-            <h1 className="anime-title-ru" children={"Title ru"} />
-            <h2 className="anime-title-romaji" children={"Title romaji"} />
+            <h1 className="anime-title-ru" children={"Title ru"}/>
+            <h2 className="anime-title-romaji" children={"Title romaji"}/>
 
-            <Player animeData={animeData} />
+            <Player animeData={animeData!}/>
 
         </main>
     );
-};
+});
 
 export default AnimePage;
