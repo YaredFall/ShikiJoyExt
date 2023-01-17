@@ -10,6 +10,8 @@ type PlayerSelectProps = {
     setCurrentPlayerId: React.Dispatch<React.SetStateAction<number>>
 }
 
+const MemoizedIcon = memo(SlArrowDown)
+
 const PlayerSelect: FC<PlayerSelectProps> = memo(({ availablePlayers, currentPlayerId, setCurrentPlayerId }) => {
 
     const currentPlayer = availablePlayers[currentPlayerId];
@@ -18,7 +20,7 @@ const PlayerSelect: FC<PlayerSelectProps> = memo(({ availablePlayers, currentPla
         <Listbox as={"div"} className="select player-select" value={currentPlayerId} onChange={setCurrentPlayerId}>
             <Listbox.Button className="select-btn">
                 <span>{currentPlayer.name}</span>
-                <SlArrowDown />
+                <MemoizedIcon />
             </Listbox.Button>
             <Transition as={Fragment}>
                 <Listbox.Options className={"select-options"}>

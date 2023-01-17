@@ -10,6 +10,9 @@ type PlayerProps = {
     animeData: AnimeData
 }
 
+const MemoizedLeftIcon = memo(SlArrowLeft);
+const MemoizedRightIcon = memo(SlArrowRight);
+
 const Player: FC<PlayerProps> = memo(({ animeData }) => {
 
     const [currentPlayerId, setCurrentPlayerId] = useState(0);
@@ -59,7 +62,7 @@ const Player: FC<PlayerProps> = memo(({ animeData }) => {
             <button className={`player-left-section${!canChangeEpisodeId("prev") ? " hide" : " show"}`}
                     onClick={() => changeEpisodeId("prev")}>
                 <div className="wrapper">
-                    <SlArrowLeft />
+                    <MemoizedLeftIcon />
                     <div className="hint" children={"Предыдущая серия"} />
                 </div>
             </button>
@@ -71,7 +74,7 @@ const Player: FC<PlayerProps> = memo(({ animeData }) => {
             <button className={`player-right-section${!canChangeEpisodeId("next") ? " hide" : " show"}`}
                     onClick={() => changeEpisodeId("next")}>
                 <div className="wrapper">
-                    <SlArrowRight />
+                    <MemoizedRightIcon />
                     <div className="hint" children={"Следующая серия"} />
                 </div>
             </button>
