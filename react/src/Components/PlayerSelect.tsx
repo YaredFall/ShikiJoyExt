@@ -2,7 +2,7 @@ import { Listbox, Transition } from '@headlessui/react';
 import React, { FC, Fragment, memo, useRef } from 'react';
 import { SlArrowDown } from 'react-icons/sl';
 import { PlayerData } from "../types";
-
+import styles from "./Player.module.scss"
 
 type PlayerSelectProps = {
     availablePlayers: PlayerData[]
@@ -17,7 +17,7 @@ const PlayerSelect: FC<PlayerSelectProps> = memo(({ availablePlayers, currentPla
     const currentPlayer = availablePlayers[currentPlayerId];
 
     return (
-        <Listbox as={"div"} className="select player-select" value={currentPlayerId} onChange={setCurrentPlayerId}>
+        <Listbox as={"div"} className={styles.playerSelect} value={currentPlayerId} onChange={setCurrentPlayerId}>
             <Listbox.Button className="select-btn">
                 <span>{currentPlayer.name}</span>
                 <MemoizedIcon />

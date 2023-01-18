@@ -4,6 +4,7 @@ import { useAnimeJoyLegacyStore } from "../Hooks/useAnimeJoyLegacyStore";
 import { isSinglePagePlayer } from '../misc';
 import { AnimeData } from "../types";
 import PlayerSelect from './PlayerSelect';
+import styles from './Player.module.scss'
 
 
 type PlayerProps = {
@@ -51,34 +52,34 @@ const Player: FC<PlayerProps> = memo(({ animeData }) => {
 
 
     return (
-        <section className="player">
-            <div className="player-top-section">
-                <div className={`current-ep-label${isSinglePagePlayer(currentPlayer.name) ? " hide" : " show"}`}>
+        <section className={styles.player}>
+            <div className={styles.topSection}>
+                <div className={`${styles.currentEpLabel}${isSinglePagePlayer(currentPlayer.name) ? " hide" : " show"}`}>
                     <span children={epLabel} />
                     {watchedEpisodes.has(currentEpisodeId) &&
-                     <span className="current-ep-watched" children={"Посмотрено"} />}
+                     <span className={styles.currentEpWatched} children={"Посмотрено"} />}
                 </div>
                 <PlayerSelect availablePlayers={animeData.players}
                               currentPlayerId={currentPlayerId}
                               setCurrentPlayerId={setCurrentPlayerId} />
             </div>
-            <button className={`player-left-section${!canChangeEpisodeId("prev") ? " hide" : " show"}`}
+            <button className={`${styles.leftSection}${!canChangeEpisodeId("prev") ? " hide" : " show"}`}
                     onClick={() => changeEpisodeId("prev")}>
-                <div className="wrapper">
+                <div className={styles.wrapper}>
                     <MemoizedLeftIcon />
-                    <div className="hint" children={"Предыдущая серия"} />
+                    <div className={styles.hint} children={"Предыдущая серия"} />
                 </div>
             </button>
             <iframe
-                className="player-iframe"
+                className={styles.playerIframe}
                 src={currentPlayer.files[isSinglePagePlayer(currentPlayer.name) ? 0 : currentEpisodeId]}
                 allowFullScreen={true}
             />
-            <button className={`player-right-section${!canChangeEpisodeId("next") ? " hide" : " show"}`}
+            <button className={`${styles.rightSection}${!canChangeEpisodeId("next") ? " hide" : " show"}`}
                     onClick={() => changeEpisodeId("next")}>
-                <div className="wrapper">
+                <div className={styles.wrapper}>
                     <MemoizedRightIcon />
-                    <div className="hint" children={"Следующая серия"} />
+                    <div className={styles.hint} children={"Следующая серия"} />
                 </div>
             </button>
         </section>
