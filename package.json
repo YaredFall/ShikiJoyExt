@@ -1,0 +1,16 @@
+{
+  "name": "shikijoyext",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "npm run dev --prefix react",
+    "build": "npm run build --prefix react",
+    "preview": "npm run preview --prefix react"
+  },
+  "engines": {
+    "npm": "please-use-yarn",
+    "yarn": ">= 1.17.3",
+    "node": ">= 12.5.0"
+  }
+}
