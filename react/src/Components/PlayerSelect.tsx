@@ -17,7 +17,7 @@ const PlayerSelect: FC<PlayerSelectProps> = memo(({ availablePlayers, currentPla
     const currentPlayer = availablePlayers[currentPlayerId];
 
     return (
-        <Listbox as={"div"} className={styles.playerSelect} value={currentPlayerId} onChange={setCurrentPlayerId}>
+        <Listbox as={"div"} className={`select ${styles.playerSelect}`} value={currentPlayerId} onChange={setCurrentPlayerId}>
             <Listbox.Button className="select-btn">
                 <span>{currentPlayer.name}</span>
                 <MemoizedIcon />
