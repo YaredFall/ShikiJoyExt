@@ -1,11 +1,11 @@
-import { FC, memo, useState } from 'react';
+import React, { FC, memo, useState } from 'react';
 import { SlArrowLeft, SlArrowRight } from 'react-icons/sl';
 import { useAnimeJoyLegacyStore } from "../Hooks/useAnimeJoyLegacyStore";
 import { isSinglePagePlayer } from '../misc';
 import { AnimeData } from "../types";
-import PlayerSelect from './PlayerSelect';
 import styles from './Player.module.scss'
-
+import { NestedChildrenMemoPolymorphicComponent as Section } from "./PolymorphicComponent";
+import PlayerSelect from './PlayerSelect';
 
 type PlayerProps = {
     animeData: AnimeData
@@ -13,6 +13,7 @@ type PlayerProps = {
 
 const MemoizedLeftIcon = memo(SlArrowLeft);
 const MemoizedRightIcon = memo(SlArrowRight);
+
 
 const Player: FC<PlayerProps> = memo(({ animeData }) => {
 
@@ -53,35 +54,42 @@ const Player: FC<PlayerProps> = memo(({ animeData }) => {
 
     return (
         <section className={styles.player}>
-            <div className={styles.topSection}>
-                <div className={`${styles.currentEpLabel}${isSinglePagePlayer(currentPlayer.name) ? " hide" : " show"}`}>
+            <Section className={styles.topSection}>
+                <div
+                    className={`${styles.currentEpLabel}${isSinglePagePlayer(currentPlayer.name) ? " hide" : " show"}`}
+                >
                     <span children={epLabel} />
                     {watchedEpisodes.has(currentEpisodeId) &&
                      <span className={styles.currentEpWatched} children={"Посмотрено"} />}
                 </div>
                 <PlayerSelect availablePlayers={animeData.players}
                               currentPlayerId={currentPlayerId}
-                              setCurrentPlayerId={setCurrentPlayerId} />
-            </div>
-            <button className={`${styles.leftSection}${!canChangeEpisodeId("prev") ? " hide" : " show"}`}
-                    onClick={() => changeEpisodeId("prev")}>
+                              setCurrentPlayerId={setCurrentPlayerId}
+                />
+            </Section>
+            <Section as={"button"}
+                     className={`${styles.leftSection}${!canChangeEpisodeId("prev") ? " hide" : " show"}`}
+                     onClick={() => changeEpisodeId("prev")}
+            >
                 <div className={styles.wrapper}>
                     <MemoizedLeftIcon />
                     <div className={styles.hint} children={"Предыдущая серия"} />
                 </div>
-            </button>
-            <iframe
-                className={styles.playerIframe}
-                src={currentPlayer.files[isSinglePagePlayer(currentPlayer.name) ? 0 : currentEpisodeId]}
-                allowFullScreen={true}
+            </Section>
+            <Section as={"iframe"}
+                     className={styles.playerIframe}
+                     src={currentPlayer.files[isSinglePagePlayer(currentPlayer.name) ? 0 : currentEpisodeId]}
+                     allowFullScreen={true}
             />
-            <button className={`${styles.rightSection}${!canChangeEpisodeId("next") ? " hide" : " show"}`}
-                    onClick={() => changeEpisodeId("next")}>
+            <Section as={"button"}
+                     className={`${styles.rightSection}${!canChangeEpisodeId("next") ? " hide" : " show"}`}
+                     onClick={() => changeEpisodeId("next")}
+            >
                 <div className={styles.wrapper}>
                     <MemoizedRightIcon />
                     <div className={styles.hint} children={"Следующая серия"} />
                 </div>
-            </button>
+            </Section>
         </section>
     );
 });
