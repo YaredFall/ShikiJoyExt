@@ -1,15 +1,41 @@
 import { ComponentProps, ComponentType, memo } from "react";
 
+
+/**
+ * @description Same as usual memo, but memoized component with children
+ * won't rerender until it AND its direct children have a reason.
+ * @param component - Component to memoize
+ */
 export const childrenCompareMemo = <T extends ComponentType<any>>(component: T) => memo(component, (
     prevProps: Readonly<ComponentProps<T>>,
     nextProps: Readonly<ComponentProps<T>>
-) => {
+):boolean => {
     const [ch1, oth1] = getChildrenAndOther(prevProps);
     const [ch2, oth2] = getChildrenAndOther(nextProps);
 
-    return shallowEqual(ch1?.props, ch2?.props) && shallowEqual(oth1, oth2)
+    const otherEqual = shallowEqual(oth1, oth2);
+    if (!otherEqual || (ch1 && !ch2) || (ch2 && !ch1)) return false;
+
+    if (otherEqual && shallowEqual(ch1, ch2)) return true;
+
+    //if plain object
+    if (ch1.props && ch2.props) {
+        return shallowEqual(ch1.props, ch2.props);
+    }
+    //if multiple children
+    if (Array.isArray(ch1) && Array.isArray(ch2)) {
+        return ch1.every((_, i) => shallowEqual(ch1[i].props, ch2[i].props));
+    }
+    //if ch1 and ch2 have structure difference
+    return false;
 })
 
+/**
+ * @description Same as usual memo, but memoized component with children
+ * won't rerender until it AND any of its children have a reason
+ * (if children of any level has a reason to rerender, the whole component will rerender too)
+ * @param component - Component to memoize
+ */
 export const nestedChildrenCompareMemo = <T extends ComponentType<any>>(component: T) => memo(component, (
     prevProps: Readonly<ComponentProps<T>>,
     nextProps: Readonly<ComponentProps<T>>
@@ -56,20 +82,23 @@ function getChildrenAndOther(obj: Object) {
 
 function nestedEqual(prevProps: any, nextProps: any): boolean {
 
+    // console.log({prevProps, nextProps})
     const [ch1, oth1] = getChildrenAndOther(prevProps);
     const [ch2, oth2] = getChildrenAndOther(nextProps);
 
-    const childrenEqual = shallowEqual(ch1?.props, ch2?.props);
     const otherEqual = shallowEqual(oth1, oth2);
-    if (childrenEqual && otherEqual) {
-        return true;
-    } else if (otherEqual && !childrenEqual) {
-        if (ch1 && ch2) {
-            return nestedEqual(ch1.props, ch2.props);
-        } else {
-            return false;
-        }
-    } else {
-        return false;
+    if (!otherEqual || (ch1 && !ch2) || (ch2 && !ch1)) return false;
+    else if (otherEqual && shallowEqual(ch1, ch2)) return true;
+    //if otherEqual is true and both children exist, but not equal
+
+    //if plain object
+    if (ch1.props && ch2.props) {
+        return nestedEqual(ch1.props, ch2.props);
     }
+    //if multiple children
+    if (Array.isArray(ch1) && Array.isArray(ch2)) {
+        return ch1.every((_, i) => nestedEqual(ch1[i].props, ch2[i].props));
+    }
+    //if ch1 and ch2 have structure difference
+    return false;
 }
