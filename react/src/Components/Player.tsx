@@ -1,6 +1,6 @@
 import React, { FC, memo, useState } from 'react';
 import { SlArrowLeft, SlArrowRight } from 'react-icons/sl';
-import { useAnimeJoyLegacyStore } from "../Hooks/useAnimeJoyLegacyStore";
+import { useAnimeJoyLegacyStorage } from "../Hooks/useAnimeJoyLegacyStorage";
 import { isSinglePagePlayer } from '../misc';
 import { AnimeData } from "../types";
 import styles from './Player.module.scss'
@@ -17,12 +17,13 @@ const MemoizedRightIcon = memo(SlArrowRight);
 
 const Player: FC<PlayerProps> = memo(({ animeData }) => {
 
-    const [watchedEpisodes, playersUsage] = useAnimeJoyLegacyStore(animeData);
+    const { watchedEpisodes, setEpisodeAsWatched, playersUsage, studiosUsage } = useAnimeJoyLegacyStorage(animeData);
 
-    const lastNotWatched = watchedEpisodes.size > 1 ? Math.max(...watchedEpisodes) + 1 : 0;
-    const mostUsedPlayerId = playersUsage.indexOf(Math.max(...playersUsage))
+    const lastNotWatched = watchedEpisodes.size > 0 ? Math.max(...watchedEpisodes) + 1 : 0;
+    const mostUsedStudioId = studiosUsage.length === 1 ? 0 : studiosUsage.indexOf(Math.max(...studiosUsage))
+    const mostUsedPlayerId = playersUsage[mostUsedStudioId].indexOf(Math.max(...playersUsage[mostUsedStudioId]))
 
-    const [currentStudioId, setCurrentStudioId] = useState(0);
+    const [currentStudioId, setCurrentStudioId] = useState(mostUsedStudioId);
     const [currentPlayerId, setCurrentPlayerId] = useState(mostUsedPlayerId);
     const [currentEpisodeId, setCurrentEpisodeId] = useState(lastNotWatched);
 
@@ -84,7 +85,12 @@ const Player: FC<PlayerProps> = memo(({ animeData }) => {
             />
             <Section as={"button"}
                      className={`${styles.rightSection}${!canChangeEpisodeId("next") ? " hide" : " show"}`}
-                     onClick={() => changeEpisodeId("next")}
+                     onClick={() => {
+                         if (!watchedEpisodes.has(currentEpisodeId)) {
+                             setEpisodeAsWatched(currentStudioId, currentPlayerId, currentEpisodeId);
+                         }
+                         changeEpisodeId("next")
+                     }}
             >
                 <div className={styles.wrapper}>
                     <MemoizedRightIcon />
