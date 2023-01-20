@@ -22,10 +22,11 @@ const Player: FC<PlayerProps> = memo(({ animeData }) => {
     const lastNotWatched = watchedEpisodes.size > 1 ? Math.max(...watchedEpisodes) + 1 : 0;
     const mostUsedPlayerId = playersUsage.indexOf(Math.max(...playersUsage))
 
+    const [currentStudioId, setCurrentStudioId] = useState(0);
     const [currentPlayerId, setCurrentPlayerId] = useState(mostUsedPlayerId);
     const [currentEpisodeId, setCurrentEpisodeId] = useState(lastNotWatched);
 
-    const currentPlayer = animeData.players[currentPlayerId];
+    const currentPlayer = animeData.studios[currentStudioId].players[currentPlayerId];
 
     const changeEpisodeId = (to: "next" | "prev" | number) => {
         let newId = to;
@@ -62,7 +63,7 @@ const Player: FC<PlayerProps> = memo(({ animeData }) => {
                     {watchedEpisodes.has(currentEpisodeId) &&
                      <span className={styles.currentEpWatched} children={"Посмотрено"} />}
                 </div>
-                <PlayerSelect availablePlayers={animeData.players}
+                <PlayerSelect availablePlayers={animeData.studios[currentStudioId].players}
                               currentPlayerId={currentPlayerId}
                               setCurrentPlayerId={setCurrentPlayerId}
                 />

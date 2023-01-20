@@ -1,5 +1,5 @@
-import {getPlayersWithFiles, promiseQuery} from "./scraping";
-import {AnimeData} from "../types";
+import { getStudiosPlayersAndFiles, promiseQuery } from "./scraping";
+import { AnimeData } from "../types";
 import ReactDOM from "react-dom/client";
 import React from "react";
 import App from "../App";
@@ -18,7 +18,7 @@ function removeDefaultStylesOnLoad() {
     })
 }
 
-function prepareDOM () {
+function prepareDOM() {
     document.body.textContent = null;
     document.body.classList.add("show");
 
@@ -30,7 +30,7 @@ function prepareDOM () {
 export function Render(data: AnimeData) {
     ReactDOM.createRoot(document.getElementById('app') as HTMLElement).render(
         <React.StrictMode>
-            <App data={data}/>
+            <App data={data} />
         </React.StrictMode>,
     )
 }
@@ -43,7 +43,7 @@ export function prepareAndRender() {
 
         const shikijoyData: AnimeData = {
             id: playlistsHTML.getAttribute("data-news_id")!,
-            players: getPlayersWithFiles(playlistsHTML)
+            studios: getStudiosPlayersAndFiles(playlistsHTML)
         };
 
         Render(shikijoyData);
