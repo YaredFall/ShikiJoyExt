@@ -1,4 +1,5 @@
 import React, { FC, memo, useState } from 'react';
+import { IoClose } from "react-icons/io5";
 import { BsCheck2 } from 'react-icons/bs';
 import { SlArrowLeft, SlArrowRight } from 'react-icons/sl';
 import { useAnimeJoyLegacyStorage } from "../Hooks/useAnimeJoyLegacyStorage";
@@ -16,12 +17,14 @@ type PlayerProps = {
 const MemoizedLeftIcon = memo(SlArrowLeft);
 const MemoizedRightIcon = memo(SlArrowRight);
 const MemoizedCheckIcon = memo(BsCheck2);
+const MemoizedCrossIcon = memo(IoClose);
 
 const Player: FC<PlayerProps> = memo(({ animeData }) => {
 
     const {
         watchedEpisodesState,
         setEpisodeAsWatched,
+        removeEpisodeFromWatched,
         playersUsage,
         studiosUsage
     } = useAnimeJoyLegacyStorage(animeData);
@@ -35,7 +38,8 @@ const Player: FC<PlayerProps> = memo(({ animeData }) => {
 
     const currentPlayer = animeData.studios[currentStudioId].players[currentPlayerId];
     const lastWatched = watchedEpisodesState.size > 0 ? Math.max(...watchedEpisodesState) : -1;
-    const lastNotWatched = (lastWatched + 1 > currentPlayer.files.length) ? lastWatched + 1 : currentPlayer.files.length - 1;
+    const lastNotWatched = (lastWatched + 1 > currentPlayer.files.length) ? lastWatched + 1
+                                                                          : currentPlayer.files.length - 1;
 
     const [currentEpisodeId, setCurrentEpisodeId] = useState(lastNotWatched);
 
@@ -72,7 +76,11 @@ const Player: FC<PlayerProps> = memo(({ animeData }) => {
                 >
                     <span children={epLabel} />
                     {watchedEpisodesState.has(currentEpisodeId) &&
-                     <span className={styles.currentEpWatched} children={"Посмотрено"} />}
+                     <button className={styles.currentEpWatched}
+                             onClick={() => removeEpisodeFromWatched(currentStudioId, currentPlayerId, currentEpisodeId)}>
+                         <span children={"Посмотрено"} />
+                         <MemoizedCrossIcon />
+                     </button>}
                 </div>
                 {
                     animeData.studios.length > 1 &&

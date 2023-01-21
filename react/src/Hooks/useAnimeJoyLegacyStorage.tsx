@@ -54,5 +54,5 @@ export const useAnimeJoyLegacyStorage = (animeData: AnimeData) => {
 
     const [watchedEpisodesState, setWatchedEpisodesState] = useState(watchedEpisodes);
 
-    return { watchedEpisodesState, playersUsage, studiosUsage, setEpisodeAsWatched } as const
+    return { watchedEpisodesState, playersUsage, studiosUsage, removeEpisodeFromWatched, setEpisodeAsWatched } as const
 }
