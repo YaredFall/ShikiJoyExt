@@ -49,7 +49,6 @@ export const useAnimeJoyLegacyStorage = (animeData: AnimeData) => {
             studiosUsage.push(watchedWithStudio);
         })
 
-        console.log({ watchedEpisodes, studiosUsage, playersUsage });
         return { watchedEpisodes, studiosUsage, playersUsage };
     }, [animeData]);
 

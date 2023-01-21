@@ -31,18 +31,15 @@ export function promiseQuery(selector: string, checkContent = true, cancelAfter:
  * @param playlistsHTML - div.playlists-ajax
  */
 export function getStudiosPlayersAndFiles(playlistsHTML: Element) {
-    console.log(playlistsHTML);
     const studiosAndPlayersHTML = playlistsHTML.querySelectorAll(".playlists-player .playlists-lists .playlists-items");
     const studiosHTML = studiosAndPlayersHTML.length > 1 ? studiosAndPlayersHTML[0].querySelectorAll("ul li")
                                                          : null;
     const playersHTML = studiosAndPlayersHTML[1] ? studiosAndPlayersHTML[1].querySelectorAll("ul li")
                                                  : studiosAndPlayersHTML[0].querySelectorAll("ul li");
-    console.log({ studiosHTML, playersHTML });
     const studios = studiosHTML === null ? [{ id: '0', name: undefined }] : Array.from(studiosHTML).map(s => ({
         id: s.getAttribute("data-id")!.split("_").at(-1)!,
         name: s.textContent!
     }))
-    console.log(studios)
     const players = Array.from(playersHTML).map(p => {
         const ids = p.getAttribute("data-id")!.split("_")
         return ({
@@ -51,7 +48,6 @@ export function getStudiosPlayersAndFiles(playlistsHTML: Element) {
             name: p.textContent === "Наш плеер" ? "AnimeJoy" : p.textContent!
         })
     })
-    console.log(players)
 
     const filesHTML = playlistsHTML.querySelectorAll(".playlists-player .playlists-videos .playlists-items ul li");
     const files = Array.from(filesHTML).map(f => {
@@ -62,7 +58,6 @@ export function getStudiosPlayersAndFiles(playlistsHTML: Element) {
             file: f.getAttribute("data-file")!
         })
     })
-    console.log(files);
 
     const studiosPlayersAndFiles: StudioData[] = studios.map(s => ({
         name: s.name?.match(/(.*?) ([0-9]+)/g) ? s.name?.replace(/(.*?) ([0-9]+)/g, "$1 [$2]") : s.name,
@@ -71,7 +66,6 @@ export function getStudiosPlayersAndFiles(playlistsHTML: Element) {
             files: files.filter(f => f.studioId === s.id && f.playerId === p.playerId).map(f => f.file)
         }))
     }))
-    console.log(studiosPlayersAndFiles)
 
     return studiosPlayersAndFiles;
 }

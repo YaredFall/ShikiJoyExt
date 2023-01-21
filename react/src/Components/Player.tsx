@@ -36,7 +36,6 @@ const Player: FC<PlayerProps> = memo(({ animeData }) => {
     const currentPlayer = animeData.studios[currentStudioId].players[currentPlayerId];
     const lastWatched = watchedEpisodesState.size > 0 ? Math.max(...watchedEpisodesState) : -1;
     const lastNotWatched = (lastWatched + 1 > currentPlayer.files.length) ? lastWatched + 1 : currentPlayer.files.length - 1;
-    console.log({ lastWatched, lastNotWatched })
 
     const [currentEpisodeId, setCurrentEpisodeId] = useState(lastNotWatched);
 
