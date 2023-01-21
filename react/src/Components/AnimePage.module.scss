@@ -1,0 +1,28 @@
+.animePage {
+  --frame-max-width: 960px;
+  --frame-max-height: calc(var(--frame-max-width) / 16 * 9);
+  --player-grid-template-cols: minmax(60px, 120px) minmax(320px, var(--frame-max-width)) minmax(60px, 120px);
+  --rondness: 0.25rem;
+
+  display: grid;
+  grid-template-columns: var(--player-grid-template-cols);
+  gap: 1rem 0;
+
+  .topSection {
+    display: grid;
+    grid-column: 2/2;
+  }
+
+  .titleRU {
+    font-size: 1.75rem;
+    font-weight: 600;
+    padding: 0.25rem;
+  }
+
+  .titleRomanji {
+    font-size: 1.25rem;
+    font-weight: 600;
+    padding: 0.25rem;
+    color: rgba(255, 255, 255, 0.5);
+  }
+}

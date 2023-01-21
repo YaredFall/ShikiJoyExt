@@ -1,10 +1,7 @@
 .player {
-  --frame-max-width: 960px;
-  --frame-max-height: calc(var(--frame-max-width) / 16 * 9);
   --gap: 0.5rem;
-  --rondness: 0.25rem;
-  --player-grid-template-cols: minmax(60px, 120px) minmax(320px, var(--frame-max-width)) minmax(60px, 120px);
 
+  grid-column: 1/4;
   display: grid;
   grid-template-columns: var(--player-grid-template-cols);
   grid-template-rows: min-content minmax(180px, auto);

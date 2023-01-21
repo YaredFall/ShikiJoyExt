@@ -1,5 +1,5 @@
 import { getStudiosPlayersAndFiles, promiseQuery } from "./scraping";
-import { AnimeData } from "../types";
+import { AnimeData, Titles } from "../types";
 import ReactDOM from "react-dom/client";
 import React from "react";
 import App from "../App";
@@ -39,10 +39,16 @@ export function prepareAndRender() {
     removeDefaultStylesOnLoad();
 
     promiseQuery("div.playlists-ajax", true, 5000).then((playlistsHTML) => {
+        const titles: Titles = {
+            ru: document.querySelector(".ntitle")!.textContent!,
+            romanji: document.querySelector(".romanji")!.textContent!
+        }
+
         prepareDOM();
 
         const shikijoyData: AnimeData = {
             id: playlistsHTML.getAttribute("data-news_id")!,
+            title: titles,
             studios: getStudiosPlayersAndFiles(playlistsHTML)
         };
 
