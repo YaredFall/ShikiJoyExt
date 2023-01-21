@@ -1,6 +1,6 @@
 import React, { FC, memo, useState } from 'react';
-import { IoClose } from "react-icons/io5";
 import { BsCheck2 } from 'react-icons/bs';
+import { IoClose } from "react-icons/io5";
 import { SlArrowLeft, SlArrowRight } from 'react-icons/sl';
 import { useAnimeJoyLegacyStorage } from "../Hooks/useAnimeJoyLegacyStorage";
 import { isSinglePagePlayer } from '../misc';
@@ -38,7 +38,7 @@ const Player: FC<PlayerProps> = memo(({ animeData }) => {
 
     const currentPlayer = animeData.studios[currentStudioId].players[currentPlayerId];
     const lastWatched = watchedEpisodesState.size > 0 ? Math.max(...watchedEpisodesState) : -1;
-    const lastNotWatched = (lastWatched + 1 > currentPlayer.files.length) ? lastWatched + 1
+    const lastNotWatched = (lastWatched + 1 < currentPlayer.files.length) ? lastWatched + 1
                                                                           : currentPlayer.files.length - 1;
 
     const [currentEpisodeId, setCurrentEpisodeId] = useState(lastNotWatched);
@@ -67,7 +67,7 @@ const Player: FC<PlayerProps> = memo(({ animeData }) => {
 
     const epLabel = isSinglePagePlayer(currentPlayer.name) ? currentPlayer.name : `Серия ${currentEpisodeId + 1}`;
 
-
+    
     return (
         <section className={styles.player}>
             <Section className={styles.topSection}>
