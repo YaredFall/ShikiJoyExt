@@ -1,12 +1,13 @@
 import React, { FC, memo, useState } from 'react';
+import { BsCheck2 } from 'react-icons/bs';
 import { SlArrowLeft, SlArrowRight } from 'react-icons/sl';
 import { useAnimeJoyLegacyStorage } from "../Hooks/useAnimeJoyLegacyStorage";
 import { isSinglePagePlayer } from '../misc';
 import { AnimeData } from "../types";
 import { fullStudioName } from "../Utils/scraping";
 import styles from './Player.module.scss'
-import { NestedChildrenMemoPolymorphicComponent as Section } from "./PolymorphicComponent";
 import PlayerSelect from './PlayerSelect';
+import { NestedChildrenMemoPolymorphicComponent as Section } from "./PolymorphicComponent";
 
 type PlayerProps = {
     animeData: AnimeData
@@ -14,21 +15,30 @@ type PlayerProps = {
 
 const MemoizedLeftIcon = memo(SlArrowLeft);
 const MemoizedRightIcon = memo(SlArrowRight);
-
+const MemoizedCheckIcon = memo(BsCheck2);
 
 const Player: FC<PlayerProps> = memo(({ animeData }) => {
 
-    const { watchedEpisodes, setEpisodeAsWatched, playersUsage, studiosUsage } = useAnimeJoyLegacyStorage(animeData);
+    const {
+        watchedEpisodesState,
+        setEpisodeAsWatched,
+        playersUsage,
+        studiosUsage
+    } = useAnimeJoyLegacyStorage(animeData);
 
-    const lastNotWatched = watchedEpisodes.size > 0 ? Math.max(...watchedEpisodes) + 1 : 0;
+
     const mostUsedStudioId = studiosUsage.length === 1 ? 0 : studiosUsage.indexOf(Math.max(...studiosUsage))
     const mostUsedPlayerId = playersUsage[mostUsedStudioId].indexOf(Math.max(...playersUsage[mostUsedStudioId]))
 
     const [currentStudioId, setCurrentStudioId] = useState(mostUsedStudioId);
     const [currentPlayerId, setCurrentPlayerId] = useState(mostUsedPlayerId);
-    const [currentEpisodeId, setCurrentEpisodeId] = useState(lastNotWatched);
 
     const currentPlayer = animeData.studios[currentStudioId].players[currentPlayerId];
+    const lastWatched = watchedEpisodesState.size > 0 ? Math.max(...watchedEpisodesState) : -1;
+    const lastNotWatched = (lastWatched + 1 > currentPlayer.files.length) ? lastWatched + 1 : currentPlayer.files.length - 1;
+    console.log({ lastWatched, lastNotWatched })
+
+    const [currentEpisodeId, setCurrentEpisodeId] = useState(lastNotWatched);
 
     const changeEpisodeId = (to: "next" | "prev" | number) => {
         let newId = to;
@@ -62,12 +72,15 @@ const Player: FC<PlayerProps> = memo(({ animeData }) => {
                     className={`${styles.currentEpLabel}${isSinglePagePlayer(currentPlayer.name) ? " hide" : " show"}`}
                 >
                     <span children={epLabel} />
-                    {watchedEpisodes.has(currentEpisodeId) &&
+                    {watchedEpisodesState.has(currentEpisodeId) &&
                      <span className={styles.currentEpWatched} children={"Посмотрено"} />}
                 </div>
                 {
                     animeData.studios.length > 1 &&
-                    <div className={styles.currentStudioLabel} children={fullStudioName(animeData.studios[currentStudioId].name)} title={"Студия"} />
+                    <div className={styles.currentStudioLabel}
+                         children={fullStudioName(animeData.studios[currentStudioId].name)}
+                         title={"Студия"}
+                    />
                 }
                 <PlayerSelect availableStudiosAndPlayers={animeData.studios}
                               currentStudioId={currentStudioId}
@@ -79,6 +92,7 @@ const Player: FC<PlayerProps> = memo(({ animeData }) => {
             <Section as={"button"}
                      className={`${styles.leftSection}${!canChangeEpisodeId("prev") ? " hide" : " show"}`}
                      onClick={() => changeEpisodeId("prev")}
+                     disabled={!canChangeEpisodeId("prev")}
             >
                 <div className={styles.wrapper}>
                     <MemoizedLeftIcon />
@@ -91,17 +105,29 @@ const Player: FC<PlayerProps> = memo(({ animeData }) => {
                      allowFullScreen={true}
             />
             <Section as={"button"}
-                     className={`${styles.rightSection}${!canChangeEpisodeId("next") ? " hide" : " show"}`}
+                     className={`${styles.rightSection}${(!canChangeEpisodeId("next") &&
+                                                          watchedEpisodesState.has(currentEpisodeId))
+                                                         ? " hide-immediate"
+                                                         : " show"}`}
                      onClick={() => {
-                         if (!watchedEpisodes.has(currentEpisodeId)) {
+                         if (!watchedEpisodesState.has(currentEpisodeId)) {
                              setEpisodeAsWatched(currentStudioId, currentPlayerId, currentEpisodeId);
                          }
-                         changeEpisodeId("next")
+                         if (canChangeEpisodeId("next")) {
+                             changeEpisodeId("next");
+                         } else {
+                             setEpisodeAsWatched(currentStudioId, currentPlayerId, currentEpisodeId);
+                         }
                      }}
+                     disabled={!canChangeEpisodeId("next") &&
+                               watchedEpisodesState.has(currentEpisodeId)}
             >
                 <div className={styles.wrapper}>
-                    <MemoizedRightIcon />
-                    <div className={styles.hint} children={"Следующая серия"} />
+                    {canChangeEpisodeId("next") ? <MemoizedRightIcon /> :
+                     <MemoizedCheckIcon style={{ fontSize: "2rem" }} />}
+                    <div className={styles.hint}
+                         children={canChangeEpisodeId("next") ? "Следующая серия" : "Отметить посмотренным"}
+                    />
                 </div>
             </Section>
         </section>

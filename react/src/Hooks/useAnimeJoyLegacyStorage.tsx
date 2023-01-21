@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { AnimeData } from "../types";
 
 export const useAnimeJoyLegacyStorage = (animeData: AnimeData) => {
@@ -8,6 +8,7 @@ export const useAnimeJoyLegacyStorage = (animeData: AnimeData) => {
         if (file) {
             localStorage.setItem(`playlists-${animeData.id}-playlist-${file}`, "1");
             watchedEpisodes.add(episodeId);
+            setWatchedEpisodesState(new Set(watchedEpisodes));
             return true;
         } else {
             return false;
@@ -19,6 +20,7 @@ export const useAnimeJoyLegacyStorage = (animeData: AnimeData) => {
         if (file) {
             localStorage.removeItem(`playlists-${animeData.id}-playlist-${file}`);
             watchedEpisodes.delete(episodeId);
+            setWatchedEpisodesState(new Set(watchedEpisodes));
             return true;
         } else {
             return false;
@@ -51,5 +53,7 @@ export const useAnimeJoyLegacyStorage = (animeData: AnimeData) => {
         return { watchedEpisodes, studiosUsage, playersUsage };
     }, [animeData]);
 
-    return { watchedEpisodes, playersUsage, studiosUsage, setEpisodeAsWatched } as const
+    const [watchedEpisodesState, setWatchedEpisodesState] = useState(watchedEpisodes);
+
+    return { watchedEpisodesState, playersUsage, studiosUsage, setEpisodeAsWatched } as const
 }

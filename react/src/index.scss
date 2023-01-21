@@ -24,5 +24,13 @@ body {
 .hide {
     opacity: 0;
     pointer-events: none;
+    user-select: none;
+
+    &-immediate {
+        background-color: red;
+        @extend .hide;
+        transition-duration: 0ms;
+        animation-duration: 0ms;
+    }
 }
 
