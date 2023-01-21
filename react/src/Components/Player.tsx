@@ -3,6 +3,7 @@ import { SlArrowLeft, SlArrowRight } from 'react-icons/sl';
 import { useAnimeJoyLegacyStorage } from "../Hooks/useAnimeJoyLegacyStorage";
 import { isSinglePagePlayer } from '../misc';
 import { AnimeData } from "../types";
+import { fullStudioName } from "../Utils/scraping";
 import styles from './Player.module.scss'
 import { NestedChildrenMemoPolymorphicComponent as Section } from "./PolymorphicComponent";
 import PlayerSelect from './PlayerSelect';
@@ -64,9 +65,15 @@ const Player: FC<PlayerProps> = memo(({ animeData }) => {
                     {watchedEpisodes.has(currentEpisodeId) &&
                      <span className={styles.currentEpWatched} children={"Посмотрено"} />}
                 </div>
-                <PlayerSelect availablePlayers={animeData.studios[currentStudioId].players}
+                {
+                    animeData.studios.length > 1 &&
+                    <div className={styles.currentStudioLabel} children={fullStudioName(animeData.studios[currentStudioId].name)} title={"Студия"} />
+                }
+                <PlayerSelect availableStudiosAndPlayers={animeData.studios}
+                              currentStudioId={currentStudioId}
                               currentPlayerId={currentPlayerId}
                               setCurrentPlayerId={setCurrentPlayerId}
+                              setCurrentStudioId={setCurrentStudioId}
                 />
             </Section>
             <Section as={"button"}

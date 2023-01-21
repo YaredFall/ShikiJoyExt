@@ -65,7 +65,7 @@ export function getStudiosPlayersAndFiles(playlistsHTML: Element) {
     console.log(files);
 
     const studiosPlayersAndFiles: StudioData[] = studios.map(s => ({
-        name: s.name,
+        name: s.name?.match(/(.*?) ([0-9]+)/g) ? s.name?.replace(/(.*?) ([0-9]+)/g, "$1 [$2]") : s.name,
         players: players.filter(p => p.studioId === s.id).map(p => ({
             name: p.name,
             files: files.filter(f => f.studioId === s.id && f.playerId === p.playerId).map(f => f.file)
@@ -74,4 +74,23 @@ export function getStudiosPlayersAndFiles(playlistsHTML: Element) {
     console.log(studiosPlayersAndFiles)
 
     return studiosPlayersAndFiles;
+}
+
+//TODO: expand list
+const namesList: {short: string, full: string}[] = [
+    { short: "AL", full: "AniLibria" },
+    { short: "SR", full: "SovetRomantica" },
+    { short: "YRT", full: "YRteam" },
+    { short: "TPDB", full: "TheProverbialDustBiter"}
+]
+export function fullStudioName(name: string | undefined) {
+    if (name === undefined || name === "undefined") return undefined;
+    let fullName = name;
+    namesList.forEach(n => {
+        if (fullName.includes(n.short)) {
+            fullName = fullName.replace(n.short, n.full);
+            return fullName;
+        }
+    })
+    return fullName;
 }
