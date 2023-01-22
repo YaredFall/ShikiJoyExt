@@ -58,6 +58,7 @@
   font-size: 1.125rem;
   font-weight: normal;
   background-color: #303030;
+  --max-options-heigth: var(--frame-max-height);
 }
 
 .playerIframe {
