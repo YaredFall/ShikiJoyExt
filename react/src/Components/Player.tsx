@@ -1,4 +1,5 @@
-import React, { FC, memo, useState } from 'react';
+import React, { FC, memo, useEffect, useRef, useState } from 'react';
+import { Simulate } from "react-dom/test-utils";
 import { BsCheck2 } from 'react-icons/bs';
 import { IoClose } from "react-icons/io5";
 import { SlArrowLeft, SlArrowRight } from 'react-icons/sl';
@@ -9,6 +10,7 @@ import { fullStudioName } from "../Utils/scraping";
 import styles from './Player.module.scss'
 import PlayerSelect from './PlayerSelect';
 import { NestedChildrenMemoPolymorphicComponent as Section } from "./PolymorphicComponent";
+import input = Simulate.input;
 
 type PlayerProps = {
     animeData: AnimeData
@@ -67,7 +69,22 @@ const Player: FC<PlayerProps> = memo(({ animeData }) => {
 
     const epLabel = isSinglePagePlayer(currentPlayer.name) ? currentPlayer.name : `Серия ${currentEpisodeId + 1}`;
 
+    const iframeRef = useRef<HTMLIFrameElement>(null);
+    useEffect(() => {
+        const onFCChange = () => {
+            if (document.fullscreenElement) {
+                iframeRef.current?.classList.add("outline-hidden");
+            } else {
+                iframeRef.current?.classList.remove("outline-hidden");
+            }
+        }
+        document.addEventListener("fullscreenchange", onFCChange)
+        return () => {
+           document.removeEventListener("fullscreenchange", onFCChange)
+        };
+    }, []);
     
+
     return (
         <section className={styles.player}>
             <Section className={styles.topSection}>
@@ -107,9 +124,12 @@ const Player: FC<PlayerProps> = memo(({ animeData }) => {
                 </div>
             </Section>
             <Section as={"iframe"}
+                     ref={iframeRef}
                      className={styles.playerIframe}
                      src={currentPlayer.files[isSinglePagePlayer(currentPlayer.name) ? 0 : currentEpisodeId]}
                      allowFullScreen={true}
+                     tabIndex={0}
+                     onLoad={() => document.querySelector("iframe")?.focus()}
             />
             <Section as={"button"}
                      className={`${styles.rightSection}${(!canChangeEpisodeId("next") &&

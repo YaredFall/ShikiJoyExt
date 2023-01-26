@@ -7,6 +7,10 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <style>
+        body {
+            width: 360px;
+        }
+
         .tgl {
             display: none;
         }
@@ -63,22 +67,38 @@
         }
         .toggle-row {
             display: flex;
+            justify-content: space-between;
             align-items: center;
             gap: 1rem;
-            margin-bottom: 1rem;
         }
         .toggle-row > span {
             font-size: 1.25rem;
+        }
+        span.smaller {
+            font-size: 0.625em;
+        }
+        .desc {
+            font-size: 1rem;
+            padding-left: 1rem;
+            color: #666666;
         }
     </style>
     <script src="popup.js"></script>
 </head>
 <body>
     <div class="toggle-row">
-        <span>Использовать</span>
-        <input class="tgl tgl-flat" id="toggle" type="checkbox" checked>
-        <label class="" id="toggle-btn" for="toggle"></label>
+        <span>Использовать расширение</span>
+        <input class="tgl tgl-flat" id="ext-toggle" type="checkbox" checked>
+        <label class="" id="ext-toggle-btn" for="ext-toggle"></label>
     </div>
+    <br />
+    <div class="toggle-row">
+        <span>Фиксы плееров*<span class="smaller">экспериментально</span></span>
+        <input class="tgl tgl-flat" id="pff-toggle" type="checkbox" checked>
+        <label class="" id="pff-toggle-btn" for="pff-toggle"></label>
+    </div>
+    <div class="desc">чинят взаимодействие плееров с клавиатурой</div>
+    <br />
     <button id="reload">Перезагрузить</button>
 </body>
 </html>

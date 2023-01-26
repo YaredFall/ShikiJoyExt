@@ -8,7 +8,14 @@
         "tabs"
     ],
     "host_permissions": [
-        "https://*.animejoy.ru/*"
+        "https://*.animejoy.ru/*",
+        "*://secvideo1.online/*",
+        "*://red.uboost.one/*",
+        "*://video.sibnet.ru/*",
+        "*://vk.com/*",
+        "*://dzen.ru/*",
+        "*://ok.ru/*",
+        "*://*.mail.ru/*"
     ],
     "icons": {
         "128": "logo.png"

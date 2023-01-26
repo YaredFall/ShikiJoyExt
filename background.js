@@ -1,17 +1,19 @@
-chrome.runtime.onInstalled.addListener( async (details) => {
+chrome.runtime.onInstalled.addListener(async (details) => {
     if (details.reason === "install") {
-        chrome.storage.local.set({ enabled: true });
-    }
-    else if (details.reason === "update") {
-        const enabled = (await chrome.storage.local.get(["enabled"])).enabled;
-        if (enabled) {
-            injectScript();
+        chrome.storage.local.set({ enabled: true, usePlayersFixes: true });
+    } else if (details.reason === "update") {
+        const data = await chrome.storage.local.get(["enabled", "usePlayersFixes"])
+        if (data.enabled) {
+            if (data.usePlayersFixes) {
+                injectFixes();
+            }
+            injectMainScript();
             refreshAnimeJoyTabs();
         }
     }
 });
 
-const injectScript = async () => {
+const injectMainScript = async () => {
     const script = {
         id: "shikijoyScript",
         matches: ["https://*.animejoy.ru/*"],
@@ -20,24 +22,71 @@ const injectScript = async () => {
         css: ["react/dist/index.scss"]
     }
     return await chrome.scripting.registerContentScripts([script], () => {
-        console.log("injected JS");
+        console.log("injected React");
     })
 }
 
-const ejectScript = async () => {
-    return await chrome.scripting.unregisterContentScripts({ ids: ["shikijoyScript"]}, () => {
-        console.log("ejected JS");
+const ejectMainScript = async () => {
+    return await chrome.scripting.unregisterContentScripts({ ids: ["shikijoyScript"] }, () => {
+        console.log("ejected React");
     });
 }
 
-chrome.storage.onChanged.addListener((changes, area) => {
-    console.log({changes, area});
-    if (changes.enabled.newValue === true) {
-        injectScript();
+const injectFixes = async () => {
+    const script = {
+        id: "playersFixes",
+        allFrames: true,
+        matches: [
+            "*://animejoy.ru/*",
+            "*://secvideo1.online/*",
+            "*://red.uboost.one/*",
+            "*://video.sibnet.ru/*",
+            "*://vk.com/*",
+            "*://dzen.ru/*",
+            "*://ok.ru/*",
+            "*://*.mail.ru/*"
+        ],
+        runAt: "document_start",
+        js: ["playersFocusFix.js"]
+    }
+    return await chrome.scripting.registerContentScripts([script], () => {
+        console.log("injected Fixes");
+    })
+}
+
+const ejectFixes = async () => {
+    return await chrome.scripting.unregisterContentScripts({ ids: ["playersFixes"] }, () => {
+        console.log("ejected Fixes");
+    });
+}
+
+chrome.storage.onChanged.addListener(async (changes, area) => {
+    console.log({ changes, area });
+
+    if (changes.enabled && changes.enabled.newValue === true) {
+        const data = await chrome.storage.local.get(["usePlayersFixes"])
+        if (data.usePlayersFixes)
+            injectFixes();
+        injectMainScript();
         refreshAnimeJoyTabs();
-    } else if (changes.enabled.newValue === false) {
-        ejectScript();
+    } else if (changes.enabled && changes.enabled.newValue === false) {
+        const data = await chrome.storage.local.get(["usePlayersFixes"])
+        if (data.usePlayersFixes)
+            ejectFixes();
+        ejectMainScript();
         refreshAnimeJoyTabs();
+    } else if (changes.usePlayersFixes && changes.usePlayersFixes.newValue === true) {
+        const data = await chrome.storage.local.get(["enabled"])
+        if (data.enabled) {
+            injectFixes();
+            refreshAnimeJoyTabs();
+        }
+    } else if (changes.usePlayersFixes && changes.usePlayersFixes.newValue === false) {
+        const data = await chrome.storage.local.get(["enabled"])
+        if (data.enabled) {
+            ejectFixes();
+            refreshAnimeJoyTabs();
+        }
     }
 })
 

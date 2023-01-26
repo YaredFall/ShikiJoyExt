@@ -68,6 +68,10 @@
   width: 100%;
   border: none;
   border-radius: var(--rondness);
+
+  &:is(:focus-visible, :focus, :focus-within) {
+    outline: -webkit-focus-ring-color auto 1px;
+  }
 }
 
 .leftSection {
@@ -122,7 +126,7 @@
 }
 
 @media (min-width: 480px) {
-  :is(.rightSection, .leftSection):hover > .wrapper > .hint {
+  :is(.rightSection, .leftSection):is(:hover, :focus-visible) > .wrapper > .hint {
     opacity: 1;
     transition-delay: 1000ms;
   }
