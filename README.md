@@ -9,6 +9,6 @@ Chrome extension that changes [animejoy.ru](https://animejoy.ru) page content to
 #### Notes
 This is a development repo. Releases will be available later.
 
-Run `npm install` and 
+Run `cd react` and `npm install` to install dependencies. Then you can run 
 * `npm run build` to generate bundled script and stylesheet.
 * `npm run dev` to run demo on your machine.
