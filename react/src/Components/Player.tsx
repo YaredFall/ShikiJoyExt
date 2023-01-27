@@ -1,5 +1,4 @@
 import React, { FC, memo, useEffect, useRef, useState } from 'react';
-import { Simulate } from "react-dom/test-utils";
 import { BsCheck2 } from 'react-icons/bs';
 import { IoClose } from "react-icons/io5";
 import { SlArrowLeft, SlArrowRight } from 'react-icons/sl';
@@ -10,17 +9,17 @@ import { fullStudioName } from "../Utils/scraping";
 import styles from './Player.module.scss'
 import PlayerSelect from './PlayerSelect';
 import { NestedChildrenMemoPolymorphicComponent as Section } from "./PolymorphicComponent";
-import input = Simulate.input;
+import { usePlayersFixes } from "../Hooks/usePlayersFixes";
 
-type PlayerProps = {
-    animeData: AnimeData
-}
 
 const MemoizedLeftIcon = memo(SlArrowLeft);
 const MemoizedRightIcon = memo(SlArrowRight);
 const MemoizedCheckIcon = memo(BsCheck2);
 const MemoizedCrossIcon = memo(IoClose);
 
+type PlayerProps = {
+    animeData: AnimeData
+}
 const Player: FC<PlayerProps> = memo(({ animeData }) => {
 
     const {
@@ -30,7 +29,6 @@ const Player: FC<PlayerProps> = memo(({ animeData }) => {
         playersUsage,
         studiosUsage
     } = useAnimeJoyLegacyStorage(animeData);
-
 
     const mostUsedStudioId = studiosUsage.length === 1 ? 0 : studiosUsage.indexOf(Math.max(...studiosUsage))
     const mostUsedPlayerId = playersUsage[mostUsedStudioId].indexOf(Math.max(...playersUsage[mostUsedStudioId]))
@@ -69,21 +67,9 @@ const Player: FC<PlayerProps> = memo(({ animeData }) => {
 
     const epLabel = isSinglePagePlayer(currentPlayer.name) ? currentPlayer.name : `Серия ${currentEpisodeId + 1}`;
 
+    const leftBtnRef = useRef<HTMLButtonElement>(null);
     const iframeRef = useRef<HTMLIFrameElement>(null);
-    useEffect(() => {
-        const onFCChange = () => {
-            if (document.fullscreenElement) {
-                iframeRef.current?.classList.add("outline-hidden");
-            } else {
-                iframeRef.current?.classList.remove("outline-hidden");
-            }
-        }
-        document.addEventListener("fullscreenchange", onFCChange)
-        return () => {
-           document.removeEventListener("fullscreenchange", onFCChange)
-        };
-    }, []);
-    
+    usePlayersFixes(iframeRef);
 
     return (
         <section className={styles.player}>
@@ -91,13 +77,13 @@ const Player: FC<PlayerProps> = memo(({ animeData }) => {
                 <div
                     className={`${styles.currentEpLabel}${isSinglePagePlayer(currentPlayer.name) ? " hide" : " show"}`}
                 >
-                    <span children={epLabel} />
+                    <span children={epLabel}/>
                     {watchedEpisodesState.has(currentEpisodeId) &&
-                     <button className={styles.currentEpWatched}
-                             onClick={() => removeEpisodeFromWatched(currentStudioId, currentPlayerId, currentEpisodeId)}>
-                         <span children={"Посмотрено"} />
-                         <MemoizedCrossIcon />
-                     </button>}
+                        <button className={styles.currentEpWatched}
+                                onClick={() => removeEpisodeFromWatched(currentStudioId, currentPlayerId, currentEpisodeId)}>
+                            <span children={"Посмотрено"}/>
+                            <MemoizedCrossIcon/>
+                        </button>}
                 </div>
                 {
                     animeData.studios.length > 1 &&
@@ -114,26 +100,39 @@ const Player: FC<PlayerProps> = memo(({ animeData }) => {
                 />
             </Section>
             <Section as={"button"}
+                     ref={leftBtnRef}
                      className={`${styles.leftSection}${!canChangeEpisodeId("prev") ? " hide" : " show"}`}
-                     onClick={() => changeEpisodeId("prev")}
+                     onClick={() => {
+                         changeEpisodeId("prev");
+                         iframeRef.current?.focus();
+                     }}
                      disabled={!canChangeEpisodeId("prev")}
             >
                 <div className={styles.wrapper}>
-                    <MemoizedLeftIcon />
-                    <div className={styles.hint} children={"Предыдущая серия"} />
+                    <MemoizedLeftIcon/>
+                    <div className={styles.hint} children={"Предыдущая серия"}/>
                 </div>
             </Section>
-            <Section as={"iframe"}
-                     ref={iframeRef}
-                     className={styles.playerIframe}
-                     src={currentPlayer.files[isSinglePagePlayer(currentPlayer.name) ? 0 : currentEpisodeId]}
-                     allowFullScreen={true}
+            <Section as={"a"}
+                     onFocus={(e: React.FocusEvent) => {
+                         if (e.relatedTarget !== iframeRef.current) {
+                             iframeRef.current?.focus();
+                         } else {
+                             leftBtnRef.current?.focus();
+                         }
+                     }}
+                     className={styles.middleSection}
                      tabIndex={0}
-                     onLoad={() => document.querySelector("iframe")?.focus()}
-            />
+            >
+                <iframe ref={iframeRef}
+                        className={styles.playerIframe}
+                        src={currentPlayer.files[isSinglePagePlayer(currentPlayer.name) ? 0 : currentEpisodeId]}
+                        allowFullScreen={true}
+                />
+            </Section>
             <Section as={"button"}
                      className={`${styles.rightSection}${(!canChangeEpisodeId("next") &&
-                                                          watchedEpisodesState.has(currentEpisodeId))
+                         watchedEpisodesState.has(currentEpisodeId))
                                                          ? " hide-immediate"
                                                          : " show"}`}
                      onClick={() => {
@@ -142,16 +141,17 @@ const Player: FC<PlayerProps> = memo(({ animeData }) => {
                          }
                          if (canChangeEpisodeId("next")) {
                              changeEpisodeId("next");
+                             iframeRef.current?.focus();
                          } else {
                              setEpisodeAsWatched(currentStudioId, currentPlayerId, currentEpisodeId);
                          }
                      }}
                      disabled={!canChangeEpisodeId("next") &&
-                               watchedEpisodesState.has(currentEpisodeId)}
+                         watchedEpisodesState.has(currentEpisodeId)}
             >
                 <div className={styles.wrapper}>
-                    {canChangeEpisodeId("next") ? <MemoizedRightIcon /> :
-                     <MemoizedCheckIcon style={{ fontSize: "2rem" }} />}
+                    {canChangeEpisodeId("next") ? <MemoizedRightIcon/> :
+                     <MemoizedCheckIcon style={{ fontSize: "2rem" }}/>}
                     <div className={styles.hint}
                          children={canChangeEpisodeId("next") ? "Следующая серия" : "Отметить посмотренным"}
                     />

@@ -5,6 +5,7 @@ let observer = new MutationObserver(mutationRecords => {
     let handler = undefined;
     switch (domain) {
         //AllVideo
+        //TODO: fix doble play if player in focus but mouse is not in window
         case 'secvideo1.online': {
             const frame = document.querySelector("iframe");
             if (frame) {
@@ -24,9 +25,14 @@ let observer = new MutationObserver(mutationRecords => {
             break;
         }
         case 'video.sibnet.ru': {
-            setTimeout(() => {
-                document.querySelector("div#video_html5_wrapper")?.focus()
-            }, 0)
+            const wrapper = document.querySelector("div#video_html5_wrapper");
+            const videoEl = document.querySelector("video");
+            if (wrapper && videoEl) {
+                setTimeout(() => {
+                    wrapper.focus()
+                }, 0)
+                observer.disconnect();
+            }
             break;
         }
         case 'animejoy.ru': {

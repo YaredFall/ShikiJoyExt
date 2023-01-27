@@ -62,8 +62,7 @@
 }
 
 .playerIframe {
-  grid-area: m;
-  aspect-ratio: 16/9;
+
   height: 100%;
   width: 100%;
   border: none;
@@ -72,6 +71,12 @@
   &:is(:focus-visible, :focus, :focus-within) {
     outline: -webkit-focus-ring-color auto 1px;
   }
+}
+
+.middleSection {
+  grid-area: m;
+  aspect-ratio: 16/9;
+  display: flex;
 }
 
 .leftSection {
