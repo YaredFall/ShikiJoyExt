@@ -1,4 +1,4 @@
-import { PlayerData, StudioData } from "../types";
+import { StudioData } from "../types";
 
 /** Returns document.querySelector(selector) on resolve, or null on reject after specified time
  * @param {string} selector - selector
