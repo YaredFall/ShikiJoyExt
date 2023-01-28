@@ -72,7 +72,7 @@ const Player: FC<PlayerProps> = memo(({ animeData }) => {
     usePlayersFixes(iframeRef);
 
     return (
-        <section className={styles.player}>
+        <div className={styles.player}>
             <Section className={styles.topSection}>
                 <div
                     className={`${styles.currentEpLabel}${isSinglePagePlayer(currentPlayer.name) ? " hide" : " show"}`}
@@ -158,7 +158,7 @@ const Player: FC<PlayerProps> = memo(({ animeData }) => {
                     />
                 </div>
             </Section>
-        </section>
+        </div>
     );
 });
 

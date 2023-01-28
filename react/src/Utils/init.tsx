@@ -2,7 +2,7 @@ import { getStudiosPlayersAndFiles, promiseQuery } from "./scraping";
 import { AnimeData, Titles } from "../types";
 import ReactDOM from "react-dom/client";
 import React from "react";
-import App from "../App";
+import App from "../Components/App";
 
 function removeDefaultStylesOnLoad() {
     window.addEventListener("DOMContentLoaded", () => {

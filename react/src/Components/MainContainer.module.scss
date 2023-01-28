@@ -1,0 +1,11 @@
+.mainContainer {
+  padding: 1rem 2px 0 2px;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-left: 2px solid var(--primary-a12p5);
+  border-right: 2px solid var(--primary-a12p5);
+  overflow: auto;
+}

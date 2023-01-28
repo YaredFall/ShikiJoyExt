@@ -1,11 +1,13 @@
 .animePage {
   --frame-max-width: 960px;
   --frame-max-height: calc(var(--frame-max-width) / 16 * 9);
-  --player-grid-template-cols: minmax(60px, 120px) minmax(320px, var(--frame-max-width)) minmax(60px, 120px);
+  --player-grid-template-cols: minmax(60px, 1fr) minmax(320px, 8fr) minmax(60px, 1fr);
   --rondness: 0.25rem;
 
+  width: 100%;
   display: grid;
   grid-template-columns: var(--player-grid-template-cols);
+  grid-auto-rows: min-content;
   gap: 1rem 0;
 
   .topSection {
@@ -23,6 +25,6 @@
     font-size: 1.25rem;
     font-weight: 600;
     padding: 0.25rem;
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--primary-a50);
   }
 }

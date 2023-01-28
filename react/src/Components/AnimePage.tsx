@@ -12,17 +12,15 @@ const AnimePage: FC<AnimePageProps> = memo(({}) => {
 
     const animeData = useAnimeDataStore(state => state.data)
     if (!animeData) return (
-        <main><h1>Data was not found or some error occurred!</h1></main>
+        <section><h1>Data was not found or some error occurred!</h1></section>
     ); else return (
-        <main className={styles.animePage}>
+        <section className={styles.animePage}>
             <div className={styles.topSection}>
                 <h1 className={styles.titleRU} children={animeData.title.ru}/>
                 <h2 className={styles.titleRomanji} children={animeData.title.romanji}/>
             </div>
-
             <Player animeData={animeData}/>
-
-        </main>
+        </section>
     );
 
 });

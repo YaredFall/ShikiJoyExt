@@ -26,7 +26,7 @@
   align-items: stretch;
 
   & > .currentEpWatched {
-    color:rgba(255, 255, 255, 0.5);
+    color: var(--primary-a50);
     display: flex;
     align-items: flex-end;
     gap: 0.25rem;
@@ -46,7 +46,7 @@
 
 .currentStudioLabel {
   font-size: 1.125rem;
-  color:rgba(255, 255, 255, 0.5);
+  color: var(--primary-a50);
   margin-left: auto;
   margin-right: 0.75rem;
   line-height: 1;
@@ -57,7 +57,7 @@
   border-radius: var(--rondness);
   font-size: 1.125rem;
   font-weight: normal;
-  background-color: #303030;
+  background-color: var(--secondary);
   --max-options-heigth: var(--frame-max-height);
 }
 
@@ -97,17 +97,23 @@
 
 .rightSection,
 .leftSection {
-  color: rgba(255, 255, 255, 0.5);
-  transition: color 500ms ease, opacity 500ms ease;
+  color: var(--primary-a50);
+  width: 100%;
+  transition-duration: 500ms;
+  transition-timing-function: ease-in-out;
+  transition-property: color, opacity;
   font-size: 1.5rem;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  border-radius: var(--rondness);
 
   &:is(:hover, :focus-visible) {
-    color: white;
+    color: var(--primary);
+    background-color: #ffffff07;
+    box-shadow: 0 0 0.25rem 0 #ffffff07;
   }
 
   & > .wrapper {
@@ -121,7 +127,7 @@
       transition: opacity 500ms ease 0ms;
       font-size: 0.75rem;
       padding: 1rem;
-      color: rgba(255, 255, 255, 0.5);
+      color: var(--primary-a50);
       position: absolute;
       top: 100%;
       left: 50%;

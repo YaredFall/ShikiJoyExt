@@ -1,11 +1,12 @@
-@use 'fonts/Rubik';
+@use 'Assets/fonts/Rubik';
+@use 'glovalVars';
 @use 'basic';
 
 
 :root {
     color-scheme: dark;
-    background-color: #1f1f1f;
-    color: white;
+    background-color: var(--tertiarty);
+    color: var(--primary);
     font-family: 'Rubik', sans-serif;
 }
 
@@ -27,7 +28,6 @@ body {
     user-select: none;
 
     &-immediate {
-        background-color: red;
         @extend .hide;
         transition-duration: 0ms;
         animation-duration: 0ms;
@@ -36,5 +36,12 @@ body {
 
 .outline-hidden {
     outline: none !important;
+}
+
+#app {
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: var(--navbar-width) 3fr minmax(var(--navbar-width), 1fr);
 }
 

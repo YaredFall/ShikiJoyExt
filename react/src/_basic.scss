@@ -9,9 +9,13 @@
 }
 
 :root,
-body,
-#app {
+body {
   height: 100%;
+}
+
+img {
+  max-height: 100%;
+  max-width: 100%;
 }
 
 button {
@@ -43,7 +47,7 @@ button {
 
   & > svg {
     font-size: 0.75em;
-    color: rgba(255, 255, 255, 0.5)
+    color: var(--primary-a50);
   }
 }
 
@@ -66,10 +70,10 @@ button {
   cursor: pointer;
 
   &.active {
-    background-color: rgba(255, 255, 255, 0.125);
+    background-color: var(--primary-a12p5);
   }
   &.selected {
-    background-color: rgba(255, 255, 255, 0.25);;
+    background-color: var(--primary-a25);
   }
 }
 
@@ -79,6 +83,6 @@ button {
   text-align: center;
 
   &:not(:first-child) {
-    border-top: 2px solid rgba(255, 255, 255, 0.5);
+    border-top: 2px solid var(--primary-a50);
   }
 }
