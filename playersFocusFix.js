@@ -182,9 +182,6 @@ let observer = new MutationObserver(mutationRecords => {
         document.addEventListener("keyup", onKeyUp)
         console.log("added onKeyUp to", document)
     }
-    if (onFocus) {
-        window.addEventListener("focus", onFocus);
-    }
 });
 
 // window.addEventListener("DOMContentLoaded", () => {
