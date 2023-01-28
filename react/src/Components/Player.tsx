@@ -125,6 +125,7 @@ const Player: FC<PlayerProps> = memo(({ animeData }) => {
                      tabIndex={0}
             >
                 <iframe ref={iframeRef}
+                        loading={"lazy"}
                         className={styles.playerIframe}
                         src={currentPlayer.files[isSinglePagePlayer(currentPlayer.name) ? 0 : currentEpisodeId]}
                         allowFullScreen={true}

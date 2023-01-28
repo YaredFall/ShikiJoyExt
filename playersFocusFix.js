@@ -2,15 +2,14 @@ let observer = new MutationObserver(mutationRecords => {
     if (!document.body) return;
 
     const domain = document.domain;
-    let handler = undefined;
+    let onKeyUp = undefined;
     switch (domain) {
         //AllVideo
-        //TODO: fix doble play if player in focus but mouse is not in window
         case 'secvideo1.online': {
             const frame = document.querySelector("iframe");
             if (frame) {
                 frame.setAttribute("tabindex", "-1");
-                handler = dealWithPlayerJS(15, 62, {playFlags: [(mouseIn) => !mouseIn]})
+                onKeyUp = dealWithPlayerJS(15, 62, {playFlags: [(mouseIn) => !mouseIn]})
             }
             break;
         }
@@ -20,7 +19,7 @@ let observer = new MutationObserver(mutationRecords => {
             const frame = document.querySelector("iframe");
             if (frame) {
                 document.querySelectorAll("iframe").forEach(e => e.setAttribute("tabindex", "-1"));
-                handler = dealWithPlayerJS(17, 99, {playFlags: [(mouseIn) => !mouseIn]})
+                onKeyUp = dealWithPlayerJS(17, 99, {playFlags: [(mouseIn) => !mouseIn]})
             }
             break;
         }
@@ -37,7 +36,7 @@ let observer = new MutationObserver(mutationRecords => {
         }
         case 'animejoy.ru': {
             if (document.URL.startsWith("https://animejoy.ru/player/playerjs.html")) {
-                handler = dealWithPlayerJS(17, 83, {playFlags: [(mouseIn) => !mouseIn]})
+                onKeyUp = dealWithPlayerJS(17, 83, {playFlags: [(mouseIn) => !mouseIn]})
             }
             break;
         }
@@ -48,26 +47,74 @@ let observer = new MutationObserver(mutationRecords => {
         case 'dzen.ru': {
             const div = document.querySelectorAll(`div[tabindex="-1"]`)[1]
             if (div) {
-                setTimeout(() => {
-                    div.focus();
-                }, 50)
-            }
-
-            const muteDiv = document.querySelector('div[class][style="pointer-events: auto;"]');
-            if (muteDiv) {
+                document.querySelectorAll(':is(a, button, iframe, [tabindex="0"])')
+                    .forEach(e => e.setAttribute("tabindex", "-1"))
+                observer.disconnect();
                 let active = false;
-                handler = (e) => {
-                    if (!active && e.code === "Space") {
-                        active = true;
+                let muted = true;
+                window.onfocus = () => {
+                    active = false;
+                }
+                onKeyUp = (e) => {
+                    if (e.code === "Space" && !active) {
+                        const playBtn = document.querySelector('[data-control-name="play"]');
+                        if (playBtn) {
+                            playBtn.click();
+                        } else {
+                            div.click();
+                        }
+                        if (muted) {
+                            const interval = setInterval(() => {
+                                const muteDiv = document.querySelector('div[class][style="pointer-events: auto;"]')
+                                if (muteDiv) {
+                                    muteDiv.click();
+                                    setTimeout(() => {
+                                        document.querySelectorAll(':is(a, button, iframe, [tabindex="0"])')
+                                            .forEach(e => e.setAttribute("tabindex", "-1"))
+                                    }, 0)
+                                    muted = false;
+                                    clearInterval(interval);
+                                }
+                            }, 50)
+                        }
+                    } else if (e.code === "KeyF") {
+                        const fsBtn = document.querySelector('[data-control-name="fullscreen"]');
+                        if (fsBtn) {
+                            fsBtn.click();
+                            if (muted && !active) {
+                                const interval = setInterval(() => {
+                                    const mdivs = document.querySelectorAll('div[class][style="pointer-events: auto;"]')
+                                    if (mdivs.length > 1) {
+                                        mdivs[1].click();
+                                        let paused = false;
+                                        let noJokePaused = false
+                                        const pauseInterval = setInterval(() => {
+                                            document.querySelectorAll(':is(a, button, iframe, [tabindex="0"])')
+                                                .forEach(e => e.setAttribute("tabindex", "-1"))
+                                            const videoEl = document.querySelector("video");
+                                            if (videoEl.paused && noJokePaused) {
+                                                clearInterval(pauseInterval);
+                                            }
+                                            if (paused && !videoEl.paused) {
+                                                videoEl.pause()
+                                                noJokePaused = true;
+                                            }
+                                            if (!paused && !videoEl.paused) {
+                                                videoEl.pause();
+                                                paused = true
+                                            }
 
+
+                                        }, 50)
+                                        muted = false;
+                                        clearInterval(interval);
+                                    }
+                                }, 50)
+                            }
+                            active = true;
+                        }
                     }
                 }
-            }
-
-            const videoEl = document.querySelector("video");
-            if (videoEl && !videoEl.paused) {
-                muteDiv.click();
-                observer.disconnect();
             }
 
             break;
@@ -78,7 +125,7 @@ let observer = new MutationObserver(mutationRecords => {
             if (img) {
                 observer.disconnect();
                 let active = false;
-                handler = (e) => {
+                onKeyUp = (e) => {
                     if (e.code === "Space") {
                         if (!active) {
                             img?.click();
@@ -110,7 +157,7 @@ let observer = new MutationObserver(mutationRecords => {
             const fsBtn = document.querySelector(".b-video-controls__fullscreen-button")
             if (video && fsBtn) {
                 video.focus();
-                handler = (e) => {
+                onKeyUp = (e) => {
                     if (e.code === "KeyF") {
                         fsBtn.click();
                     }
@@ -120,20 +167,23 @@ let observer = new MutationObserver(mutationRecords => {
             break;
         }
     }
-    if (handler) {
-        document.removeEventListener("keyup", handler);
+    if (onKeyUp) {
+        document.removeEventListener("keyup", onKeyUp);
         document.body.addEventListener("focus", () => {
-            document.removeEventListener("keyup", handler);
+            document.removeEventListener("keyup", onKeyUp);
             console.log("got focus", document)
         })
         document.body.addEventListener("blur", () => {
             if (!document.fullscreenElement) {
-                document.addEventListener("keyup", handler)
+                document.addEventListener("keyup", onKeyUp)
             }
             console.log("lost focus", document)
         })
-        document.addEventListener("keyup", handler)
-        console.log("added handler to", document)
+        document.addEventListener("keyup", onKeyUp)
+        console.log("added onKeyUp to", document)
+    }
+    if (onFocus) {
+        window.addEventListener("focus", onFocus);
     }
 });
 
@@ -167,7 +217,7 @@ function dealWithPlayerJS(
     const a = document.querySelectorAll("pjsdiv");
 
     if (a.length > 0) {
-        let mouseIn;
+        let mouseIn = false;
         document.addEventListener("mouseenter", () => {
             mouseIn = true
         });
@@ -186,6 +236,11 @@ function dealWithPlayerJS(
                 fsBtn.click();
             }
         }
+
+        //prevents unwanted behavior after player being clicked
+        document.body.addEventListener("click", () => {
+            document.removeEventListener("keyup", handler);
+        })
         return handler;
     } else
         return undefined;

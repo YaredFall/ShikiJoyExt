@@ -44,12 +44,14 @@ export const usePlayersFixes = (iframeRef: RefObject<HTMLIFrameElement>) => {
         document.body.addEventListener("mouseenter", onMouseEnter);
         window.addEventListener("focus", onFocus);
         document.addEventListener("fullscreenchange", onFCChange);
+        document.addEventListener("webkitfullscreenchange", onFCChange)
 
         return () => {
             window.removeEventListener("load", onLoad);
             window.removeEventListener("focus", onFocus);
             document.body.removeEventListener("mouseenter", onMouseEnter);
             document.removeEventListener("fullscreenchange", onFCChange);
+            document.removeEventListener("webkitfullscreenchange", onFCChange)
         };
     }, []);
 }
