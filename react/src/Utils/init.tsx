@@ -1,5 +1,5 @@
 import { getStudiosPlayersAndFiles, promiseQuery } from "./scraping";
-import { AnimeData, Titles } from "../types";
+import { AnimeJoyData, Titles } from "../types";
 import ReactDOM from "react-dom/client";
 import React from "react";
 import App from "../Components/App";
@@ -27,7 +27,7 @@ function prepareDOM() {
     document.body.appendChild(appEL);
 }
 
-export function Render(data: AnimeData) {
+export function Render(data: AnimeJoyData) {
     ReactDOM.createRoot(document.getElementById('app') as HTMLElement).render(
         <React.StrictMode>
             <App data={data} />
@@ -46,7 +46,7 @@ export function prepareAndRender() {
 
         prepareDOM();
 
-        const shikijoyData: AnimeData = {
+        const shikijoyData: AnimeJoyData = {
             id: playlistsHTML.getAttribute("data-news_id")!,
             title: titles,
             studios: getStudiosPlayersAndFiles(playlistsHTML)

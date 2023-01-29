@@ -1,9 +1,9 @@
 import { create } from "zustand";
-import { AnimeData } from "../types";
+import { AnimeJoyData } from "../types";
 
 type AnimeDataState = {
-    data: AnimeData | null
-    set: (to: AnimeData) => void
+    data: AnimeJoyData | null
+    set: (to: AnimeJoyData) => void
 }
 
 export const useAnimeDataStore = create<AnimeDataState>()((set) => ({

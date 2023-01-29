@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
-import { AnimeData } from "../types";
+import { AnimeJoyData } from "../types";
 
-export const useAnimeJoyLegacyStorage = (animeData: AnimeData) => {
+export const useAnimeJoyLegacyStorage = (animeData: AnimeJoyData) => {
 
     const setEpisodeAsWatched = useCallback((studioId: number, playerId: number, episodeId: number): boolean => {
         const file = animeData.studios[studioId].players[playerId].files[episodeId];

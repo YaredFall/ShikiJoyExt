@@ -42,6 +42,6 @@ body {
     height: 100%;
     width: 100%;
     display: grid;
-    grid-template-columns: var(--navbar-width) 3fr minmax(var(--navbar-width), 1fr);
+    grid-template-columns: var(--navbar-width) 12fr minmax(var(--navbar-width), 5fr);
 }
 

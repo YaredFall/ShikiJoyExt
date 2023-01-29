@@ -1,0 +1,21 @@
+.description {
+
+
+}
+
+.posterAndDetails {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(20px, 1fr));
+  gap: 1rem;
+
+
+  & img {
+    border-radius: var(--rondness);
+    width: auto;
+    grid-column: span 5;
+  }
+
+  & .details {
+    grid-column: span 6;
+  }
+}

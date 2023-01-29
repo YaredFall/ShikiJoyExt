@@ -1,8 +1,8 @@
 import { Listbox, Transition } from '@headlessui/react';
 import React, { FC, Fragment, memo, useRef } from 'react';
 import { SlArrowDown } from 'react-icons/sl';
-import { PlayerData, StudioData } from "../types";
-import { fullStudioName } from "../Utils/scraping";
+import { PlayerData, StudioData } from "../../types";
+import { fullStudioName } from "../../Utils/scraping";
 import styles from "./Player.module.scss"
 
 type PlayerSelectProps = {

@@ -2,7 +2,6 @@
   --frame-max-width: 960px;
   --frame-max-height: calc(var(--frame-max-width) / 16 * 9);
   --player-grid-template-cols: minmax(60px, 1fr) minmax(320px, 8fr) minmax(60px, 1fr);
-  --rondness: 0.25rem;
 
   width: 100%;
   display: grid;
@@ -10,21 +9,9 @@
   grid-auto-rows: min-content;
   gap: 1rem 0;
 
-  .topSection {
+  & > * {
     display: grid;
-    grid-column: 2/2;
-  }
-
-  .titleRU {
-    font-size: 1.75rem;
-    font-weight: 600;
-    padding: 0.25rem;
-  }
-
-  .titleRomanji {
-    font-size: 1.25rem;
-    font-weight: 600;
-    padding: 0.25rem;
-    color: var(--primary-a50);
+    grid-column: 1/-1;
+    grid-template-columns: var(--player-grid-template-cols);
   }
 }

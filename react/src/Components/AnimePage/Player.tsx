@@ -2,14 +2,14 @@ import React, { FC, memo, useEffect, useRef, useState } from 'react';
 import { BsCheck2 } from 'react-icons/bs';
 import { IoClose } from "react-icons/io5";
 import { SlArrowLeft, SlArrowRight } from 'react-icons/sl';
-import { useAnimeJoyLegacyStorage } from "../Hooks/useAnimeJoyLegacyStorage";
-import { isSinglePagePlayer } from '../misc';
-import { AnimeData } from "../types";
-import { fullStudioName } from "../Utils/scraping";
+import { useAnimeJoyLegacyStorage } from "../../Hooks/useAnimeJoyLegacyStorage";
+import { isSinglePagePlayer } from '../../misc';
+import { AnimeJoyData } from "../../types";
+import { fullStudioName } from "../../Utils/scraping";
 import styles from './Player.module.scss'
 import PlayerSelect from './PlayerSelect';
-import { NestedChildrenMemoPolymorphicComponent as Section } from "./PolymorphicComponent";
-import { usePlayersFixes } from "../Hooks/usePlayersFixes";
+import { NestedChildrenMemoPolymorphicComponent as Section } from "../PolymorphicComponent";
+import { usePlayersFixes } from "../../Hooks/usePlayersFixes";
 
 
 const MemoizedLeftIcon = memo(SlArrowLeft);
@@ -18,7 +18,7 @@ const MemoizedCheckIcon = memo(BsCheck2);
 const MemoizedCrossIcon = memo(IoClose);
 
 type PlayerProps = {
-    animeData: AnimeData
+    animeData: AnimeJoyData
 }
 const Player: FC<PlayerProps> = memo(({ animeData }) => {
 
@@ -69,7 +69,7 @@ const Player: FC<PlayerProps> = memo(({ animeData }) => {
 
     const leftBtnRef = useRef<HTMLButtonElement>(null);
     const iframeRef = useRef<HTMLIFrameElement>(null);
-    usePlayersFixes(iframeRef);
+    // usePlayersFixes(iframeRef);
 
     return (
         <div className={styles.player}>

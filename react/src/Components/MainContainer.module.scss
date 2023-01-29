@@ -7,5 +7,6 @@
   align-items: center;
   border-left: 2px solid var(--primary-a12p5);
   border-right: 2px solid var(--primary-a12p5);
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
