@@ -17,6 +17,7 @@ const injectMainScript = async () => {
     const script = {
         id: "shikijoyScript",
         matches: ["https://*.animejoy.ru/*"],
+        excludeMatches: ["https://*.animejoy.ru/engine/*"],
         runAt: "document_start",
         js: ["react/dist/index.js"],
         css: ["react/dist/index.scss"]

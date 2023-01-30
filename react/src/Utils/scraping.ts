@@ -1,30 +1,10 @@
-import { StudioData } from "../types";
+import { StudioData, Titles } from "../types";
 
-/** Returns document.querySelector(selector) on resolve, or null on reject after specified time
- * @param {string} selector - selector
- * @param {boolean} [checkContent = true] - check if element has content before resolving
- * @param {number} [cancelAfter = undefined] - reject promise after specified time in milliseconds (not sooner than
- *     N*interval)
- * @param {number} [interval = 50] - time interval in milliseconds between resolving attempts */
-export function promiseQuery(selector: string, checkContent = true, cancelAfter: number | undefined = undefined, interval = 50) {
-    return new Promise<Element>((res, rej) => {
-        let pendingTime = 0;
-
-        const queryInterval = setInterval(() => {
-            if (cancelAfter && (pendingTime > cancelAfter)) {
-                clearInterval(queryInterval);
-                rej(null);
-            }
-
-            const queryResult = document.querySelector(selector);
-            if ((!checkContent && queryResult) || (checkContent && queryResult?.textContent)) {
-                clearInterval(queryInterval);
-                res(queryResult)
-            }
-
-            pendingTime += interval;
-        }, interval)
-    })
+export function getTitles(parentNode: ParentNode = document): Titles {
+    return {
+        ru: parentNode.querySelector(".ntitle")!.textContent!,
+        romanji: parentNode.querySelector(".romanji")!.textContent!
+    }
 }
 
 /**

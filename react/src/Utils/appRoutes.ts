@@ -1,5 +1,6 @@
 export enum appRoutes {
-    test = "tv-serialy/2880-ukrotitel-zverey-izgnannyy-iz-komandy-geroya-vstretil-devochku-koshku-iz-silneyshey-rasy.html",
+    test = "tv-serialy/2914-dlya-tebya-bessmertnyy-2-sezon.html",
+    test2 = "tv-serialy/3009-angel-po-sosedstvu.html",
     home = "/",
     serials = "tv-serialy",
     idParam = ":id",

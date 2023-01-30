@@ -15,7 +15,7 @@ export type Titles = {
 
 export type AnimeJoyData = {
     id: string
-    title: Titles
+    titles: Titles
     studios: StudioData[]
 }
 

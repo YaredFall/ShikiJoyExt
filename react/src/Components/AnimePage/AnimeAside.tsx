@@ -1,29 +1,35 @@
-import { FC, Fragment } from 'react';
+import { FC } from 'react';
 import { useQuery } from "react-query";
-import { AnimeJoyData, ShikimoriAnimeCoreData } from "../../types";
+import { ShikimoriAnimeCoreData } from "../../types";
 import AnimeDescription from "./AnimeDescription";
+import { useParams } from "react-router-dom";
+import { useAnimeJoyAnimePageQuery } from "../../Api/useAnimeJoyAnimePageQuery";
+import { getTitles } from "../../Utils/scraping";
 
-type AnimeAsideProps = {
-    animeData: AnimeJoyData
-}
+type AnimeAsideProps = {}
 
-const AnimeAside: FC<AnimeAsideProps> = ({ animeData }) => {
+const AnimeAside: FC<AnimeAsideProps> = () => {
 
-    if (!animeData) {
-        return null;
-    }
+    const { id: fullID } = useParams();
+    const id = fullID!.split('-')[0];
+
+    const { data: pageDocument } = useAnimeJoyAnimePageQuery(fullID!);
 
     const { isLoading, error, data } = useQuery<ShikimoriAnimeCoreData>(
-        'test',
-        () => fetch(`https://shikimori.one/api/animes?search=${animeData.title.romanji}`)
-            .then(fres => fres.json()
-                              .then(sres =>
-                                  fetch(`https://shikimori.one/api/animes/${sres[0].id}`)
-                                      .then(animeRes => animeRes.json())
-                              )
-            ),
-        { retry: false }
+        ['shikimori', 'search', fullID],
+        () => fetch(`https://shikimori.one/api/animes?search=${getTitles(pageDocument).romanji}`)
+                .then(fres => fres.json()
+                                  .then(sres =>
+                                      fetch(`https://shikimori.one/api/animes/${sres[0].id}`)
+                                          .then(animeRes => animeRes.json())
+                                  )
+                ),
+        { retry: false, enabled: !!pageDocument }
     )
+
+    if (!pageDocument) {
+        return null;
+    }
 
     return (
         <section>

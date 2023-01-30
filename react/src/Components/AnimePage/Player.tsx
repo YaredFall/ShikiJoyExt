@@ -18,9 +18,9 @@ const MemoizedCheckIcon = memo(BsCheck2);
 const MemoizedCrossIcon = memo(IoClose);
 
 type PlayerProps = {
-    animeData: AnimeJoyData
+    animejoyData: AnimeJoyData
 }
-const Player: FC<PlayerProps> = memo(({ animeData }) => {
+const Player: FC<PlayerProps> = memo(({ animejoyData }) => {
 
     const {
         watchedEpisodesState,
@@ -28,7 +28,7 @@ const Player: FC<PlayerProps> = memo(({ animeData }) => {
         removeEpisodeFromWatched,
         playersUsage,
         studiosUsage
-    } = useAnimeJoyLegacyStorage(animeData);
+    } = useAnimeJoyLegacyStorage(animejoyData);
 
     const mostUsedStudioId = studiosUsage.length === 1 ? 0 : studiosUsage.indexOf(Math.max(...studiosUsage))
     const mostUsedPlayerId = playersUsage[mostUsedStudioId].indexOf(Math.max(...playersUsage[mostUsedStudioId]))
@@ -36,7 +36,7 @@ const Player: FC<PlayerProps> = memo(({ animeData }) => {
     const [currentStudioId, setCurrentStudioId] = useState(mostUsedStudioId);
     const [currentPlayerId, setCurrentPlayerId] = useState(mostUsedPlayerId);
 
-    const currentPlayer = animeData.studios[currentStudioId].players[currentPlayerId];
+    const currentPlayer = animejoyData.studios[currentStudioId].players[currentPlayerId];
     const lastWatched = watchedEpisodesState.size > 0 ? Math.max(...watchedEpisodesState) : -1;
     const lastNotWatched = (lastWatched + 1 < currentPlayer.files.length) ? lastWatched + 1
                                                                           : currentPlayer.files.length - 1;
@@ -69,7 +69,7 @@ const Player: FC<PlayerProps> = memo(({ animeData }) => {
 
     const leftBtnRef = useRef<HTMLButtonElement>(null);
     const iframeRef = useRef<HTMLIFrameElement>(null);
-    // usePlayersFixes(iframeRef);
+    usePlayersFixes(iframeRef);
 
     return (
         <div className={styles.player}>
@@ -86,13 +86,13 @@ const Player: FC<PlayerProps> = memo(({ animeData }) => {
                         </button>}
                 </div>
                 {
-                    animeData.studios.length > 1 &&
+                    animejoyData.studios.length > 1 &&
                     <div className={styles.currentStudioLabel}
-                         children={fullStudioName(animeData.studios[currentStudioId].name)}
+                         children={fullStudioName(animejoyData.studios[currentStudioId].name)}
                          title={"Студия"}
                     />
                 }
-                <PlayerSelect availableStudiosAndPlayers={animeData.studios}
+                <PlayerSelect availableStudiosAndPlayers={animejoyData.studios}
                               currentStudioId={currentStudioId}
                               currentPlayerId={currentPlayerId}
                               setCurrentPlayerId={setCurrentPlayerId}
