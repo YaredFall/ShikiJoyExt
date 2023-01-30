@@ -16,12 +16,19 @@ const AnimePage: FC<AnimePageProps> = memo(({}) => {
     const { id: fullID } = useParams();
     const id = fullID!.split('-')[0];
 
-    const { isLoading: isLoadingStudios, data: studioData } = useAnimeJoyPlaylistQuery(id);
-    const { isLoading, data: pageDocument } = useAnimeJoyAnimePageQuery(fullID!);
+    const { isLoading: isLoadingStudios, isFetching: isFetchingStudios, data: studioData } = useAnimeJoyPlaylistQuery(id);
+    const { isLoading: isLoadingPage, isFetching: isFetchingPage, data: pageDocument } = useAnimeJoyAnimePageQuery(fullID!);
 
-    if (!studioData) {
+    if ((!isLoadingStudios && !studioData) || (!isLoadingPage && !pageDocument)) {
         return (
             <section><h1>Data was not found or some error occurred!</h1></section>
+        );
+    }
+
+    if (isLoadingPage || isLoadingStudios || isFetchingPage || isFetchingStudios) {
+        return (
+            <section className={styles.animePage}>
+            </section>
         );
     }
 

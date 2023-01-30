@@ -15,7 +15,7 @@ const AnimeAside: FC<AnimeAsideProps> = () => {
 
     const { data: pageDocument } = useAnimeJoyAnimePageQuery(fullID!);
 
-    const { isLoading, error, data } = useQuery<ShikimoriAnimeCoreData>(
+    const { isLoading, isFetching, error, data } = useQuery<ShikimoriAnimeCoreData>(
         ['shikimori', 'search', fullID],
         () => fetch(`https://shikimori.one/api/animes?search=${getTitles(pageDocument).romanji}`)
                 .then(fres => fres.json()
@@ -24,10 +24,12 @@ const AnimeAside: FC<AnimeAsideProps> = () => {
                                           .then(animeRes => animeRes.json())
                                   )
                 ),
-        { retry: false, enabled: !!pageDocument }
+        {
+            retry: false,
+            enabled: !!pageDocument }
     )
 
-    if (!pageDocument) {
+    if (!pageDocument || isLoading || isFetching ) {
         return null;
     }
 
