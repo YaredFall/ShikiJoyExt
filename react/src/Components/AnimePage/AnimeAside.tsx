@@ -25,7 +25,6 @@ const AnimeAside: FC<AnimeAsideProps> = () => {
                                   )
                 ),
         {
-            retry: false,
             enabled: !!pageDocument }
     )
 

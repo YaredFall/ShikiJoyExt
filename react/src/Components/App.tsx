@@ -13,6 +13,10 @@ const queryClient = new QueryClient({
     defaultOptions: {
         queries: {
             refetchOnWindowFocus: false, // default: true
+            retry: (failureCount, error) => {
+                // @ts-ignore
+                return (error.message === `SyntaxError: Unexpected token 'R', "Retry later" is not valid JSON` || error.message === "Unexpected token 'R', \"Retry later\n\" is not valid JSON")
+            }
         },
     },
 })
