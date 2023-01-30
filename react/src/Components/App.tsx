@@ -9,8 +9,13 @@ import MainContainer from "./MainContainer";
 import AsideContainer from "./AsideContainer";
 import AnimeAside from "./AnimePage/AnimeAside";
 
-const queryClient = new QueryClient()
-
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            refetchOnWindowFocus: false, // default: true
+        },
+    },
+})
 
 const App: FC = () => {
 
