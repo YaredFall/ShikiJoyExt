@@ -25,7 +25,10 @@ const AnimeAside: FC<AnimeAsideProps> = () => {
                                   )
                 ),
         {
-            enabled: !!pageDocument }
+            enabled: !!pageDocument,
+            staleTime: 60 * 1000 * 60 * 12,
+            cacheTime: 60 * 1000 * 60 * 12
+        }
     )
 
     if (!pageDocument || isLoading || isFetching ) {

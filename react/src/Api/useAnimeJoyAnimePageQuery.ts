@@ -6,7 +6,7 @@ const parser = new DOMParser();
 
 export const useAnimeJoyAnimePageQuery = (animejoyFullID: string) => {
 
-    const isNotFetchedYet = useRef(true);
+    const firstFetch = useRef(true);
 
     return useQuery(
         ['animejoy', 'anime', animejoyFullID],
@@ -14,11 +14,18 @@ export const useAnimeJoyAnimePageQuery = (animejoyFullID: string) => {
             if (import.meta.env.DEV)
                 return parser.parseFromString(mockupPage, "text/html");
 
-            isNotFetchedYet.current = false;
+            if (firstFetch.current) {
+                firstFetch.current = false;
+                return document;
+            }
 
             return fetch(`https://animejoy.ru/tv-serialy/${animejoyFullID}`)
                 .then(response => response.text().then(page => parser.parseFromString(page, "text/html")))
         },
-        { retry: false, initialData: isNotFetchedYet.current ? document : undefined}
+        {
+            retry: false,
+            staleTime: 60 * 1000 * 60 * 12,
+            cacheTime: 60 * 1000 * 60 * 12
+        }
     )
 }
