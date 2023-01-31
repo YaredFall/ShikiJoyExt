@@ -32,26 +32,13 @@ export const usePlayersFixes = (iframeRef: RefObject<HTMLIFrameElement>) => {
             }
         }
 
-        //removes outline in fullscreen
-        const onFCChange = () => {
-            if (document.fullscreenElement) {
-                iframeRef.current?.classList.add("outline-hidden");
-            } else {
-                iframeRef.current?.classList.remove("outline-hidden");
-            }
-        }
         window.addEventListener("load", onLoad);
         document.body.addEventListener("mouseenter", onMouseEnter);
         window.addEventListener("focus", onFocus);
-        document.addEventListener("fullscreenchange", onFCChange);
-        document.addEventListener("webkitfullscreenchange", onFCChange)
-
         return () => {
             window.removeEventListener("load", onLoad);
             window.removeEventListener("focus", onFocus);
             document.body.removeEventListener("mouseenter", onMouseEnter);
-            document.removeEventListener("fullscreenchange", onFCChange);
-            document.removeEventListener("webkitfullscreenchange", onFCChange)
         };
     }, []);
 }

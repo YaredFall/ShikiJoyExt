@@ -62,21 +62,47 @@
 }
 
 .playerIframe {
-
   height: 100%;
   width: 100%;
   border: none;
   border-radius: var(--rondness);
-
-  &:is(:focus-visible, :focus, :focus-within) {
-    outline: -webkit-focus-ring-color auto 1px;
-  }
 }
 
 .middleSection {
   grid-area: m;
   aspect-ratio: 16/9;
   display: flex;
+  overflow: hidden;
+  border-radius: var(--rondness);
+  background-color: var(--primary-a12p5);
+  margin: 1px;
+
+  &.loading {
+    animation: pulse 4s ease-in-out infinite;
+  }
+
+  &.loading > iframe {
+    opacity: 0;
+    pointer-events: none;
+  }
+  &.loaded > iframe {
+    transition: opacity 125ms ease-in-out 100ms;
+    opacity: 1;
+  }
+
+  &:is(:focus-visible, :focus, :focus-within) {
+    outline: -webkit-focus-ring-color auto 1px;
+  }
+}
+
+@keyframes pulse {
+  0%, 25%, 100% {
+    background-color: var(--primary-a12p5);
+  }
+  75% {
+    background-color: var(--primary-a50);
+  }
+
 }
 
 .leftSection {

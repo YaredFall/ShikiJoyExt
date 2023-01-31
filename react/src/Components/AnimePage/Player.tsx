@@ -13,6 +13,7 @@ import { usePlayersFixes } from "../../Hooks/usePlayersFixes";
 import { useParams } from "react-router-dom";
 import { updateAnimeRecord } from "../../Dexie";
 import { useAnimeRecord } from "../../Hooks/useAnimeRecord";
+import PlayerMiddleSection from "./PlayerMiddleSection";
 
 
 const MemoizedLeftIcon = memo(SlArrowLeft);
@@ -67,7 +68,7 @@ const Player: FC<PlayerProps> = memo(({ animejoyData }) => {
 
         if (currentPlayer.files[+newId]) {
             setCurrentEpisodeId(_ => +newId);
-            updateAnimeRecord(animeID, { lastEpisode: +newId})
+            updateAnimeRecord(animeID, { lastEpisode: +newId })
         }
     }
 
@@ -94,12 +95,13 @@ const Player: FC<PlayerProps> = memo(({ animejoyData }) => {
                 <div
                     className={`${styles.currentEpLabel}${isSinglePagePlayer(currentPlayer.name) ? " hide" : " show"}`}
                 >
-                    <span children={epLabel}/>
+                    <span children={epLabel} />
                     {watchedEpisodesState.has(currentEpisodeId) &&
                         <button className={styles.currentEpWatched}
-                                onClick={() => removeEpisodeFromWatched(currentStudioId, currentPlayerId, currentEpisodeId)}>
-                            <span children={"Посмотрено"}/>
-                            <MemoizedCrossIcon/>
+                                onClick={() => removeEpisodeFromWatched(currentStudioId, currentPlayerId, currentEpisodeId)}
+                        >
+                            <span children={"Посмотрено"} />
+                            <MemoizedCrossIcon />
                         </button>}
                 </div>
                 {
@@ -126,28 +128,15 @@ const Player: FC<PlayerProps> = memo(({ animejoyData }) => {
                      disabled={!canChangeEpisodeId("prev")}
             >
                 <div className={styles.wrapper}>
-                    <MemoizedLeftIcon/>
-                    <div className={styles.hint} children={"Предыдущая серия"}/>
+                    <MemoizedLeftIcon />
+                    <div className={styles.hint} children={"Предыдущая серия"} />
                 </div>
             </Section>
-            <Section as={"a"}
-                     onFocus={(e: React.FocusEvent) => {
-                         if (e.relatedTarget !== iframeRef.current) {
-                             iframeRef.current?.focus();
-                         } else {
-                             leftBtnRef.current?.focus();
-                         }
-                     }}
-                     className={styles.middleSection}
-                     tabIndex={0}
-            >
-                <iframe ref={iframeRef}
-                        loading={"lazy"}
-                        className={styles.playerIframe}
-                        src={currentPlayer.files[isSinglePagePlayer(currentPlayer.name) ? 0 : currentEpisodeId]}
-                        allowFullScreen={true}
-                />
-            </Section>
+            <PlayerMiddleSection iframeRef={iframeRef}
+                                 leftBtnRef={leftBtnRef}
+                                 currentPlayer={currentPlayer}
+                                 currentEpisodeId={currentEpisodeId}
+            />
             <Section as={"button"}
                      className={`${styles.rightSection}${(!canChangeEpisodeId("next") &&
                          watchedEpisodesState.has(currentEpisodeId))
@@ -168,8 +157,8 @@ const Player: FC<PlayerProps> = memo(({ animejoyData }) => {
                          watchedEpisodesState.has(currentEpisodeId)}
             >
                 <div className={styles.wrapper}>
-                    {canChangeEpisodeId("next") ? <MemoizedRightIcon/> :
-                     <MemoizedCheckIcon style={{ fontSize: "2rem" }}/>}
+                    {canChangeEpisodeId("next") ? <MemoizedRightIcon /> :
+                     <MemoizedCheckIcon style={{ fontSize: "2rem" }} />}
                     <div className={styles.hint}
                          children={canChangeEpisodeId("next") ? "Следующая серия" : "Отметить посмотренным"}
                     />
