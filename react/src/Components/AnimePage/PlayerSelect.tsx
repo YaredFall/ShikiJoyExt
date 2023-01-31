@@ -1,9 +1,11 @@
 import { Listbox, Transition } from '@headlessui/react';
-import React, { FC, Fragment, memo, useRef } from 'react';
+import React, { FC, Fragment, memo } from 'react';
 import { SlArrowDown } from 'react-icons/sl';
-import { PlayerData, StudioData } from "../../types";
+import { StudioData } from "../../types";
 import { fullStudioName } from "../../Utils/scraping";
 import styles from "./Player.module.scss"
+import { useParams } from "react-router-dom";
+import { updateAnimeRecord } from "../../Dexie";
 
 type PlayerSelectProps = {
     availableStudiosAndPlayers: StudioData[]
@@ -23,6 +25,9 @@ const PlayerSelect: FC<PlayerSelectProps> = (({
     setCurrentPlayerId
 }) => {
 
+    const { id: fullID } = useParams();
+    const id = fullID!.split('-')[0];
+
     const currentPlayer = availableStudiosAndPlayers[currentStudioId].players[currentPlayerId];
 
     return (
@@ -33,6 +38,7 @@ const PlayerSelect: FC<PlayerSelectProps> = (({
                      const ids = value.split("-");
                      setCurrentStudioId(+ids[0]);
                      setCurrentPlayerId(+ids[1]);
+                     updateAnimeRecord(id, { lastStudio: +ids[0], lastPlayer: +ids[1]})
                  }}
         >
             <Listbox.Button className="select-btn" title={"Выбор плеера"}>

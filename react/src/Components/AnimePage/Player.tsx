@@ -10,6 +10,9 @@ import styles from './Player.module.scss'
 import PlayerSelect from './PlayerSelect';
 import { NestedChildrenMemoPolymorphicComponent as Section } from "../PolymorphicComponent";
 import { usePlayersFixes } from "../../Hooks/usePlayersFixes";
+import { useParams } from "react-router-dom";
+import { updateAnimeRecord } from "../../Dexie";
+import { useAnimeRecord } from "../../Hooks/useAnimeRecord";
 
 
 const MemoizedLeftIcon = memo(SlArrowLeft);
@@ -22,26 +25,39 @@ type PlayerProps = {
 }
 const Player: FC<PlayerProps> = memo(({ animejoyData }) => {
 
+    const { id: fullID } = useParams();
+    const animeID = fullID!.split('-')[0];
+    const animeRecord = useAnimeRecord(animeID);
+    console.log(animeRecord)
+
     const {
         watchedEpisodesState,
         setEpisodeAsWatched,
         removeEpisodeFromWatched,
-        playersUsage,
-        studiosUsage
+        // playersUsage,
+        // studiosUsage
     } = useAnimeJoyLegacyStorage(animejoyData);
 
-    const mostUsedStudioId = studiosUsage.length === 1 ? 0 : studiosUsage.indexOf(Math.max(...studiosUsage))
-    const mostUsedPlayerId = playersUsage[mostUsedStudioId].indexOf(Math.max(...playersUsage[mostUsedStudioId]))
+    // const mostUsedStudioId = studiosUsage.length === 1 ? 0 : studiosUsage.indexOf(Math.max(...studiosUsage))
+    // const mostUsedPlayerId = playersUsage[mostUsedStudioId].indexOf(Math.max(...playersUsage[mostUsedStudioId]))
 
-    const [currentStudioId, setCurrentStudioId] = useState(mostUsedStudioId);
-    const [currentPlayerId, setCurrentPlayerId] = useState(mostUsedPlayerId);
+    const [currentStudioId, setCurrentStudioId] = useState(0);
+    const [currentPlayerId, setCurrentPlayerId] = useState(0);
 
     const currentPlayer = animejoyData.studios[currentStudioId].players[currentPlayerId];
-    const lastWatched = watchedEpisodesState.size > 0 ? Math.max(...watchedEpisodesState) : -1;
-    const lastNotWatched = (lastWatched + 1 < currentPlayer.files.length) ? lastWatched + 1
-                                                                          : currentPlayer.files.length - 1;
+    // const lastWatched = watchedEpisodesState.size > 0 ? Math.max(...watchedEpisodesState) : -1;
+    // const lastNotWatched = (lastWatched + 1 < currentPlayer.files.length) ? lastWatched + 1
+    //                                                                       : currentPlayer.files.length - 1;
 
-    const [currentEpisodeId, setCurrentEpisodeId] = useState(lastNotWatched);
+    const [currentEpisodeId, setCurrentEpisodeId] = useState(0);
+
+    useEffect(() => {
+        if (animeRecord) {
+            setCurrentStudioId(animeRecord.lastStudio);
+            setCurrentPlayerId(animeRecord.lastPlayer);
+            setCurrentEpisodeId(animeRecord.lastEpisode);
+        }
+    }, [animeRecord])
 
     const changeEpisodeId = (to: "next" | "prev" | number) => {
         let newId = to;
@@ -51,6 +67,7 @@ const Player: FC<PlayerProps> = memo(({ animejoyData }) => {
 
         if (currentPlayer.files[+newId]) {
             setCurrentEpisodeId(_ => +newId);
+            updateAnimeRecord(animeID, { lastEpisode: +newId})
         }
     }
 

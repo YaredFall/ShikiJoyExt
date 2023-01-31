@@ -7,6 +7,8 @@ import { AnimeJoyData } from "../../types";
 import { useAnimeJoyAnimePageQuery } from "../../Api/useAnimeJoyAnimePageQuery";
 import { getTitles } from "../../Utils/scraping";
 import { useParams } from "react-router-dom";
+import { tryAddAnime } from "../../Dexie";
+import { useEffectOnce } from "../../Hooks/useEffectOnce";
 
 
 type AnimePageProps = {}
@@ -15,6 +17,8 @@ const AnimePage: FC<AnimePageProps> = memo(({}) => {
 
     const { id: fullID } = useParams();
     const id = fullID!.split('-')[0];
+
+    useEffectOnce(() => { tryAddAnime(id) });
 
     const { isLoading: isLoadingStudios, isFetching: isFetchingStudios, data: studioData } = useAnimeJoyPlaylistQuery(id);
     const { isLoading: isLoadingPage, isFetching: isFetchingPage, data: pageDocument } = useAnimeJoyAnimePageQuery(fullID!);
