@@ -4,9 +4,9 @@ Chrome extension that changes [animejoy.ru](https://animejoy.ru) page content to
 ## Reasoning
 - AnimeJoy is a nice site, but user experience is not great.
 - I want to integrate [Shikimori](https://shikimori.one).
-- Absence of API and Cloudflare protection makes it very problematic to build a separate website.
+- Absence of API and Cloudflare protection makes it very problematic to build a separate website that would consume animejoy data.
 
-#### Notes
+## Notes
 This is a development repo. Releases will be available later.
 
 Run `cd react` and `npm install` to install dependencies. Then you can run 
