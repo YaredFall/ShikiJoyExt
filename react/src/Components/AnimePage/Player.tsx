@@ -6,7 +6,7 @@ import { useAnimeJoyLegacyStorage } from "../../Hooks/useAnimeJoyLegacyStorage";
 import { isSinglePagePlayer } from '../../misc';
 import { AnimeJoyData } from "../../types";
 import { fullStudioName } from "../../Utils/scraping";
-import styles from './Player.module.scss'
+import styles from './Player.module.scss';
 import PlayerSelect from './PlayerSelect';
 import { NestedChildrenMemoPolymorphicComponent as Section } from "../PolymorphicComponent";
 import { usePlayersFixes } from "../../Hooks/usePlayersFixes";
@@ -29,7 +29,7 @@ const Player: FC<PlayerProps> = memo(({ animejoyData }) => {
     const { id: fullID } = useParams();
     const animeID = fullID!.split('-')[0];
     const animeRecord = useAnimeRecord(animeID);
-    console.log(animeRecord)
+    console.log(animeRecord);
 
     const {
         watchedEpisodesState,
@@ -58,7 +58,7 @@ const Player: FC<PlayerProps> = memo(({ animejoyData }) => {
             setCurrentPlayerId(animeRecord.lastPlayer);
             setCurrentEpisodeId(animeRecord.lastEpisode);
         }
-    }, [animeRecord])
+    }, [animeRecord]);
 
     const changeEpisodeId = (to: "next" | "prev" | number) => {
         let newId = to;
@@ -68,9 +68,9 @@ const Player: FC<PlayerProps> = memo(({ animejoyData }) => {
 
         if (currentPlayer.files[+newId]) {
             setCurrentEpisodeId(_ => +newId);
-            updateAnimeRecord(animeID, { lastEpisode: +newId })
+            updateAnimeRecord(animeID, { lastEpisode: +newId });
         }
-    }
+    };
 
     const canChangeEpisodeId = (to: "next" | "prev" | number) => {
         if (isSinglePagePlayer(currentPlayer.name)) return false;
@@ -80,8 +80,8 @@ const Player: FC<PlayerProps> = memo(({ animejoyData }) => {
             newId = currentEpisodeId + 1;
         } else if (to === "prev") newId = currentEpisodeId - 1;
 
-        return (currentPlayer.files[+newId] !== undefined)
-    }
+        return (currentPlayer.files[+newId] !== undefined);
+    };
 
     const epLabel = isSinglePagePlayer(currentPlayer.name) ? currentPlayer.name : `Серия ${currentEpisodeId + 1}`;
 
@@ -98,7 +98,7 @@ const Player: FC<PlayerProps> = memo(({ animejoyData }) => {
                     <span children={epLabel} />
                     {watchedEpisodesState.has(currentEpisodeId) &&
                         <button className={styles.currentEpWatched}
-                                onClick={() => removeEpisodeFromWatched(currentStudioId, currentPlayerId, currentEpisodeId)}
+                                onClick={() => removeEpisodeFromWatched(currentEpisodeId)}
                         >
                             <span children={"Посмотрено"} />
                             <MemoizedCrossIcon />

@@ -15,17 +15,23 @@ export const useAnimeJoyLegacyStorage = (animeData: AnimeJoyData) => {
         }
     }, [animeData]);
 
-    const removeEpisodeFromWatched = useCallback((studioId: number, playerId: number, episodeId: number): boolean => {
-        const file = animeData.studios[studioId].players[playerId].files[episodeId];
-        if (file) {
-            localStorage.removeItem(`playlists-${animeData.id}-playlist-${file}`);
-            watchedEpisodes.delete(episodeId);
-            setWatchedEpisodesState(new Set(watchedEpisodes));
-            return true;
-        } else {
-            return false;
-        }
+
+    /**
+     * @description NOTE: removes ALL localStorage records of given episode
+     */
+    const removeEpisodeFromWatched = useCallback((episodeID: number) => {
+        animeData.studios.forEach(s => {
+            s.players.forEach(p => {
+                const file = p.files[episodeID];
+                if (file) {
+                    localStorage.removeItem(`playlists-${animeData.id}-playlist-${file}`);
+                    watchedEpisodes.delete(episodeID);
+                    setWatchedEpisodesState(new Set(watchedEpisodes));
+                }
+            })
+        });
     }, [animeData]);
+
 
     const { watchedEpisodes, studiosUsage, playersUsage } = useMemo(() => {
         const watchedEpisodes = new Set<number>();
