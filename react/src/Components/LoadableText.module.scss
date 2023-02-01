@@ -1,0 +1,11 @@
+
+.fakeText {
+  color: transparent;
+  max-width: 100%;
+  pointer-events: none;
+  display: inline-block;
+  border-radius: var(--roundess, 0.25rem);
+  animation: var(--animation-pulse);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

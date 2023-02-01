@@ -32,6 +32,8 @@ const AnimePage: FC<AnimePageProps> = memo(({}) => {
     if (isLoadingPage || isLoadingStudios || isFetchingPage || isFetchingStudios) {
         return (
             <section className={styles.animePage}>
+                <AnimeHeader titles={undefined}/>
+                {/*TODO:<Player animejoyData={undefined}/>*/}
             </section>
         );
     }

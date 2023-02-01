@@ -2,20 +2,29 @@ import { FC } from 'react';
 import styles from "./AnimeHeader.module.scss";
 import { Titles } from "../../types";
 import { nestedChildrenCompareMemo } from "../../Utils/childrenCompareMemo";
+import LoadableText from "../LoadableText";
 
 type AnimeHeaderProps = {
-    titles: Titles
+    titles: Titles | undefined
+    placeholderLength?: number
 }
 
-const AnimeHeader:FC<AnimeHeaderProps> = ({ titles }) => {
+const AnimeHeader: FC<AnimeHeaderProps> = ({
+    titles,
+    placeholderLength = 45
+}) => {
+
     return (
         <header className={styles.headerContainer}>
             <div className={styles.titlesSection}>
-                <h1 className={styles.titleRU} children={titles.ru}/>
-                <h2 className={styles.titleRomanji} children={titles.romanji}/>
+                <h1 className={styles.titleRU}
+                    children={<LoadableText placeholderLength={placeholderLength} children={titles?.ru} />} />
+                <h2 className={styles.titleRomanji}
+                    children={<LoadableText placeholderLength={placeholderLength} children={titles?.romanji} />}
+                />
             </div>
         </header>
     );
 };
 
-export default  nestedChildrenCompareMemo(AnimeHeader);
+export default nestedChildrenCompareMemo(AnimeHeader);
