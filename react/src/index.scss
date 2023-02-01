@@ -49,3 +49,13 @@ body {
     grid-template-columns: var(--navbar-width) 12fr minmax(var(--navbar-width), 5fr);
 }
 
+@keyframes pulse {
+    0%, 25%, 100% {
+        background-color: var(--primary-a12p5);
+    }
+    75% {
+        background-color: var(--primary-a50);
+    }
+
+}
+

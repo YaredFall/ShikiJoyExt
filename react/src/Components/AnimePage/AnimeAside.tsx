@@ -15,34 +15,42 @@ const AnimeAside: FC<AnimeAsideProps> = () => {
 
     const { data: pageDocument } = useAnimeJoyAnimePageQuery(fullID!);
 
-    const { isLoading, isFetching, error, data } = useQuery<ShikimoriAnimeCoreData>(
+    const {
+        isLoading,
+        isFetching,
+        error,
+        data
+    } = useQuery<ShikimoriAnimeCoreData>(
         ['shikimori', 'search', fullID],
         () => fetch(`https://shikimori.one/api/animes?search=${getTitles(pageDocument).romanji}`)
-                .then(fres => fres.json()
-                                  .then(sres =>
-                                      fetch(`https://shikimori.one/api/animes/${sres[0].id}`)
-                                          .then(animeRes => animeRes.json())
-                                  )
-                ),
+            .then(fres => fres.json()
+                              .then(sres =>
+                                  fetch(`https://shikimori.one/api/animes/${sres[0].id}`)
+                                      .then(animeRes => animeRes.json())
+                              )
+            ),
         {
             enabled: !!pageDocument,
             staleTime: 60 * 1000 * 60 * 12,
             cacheTime: 60 * 1000 * 60 * 12
         }
-    )
+    );
 
-    if (!pageDocument || isLoading || isFetching ) {
-        return null;
+    // if (!pageDocument || isLoading || isFetching) {
+    //     return null;
+    // }
+
+    if (error) {
+        return (
+            <section>
+                <h3>Произошла ошибка! Возможно ваш блокировщик рекламы блокирует запросы shikimori.one</h3>
+            </section>
+        );
     }
 
     return (
         <section>
-            <>
-                {error && <h2>Произошла ошибка! Возможно ваш блокировщик рекламы блокирует запросы shikimori.one</h2>}
-                {!isLoading && !error && data &&
-                    <AnimeDescription data={data} />
-                }
-            </>
+            <AnimeDescription data={data} />
         </section>
     );
 };
