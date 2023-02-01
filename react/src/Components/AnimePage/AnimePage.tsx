@@ -9,6 +9,8 @@ import { getTitles } from "../../Utils/scraping";
 import { useParams } from "react-router-dom";
 import { tryAddAnime } from "../../Dexie";
 import { useEffectOnce } from "../../Hooks/useEffectOnce";
+import PlayerSkeleton from "./PlayerSkeleton";
+import { useAnimeRecord } from "../../Hooks/useAnimeRecord";
 
 
 type AnimePageProps = {}
@@ -16,11 +18,14 @@ type AnimePageProps = {}
 const AnimePage: FC<AnimePageProps> = memo(({}) => {
 
     const { id: fullID } = useParams();
-    const id = fullID!.split('-')[0];
+    const animeID = fullID!.split('-')[0];
 
-    useEffectOnce(() => { tryAddAnime(id) });
+    useEffectOnce(() => { tryAddAnime(animeID) });
 
-    const { isLoading: isLoadingStudios, isFetching: isFetchingStudios, data: studioData } = useAnimeJoyPlaylistQuery(id);
+    const animeRecord = useAnimeRecord(animeID);
+    console.log(animeRecord);
+
+    const { isLoading: isLoadingStudios, isFetching: isFetchingStudios, data: studioData } = useAnimeJoyPlaylistQuery(animeID);
     const { isLoading: isLoadingPage, isFetching: isFetchingPage, data: pageDocument } = useAnimeJoyAnimePageQuery(fullID!);
 
     if ((!isLoadingStudios && !studioData) || (!isLoadingPage && !pageDocument)) {
@@ -29,17 +34,17 @@ const AnimePage: FC<AnimePageProps> = memo(({}) => {
         );
     }
 
-    if (isLoadingPage || isLoadingStudios || isFetchingPage || isFetchingStudios) {
+    if (isLoadingPage || isLoadingStudios || isFetchingPage || isFetchingStudios || !animeRecord) {
         return (
             <section className={styles.animePage}>
                 <AnimeHeader titles={undefined}/>
-                {/*TODO:<Player animejoyData={undefined}/>*/}
+                <PlayerSkeleton />
             </section>
         );
     }
 
     const animejoyData: AnimeJoyData = {
-        id: id,
+        id: animeID,
         titles: getTitles(pageDocument),
         studios: studioData
     }
@@ -47,7 +52,7 @@ const AnimePage: FC<AnimePageProps> = memo(({}) => {
     return (
         <section className={styles.animePage}>
             <AnimeHeader titles={animejoyData.titles}/>
-            <Player animejoyData={animejoyData}/>
+            <Player animejoyData={animejoyData} animeRecord={animeRecord}/>
         </section>
     );
 

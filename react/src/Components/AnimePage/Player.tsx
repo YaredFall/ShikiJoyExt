@@ -10,10 +10,9 @@ import styles from './Player.module.scss';
 import PlayerSelect from './PlayerSelect';
 import { NestedChildrenMemoPolymorphicComponent as Section } from "../PolymorphicComponent";
 import { usePlayersFixes } from "../../Hooks/usePlayersFixes";
-import { useParams } from "react-router-dom";
 import { updateAnimeRecord } from "../../Dexie";
-import { useAnimeRecord } from "../../Hooks/useAnimeRecord";
 import PlayerMiddleSection from "./PlayerMiddleSection";
+import { Anime } from "../../Dexie/db";
 
 
 const MemoizedLeftIcon = memo(SlArrowLeft);
@@ -22,42 +21,28 @@ const MemoizedCheckIcon = memo(BsCheck2);
 const MemoizedCrossIcon = memo(IoClose);
 
 type PlayerProps = {
-    animejoyData: AnimeJoyData
+    animejoyData: AnimeJoyData,
+    animeRecord: Anime
 }
-const Player: FC<PlayerProps> = memo(({ animejoyData }) => {
-
-    const { id: fullID } = useParams();
-    const animeID = fullID!.split('-')[0];
-    const animeRecord = useAnimeRecord(animeID);
-    console.log(animeRecord);
+const Player: FC<PlayerProps> = memo(({ animejoyData, animeRecord }) => {
 
     const {
         watchedEpisodesState,
         setEpisodeAsWatched,
         removeEpisodeFromWatched,
-        // playersUsage,
-        // studiosUsage
     } = useAnimeJoyLegacyStorage(animejoyData);
 
-    // const mostUsedStudioId = studiosUsage.length === 1 ? 0 : studiosUsage.indexOf(Math.max(...studiosUsage))
-    // const mostUsedPlayerId = playersUsage[mostUsedStudioId].indexOf(Math.max(...playersUsage[mostUsedStudioId]))
-
-    const [currentStudioId, setCurrentStudioId] = useState(0);
-    const [currentPlayerId, setCurrentPlayerId] = useState(0);
+    const [currentStudioId, setCurrentStudioId] = useState(animeRecord.lastStudio);
+    const [currentPlayerId, setCurrentPlayerId] = useState(animeRecord.lastPlayer);
 
     const currentPlayer = animejoyData.studios[currentStudioId].players[currentPlayerId];
-    // const lastWatched = watchedEpisodesState.size > 0 ? Math.max(...watchedEpisodesState) : -1;
-    // const lastNotWatched = (lastWatched + 1 < currentPlayer.files.length) ? lastWatched + 1
-    //                                                                       : currentPlayer.files.length - 1;
 
-    const [currentEpisodeId, setCurrentEpisodeId] = useState(0);
+    const [currentEpisodeId, setCurrentEpisodeId] = useState(animeRecord.lastEpisode);
 
     useEffect(() => {
-        if (animeRecord) {
             setCurrentStudioId(animeRecord.lastStudio);
             setCurrentPlayerId(animeRecord.lastPlayer);
             setCurrentEpisodeId(animeRecord.lastEpisode);
-        }
     }, [animeRecord]);
 
     const changeEpisodeId = (to: "next" | "prev" | number) => {
@@ -68,7 +53,7 @@ const Player: FC<PlayerProps> = memo(({ animejoyData }) => {
 
         if (currentPlayer.files[+newId]) {
             setCurrentEpisodeId(_ => +newId);
-            updateAnimeRecord(animeID, { lastEpisode: +newId });
+            updateAnimeRecord(animejoyData.id, { lastEpisode: +newId });
         }
     };
 
@@ -92,9 +77,7 @@ const Player: FC<PlayerProps> = memo(({ animejoyData }) => {
     return (
         <div className={styles.player}>
             <Section className={styles.topSection}>
-                <div
-                    className={`${styles.currentEpLabel}${isSinglePagePlayer(currentPlayer.name) ? " hide" : " show"}`}
-                >
+                <div className={`${styles.currentEpLabel}${isSinglePagePlayer(currentPlayer.name) ? " hide" : " show"}`}>
                     <span children={epLabel} />
                     {watchedEpisodesState.has(currentEpisodeId) &&
                         <button className={styles.currentEpWatched}

@@ -11,7 +11,7 @@ type AnimeHeaderProps = {
 
 const AnimeHeader: FC<AnimeHeaderProps> = ({
     titles,
-    placeholderLength = 45
+    placeholderLength = 40
 }) => {
 
     return (

@@ -1,9 +1,9 @@
 
 .fakeText {
   color: transparent;
-  max-width: 100%;
+  max-width: min-content;
   pointer-events: none;
-  display: inline-block;
+  display: block;
   border-radius: var(--roundess, 0.25rem);
   animation: var(--animation-pulse);
   overflow: hidden;
