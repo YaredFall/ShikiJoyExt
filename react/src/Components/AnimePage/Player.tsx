@@ -107,8 +107,9 @@ const Player: FC<PlayerProps> = memo(({ animejoyData, animeRecord }) => {
                     animejoyData.studios.length > 1 &&
                     <div className={styles.currentStudioLabel}>
                         <span title={"Студия"}>{fullStudioName(studioName)}</span>
-                        <DotSplitter />
-                        <span title={"Серий"}>{studioEpisodesCount}</span>
+                        {studioEpisodesCount &&
+                            <><DotSplitter /><span title={"Серий"}>{studioEpisodesCount}</span></>
+                        }
                     </div>
                 }
                 <PlayerSelect availableStudiosAndPlayers={animejoyData.studios}
