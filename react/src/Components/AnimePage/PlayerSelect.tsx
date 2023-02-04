@@ -2,11 +2,11 @@ import { Listbox, Transition } from '@headlessui/react';
 import React, { FC, Fragment, memo } from 'react';
 import { SlArrowDown } from 'react-icons/sl';
 import { StudioData } from "../../types";
-import { fullStudioName } from "../../Utils/scraping";
+import { fullStudioName, splitTitleOrStudioAndEpisodeCount } from "../../Utils/scraping";
 import styles from "./Player.module.scss";
 import { useParams } from "react-router-dom";
 import { updateAnimeRecord } from "../../Dexie";
-import LoadableText from "../LoadableText";
+import DotSplitter from "../DotSplitter";
 
 type PlayerSelectProps = {
     availableStudiosAndPlayers: StudioData[]
@@ -45,10 +45,11 @@ const PlayerSelect: FC<PlayerSelectProps> = (({
                     <span className={"hide-immediate"}>Player</span>
                 </Listbox.Button>
             </Listbox>
-        )
+        );
     }
 
-    const currentPlayer = availableStudiosAndPlayers[currentStudioId].players[currentPlayerId];
+    const currentStudio = availableStudiosAndPlayers[currentStudioId];
+    const currentPlayer = currentStudio.players[currentPlayerId];
 
     return (
         <Listbox as={"div"}
@@ -70,28 +71,33 @@ const PlayerSelect: FC<PlayerSelectProps> = (({
             </Listbox.Button>
             <Transition as={Fragment}>
                 <Listbox.Options key={"options"} className={"select-options"} children={
-                    availableStudiosAndPlayers.map((studio, sID) => (
-                        <Fragment key={"fragment" + sID}>
-                            {studio.name !== undefined && studio.name !== "undefined" &&
-                                <div
-                                    key={studio.name + sID} className={"select-options-header"}
-                                    children={fullStudioName(studio.name)!.length < 12 ? fullStudioName(studio.name) : studio.name}
-                                />}
-                            {
-                                studio.players.map((player, pID) => <Listbox.Option
-                                    key={"player" + sID + "-" + pID}
-                                    className={({
-                                        active,
-                                        selected
-                                    }) =>
-                                        `select-option${active ? " active" : ""}${selected ? " selected" : ""}`
-                                    }
-                                    value={`${sID}-${pID}`}
-                                    children={player.name}
-                                />)
-                            }
-                        </Fragment>
-                    ))
+                    availableStudiosAndPlayers.map((studio, sID) => {
+                        const [studioName, studioAvailableEpisodes] = splitTitleOrStudioAndEpisodeCount(studio.name);
+                        return (
+                            <Fragment key={"fragment" + sID}>
+                                {studioName !== undefined &&
+                                    <div key={studioName + sID} className={"select-options-header"}>
+                                        <span title={`Студия ${fullStudioName(studioName)}`}
+                                            children={fullStudioName(studioName)!.length < 9 ? fullStudioName(studioName) : studioName}
+                                        />
+                                        {studioAvailableEpisodes &&
+                                            <><DotSplitter /><span title={"Серий"} children={studioAvailableEpisodes} /></>
+                                        }
+                                    </div>
+                                }
+                                {
+                                    studio.players.map((player, pID) => <Listbox.Option
+                                        key={"player" + sID + "-" + pID}
+                                        className={({ active, selected }) =>
+                                            `select-option${active ? " active" : ""}${selected ? " selected" : ""}`}
+                                        value={`${sID}-${pID}`}
+                                        children={player.name}
+                                        />)
+                                }
+                            </Fragment>
+                            );
+                        }
+                    )
                 }
                 />
             </Transition>

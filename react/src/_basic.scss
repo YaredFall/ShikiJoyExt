@@ -45,6 +45,7 @@ button {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 0.5rem;
 
   & > span {
     line-height: 1;
@@ -62,7 +63,7 @@ button {
 }
 
 .select-options {
-  max-height: var(--max-options-heigth, 600px);
+  max-height: var(--max-options-height, 600px);
   border-radius: inherit;
   list-style: none;
   position: absolute;
@@ -73,7 +74,10 @@ button {
   z-index: 100;
   background: inherit;
   overflow: auto;
+  clip-path: inset(0 0 0 0 round var(--roundness, -0.5rem));
+  outline: none;
 }
+
 
 .select-option {
   padding: var(--padding);
@@ -93,6 +97,6 @@ button {
   text-align: center;
 
   &:not(:first-child) {
-    border-top: 2px solid var(--primary-a50);
+    border-top: 2px dashed var(--primary-a50);
   }
 }

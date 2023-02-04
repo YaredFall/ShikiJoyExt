@@ -5,7 +5,7 @@ import { SlArrowLeft, SlArrowRight } from 'react-icons/sl';
 import { useAnimeJoyLegacyStorage } from "../../Hooks/useAnimeJoyLegacyStorage";
 import { isSinglePagePlayer } from '../../misc';
 import { AnimeJoyData } from "../../types";
-import { fullStudioName } from "../../Utils/scraping";
+import { fullStudioName, splitTitleOrStudioAndEpisodeCount } from "../../Utils/scraping";
 import styles from './Player.module.scss';
 import PlayerSelect from './PlayerSelect';
 import { NestedChildrenMemoPolymorphicComponent as Section } from "../PolymorphicComponent";
@@ -13,6 +13,7 @@ import { usePlayersFixes } from "../../Hooks/usePlayersFixes";
 import { updateAnimeRecord } from "../../Dexie";
 import PlayerMiddleSection from "./PlayerMiddleSection";
 import { Anime } from "../../Dexie/db";
+import DotSplitter from "../DotSplitter";
 
 
 const MemoizedLeftIcon = memo(SlArrowLeft);
@@ -35,7 +36,8 @@ const Player: FC<PlayerProps> = memo(({ animejoyData, animeRecord }) => {
     const [currentStudioId, setCurrentStudioId] = useState(animeRecord.lastStudio);
     const [currentPlayerId, setCurrentPlayerId] = useState(animeRecord.lastPlayer);
 
-    const currentPlayer = animejoyData.studios[currentStudioId].players[currentPlayerId];
+    const currentStudio = animejoyData.studios[currentStudioId];
+    const currentPlayer = currentStudio.players[currentPlayerId];
 
     const [currentEpisodeId, setCurrentEpisodeId] = useState(animeRecord.lastEpisode);
 
@@ -58,6 +60,7 @@ const Player: FC<PlayerProps> = memo(({ animejoyData, animeRecord }) => {
     };
 
     const canChangeEpisodeId = (to: "next" | "prev" | number) => {
+        //TODO
         if (isSinglePagePlayer(currentPlayer.name)) return false;
 
         let newId = to;
@@ -69,10 +72,26 @@ const Player: FC<PlayerProps> = memo(({ animejoyData, animeRecord }) => {
     };
 
     const epLabel = isSinglePagePlayer(currentPlayer.name) ? currentPlayer.name : `Серия ${currentEpisodeId + 1}`;
+    const [studioName, studioEpisodesCount] = splitTitleOrStudioAndEpisodeCount(currentStudio.name)
 
     const leftBtnRef = useRef<HTMLButtonElement>(null);
     const iframeRef = useRef<HTMLIFrameElement>(null);
     usePlayersFixes(iframeRef);
+
+    //sets player select options max-height to iframe height
+    useEffect(() => {
+        document.querySelector(`.${styles.player}`)?.setAttribute("style",
+            "--max-options-height: " + (iframeRef.current?.getBoundingClientRect().height! + 2) + "px")
+        const onResize = () => {
+            document.querySelector(`.${styles.player}`)?.setAttribute("style",
+                "--max-options-height: " + (iframeRef.current?.getBoundingClientRect().height! + 2) + "px")
+        };
+        window.addEventListener('resize', onResize)
+        return () => {
+            window.removeEventListener('resize', onResize)
+        }
+    }, []);
+
 
     return (
         <div className={styles.player}>
@@ -89,10 +108,11 @@ const Player: FC<PlayerProps> = memo(({ animejoyData, animeRecord }) => {
                 </div>
                 {
                     animejoyData.studios.length > 1 &&
-                    <div className={styles.currentStudioLabel}
-                         children={fullStudioName(animejoyData.studios[currentStudioId].name)}
-                         title={"Студия"}
-                    />
+                    <div className={styles.currentStudioLabel}>
+                        <span title={"Студия"}>{fullStudioName(studioName)}</span>
+                        <DotSplitter />
+                        <span title={"Серий"}>{studioEpisodesCount}</span>
+                    </div>
                 }
                 <PlayerSelect availableStudiosAndPlayers={animejoyData.studios}
                               currentStudioId={currentStudioId}

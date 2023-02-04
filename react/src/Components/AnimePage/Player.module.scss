@@ -54,18 +54,17 @@
 }
 
 .playerSelect {
-  border-radius: var(--rondness);
+  border-radius: var(--roundness);
   font-size: 1.125rem;
   font-weight: normal;
   background-color: var(--secondary);
-  --max-options-heigth: var(--frame-max-height);
 }
 
 .playerIframe {
   height: 100%;
   width: 100%;
   border: none;
-  border-radius: var(--rondness);
+  border-radius: var(--roundness);
 }
 
 .middleSection {
@@ -73,7 +72,7 @@
   aspect-ratio: 16/9;
   display: flex;
   overflow: hidden;
-  border-radius: var(--rondness);
+  border-radius: var(--roundness);
   background-color: var(--primary-a12p5);
   margin: 1px;
 
@@ -125,7 +124,7 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  border-radius: var(--rondness);
+  border-radius: var(--roundness);
 
   &:is(:hover, :focus-visible) {
     color: var(--primary);

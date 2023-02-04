@@ -1,0 +1,10 @@
+.splitter {
+  display: inline-block;
+  vertical-align: middle;
+  color: var(--primary-a50);
+  margin-inline: 0.375em;
+  height: 0.1875em;
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+  background-color: currentColor;
+}

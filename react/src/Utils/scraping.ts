@@ -8,7 +8,7 @@ export function getTitles(parentNode: ParentNode = document): Titles {
 }
 
 /**
- * @param playlistsHTML - div.playlists-ajax
+ * @param playlistsHTML - element that contains div.playlists-player
  */
 export function getStudiosPlayersAndFiles(playlistsHTML: Element) {
     const studiosAndPlayersHTML = playlistsHTML.querySelectorAll(".playlists-player .playlists-lists .playlists-items");
@@ -40,7 +40,7 @@ export function getStudiosPlayersAndFiles(playlistsHTML: Element) {
     })
 
     const studiosPlayersAndFiles: StudioData[] = studios.map(s => ({
-        name: s.name?.match(/(.*?) ([0-9]+)/g) ? s.name?.replace(/(.*?) ([0-9]+)/g, "$1 [$2]") : s.name,
+        name: s.name,
         players: players.filter(p => p.studioId === s.id).map(p => ({
             name: p.name,
             files: files.filter(f => f.studioId === s.id && f.playerId === p.playerId).map(f => f.file)
@@ -50,12 +50,15 @@ export function getStudiosPlayersAndFiles(playlistsHTML: Element) {
     return studiosPlayersAndFiles;
 }
 
-//TODO: expand list
+// * May be incomplete
 const namesList: {short: string, full: string}[] = [
     { short: "AL", full: "AniLibria" },
     { short: "SR", full: "SovetRomantica" },
     { short: "YRT", full: "YRteam" },
-    { short: "TPDB", full: "TheProverbialDustBiter"}
+    { short: "TPDB", full: "TheProverbialDustBiter"},
+    { short: "UO", full: "Ушастая Озвучка"},
+    { short: "YSS", full: "YakuSub Studio"},
+    { short: "PV", full: "Трейлеры"}
 ]
 export function fullStudioName(name: string | undefined) {
     if (name === undefined || name === "undefined") return undefined;
@@ -67,4 +70,11 @@ export function fullStudioName(name: string | undefined) {
         }
     })
     return fullName;
+}
+const matchPattern = /(?<name>^[^\n[]+?)(?= \d{1,4}| \[\d{1,4} из [\dXХ]{1,4}\]| \[Анонс\]|$) ?(?<count>\d{1,4}|\[\d{1,4} из [\dXХ]{1,4}\]|\[Анонс\])?/mu
+export function splitTitleOrStudioAndEpisodeCount(titleOrStudio: string | undefined) {
+    if (titleOrStudio === undefined || titleOrStudio === "undefined") return [undefined, undefined] as const;
+
+    const match = titleOrStudio.match(matchPattern);
+    return match ? [match.groups?.name, match.groups?.count] as const : [titleOrStudio, undefined] as const
 }

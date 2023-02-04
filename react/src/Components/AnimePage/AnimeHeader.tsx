@@ -3,6 +3,8 @@ import styles from "./AnimeHeader.module.scss";
 import { Titles } from "../../types";
 import { nestedChildrenCompareMemo } from "../../Utils/childrenCompareMemo";
 import LoadableText from "../LoadableText";
+import { splitTitleOrStudioAndEpisodeCount } from "../../Utils/scraping";
+import DotSplitter from "../DotSplitter";
 
 type AnimeHeaderProps = {
     titles: Titles | undefined
@@ -14,11 +16,17 @@ const AnimeHeader: FC<AnimeHeaderProps> = ({
     placeholderLength = 40
 }) => {
 
+    const [ruTitle, episodesAvailable] = splitTitleOrStudioAndEpisodeCount(titles?.ru);
+
     return (
         <header className={styles.headerContainer}>
             <div className={styles.titlesSection}>
-                <h1 className={styles.titleRU}
-                    children={<LoadableText placeholderLength={placeholderLength} children={titles?.ru} />} />
+                <h1 className={styles.titleRU}>
+                    <LoadableText placeholderLength={placeholderLength} children={ruTitle} />
+                    {episodesAvailable &&
+                        <><DotSplitter /><span children={episodesAvailable} /></>
+                    }
+                </h1>
                 <h2 className={styles.titleRomanji}
                     children={<LoadableText placeholderLength={placeholderLength} children={titles?.romanji} />}
                 />
