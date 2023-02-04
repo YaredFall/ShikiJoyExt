@@ -8,9 +8,10 @@ export const tryAddAnime = async (animejoyData: AnimeJoyData) => {
         const { watchedEpisodes, watchedEpisodesDetails } = extractLocalStorageData(animejoyData)
 
         const wasWatched = watchedEpisodes.size > 0;
-
         const lastWatchedEpisode = wasWatched ? Math.max(...watchedEpisodes) : -1;
-        const { studioID, playerID } = wasWatched ? watchedEpisodesDetails[lastWatchedEpisode].records[0] : { studioID: 0, playerID: 0}
+        const { studioID, playerID } = wasWatched
+                                       ? watchedEpisodesDetails.find(e => e.episodeID === lastWatchedEpisode)!.records[0]
+                                       : { studioID: 0, playerID: 0}
 
         anime = {
             animejoyID: animejoyData.id,
