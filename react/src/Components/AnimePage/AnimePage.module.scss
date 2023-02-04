@@ -1,7 +1,7 @@
 .animePage {
   --frame-max-width: 960px;
   --frame-max-height: calc(var(--frame-max-width) / 16 * 9);
-  --player-grid-template-cols: minmax(60px, 1fr) minmax(320px, 8fr) minmax(60px, 1fr);
+  --player-grid-template-cols: minmax(80px, 1fr) minmax(400px, 8fr) minmax(80px, 1fr);
 
   width: 100%;
   display: grid;
