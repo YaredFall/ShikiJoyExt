@@ -6,6 +6,7 @@ export interface Anime {
     lastStudio: number;
     lastPlayer: number;
     lastEpisode: number;
+    watchedEpisodes: Set<number>
 }
 
 export class MySubClassedDexie extends Dexie {
@@ -13,7 +14,7 @@ export class MySubClassedDexie extends Dexie {
 
     constructor() {
         super('shikijoyDB');
-        this.version(1).stores({
+        this.version(2).stores({
             anime: '++dbID, &animejoyID' // Primary key and indexed props
         });
     }

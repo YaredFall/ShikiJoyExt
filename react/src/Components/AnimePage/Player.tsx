@@ -27,11 +27,8 @@ type PlayerProps = {
 }
 const Player: FC<PlayerProps> = memo(({ animejoyData, animeRecord }) => {
 
-    const {
-        watchedEpisodesState,
-        setEpisodeAsWatched,
-        removeEpisodeFromWatched,
-    } = useAnimeJoyLegacyStorage(animejoyData);
+    const { setEpisodeAsWatched, removeEpisodeFromWatched, } = useAnimeJoyLegacyStorage(animejoyData);
+    const watchedEpisodes = animeRecord.watchedEpisodes
 
     const [currentStudioId, setCurrentStudioId] = useState(animeRecord.lastStudio);
     const [currentPlayerId, setCurrentPlayerId] = useState(animeRecord.lastPlayer);
@@ -44,7 +41,8 @@ const Player: FC<PlayerProps> = memo(({ animejoyData, animeRecord }) => {
     useEffect(() => {
             setCurrentStudioId(animeRecord.lastStudio);
             setCurrentPlayerId(animeRecord.lastPlayer);
-            setCurrentEpisodeId(animeRecord.lastEpisode);
+            const availableEps = currentPlayer.files.length;
+            setCurrentEpisodeId(animeRecord.lastEpisode >= availableEps ? availableEps - 1 : animeRecord.lastEpisode );
     }, [animeRecord]);
 
     const changeEpisodeId = (to: "next" | "prev" | number) => {
@@ -53,25 +51,24 @@ const Player: FC<PlayerProps> = memo(({ animejoyData, animeRecord }) => {
             newId = currentEpisodeId + 1;
         } else if (to === "prev") newId = currentEpisodeId - 1;
 
-        if (currentPlayer.files[+newId]) {
-            setCurrentEpisodeId(_ => +newId);
-            updateAnimeRecord(animejoyData.id, { lastEpisode: +newId });
-        }
+        setCurrentEpisodeId(_ => +newId);
+        updateAnimeRecord(animejoyData.id, { lastEpisode: +newId });
     };
 
     const canChangeEpisodeId = (to: "next" | "prev" | number) => {
-        //TODO
-        if (isSinglePagePlayer(currentPlayer.name)) return false;
-
         let newId = to;
         if (to === "next") {
             newId = currentEpisodeId + 1;
         } else if (to === "prev") newId = currentEpisodeId - 1;
 
+        if (isSinglePagePlayer(currentPlayer.name)) {
+            const availableCount = studioEpisodesCount || Math.max(...currentStudio.players.map(p => p.files.length))
+            return newId >= 0 && newId < availableCount
+        }
+
         return (currentPlayer.files[+newId] !== undefined);
     };
 
-    const epLabel = isSinglePagePlayer(currentPlayer.name) ? currentPlayer.name : `Серия ${currentEpisodeId + 1}`;
     const [studioName, studioEpisodesCount] = splitTitleOrStudioAndEpisodeCount(currentStudio.name)
 
     const leftBtnRef = useRef<HTMLButtonElement>(null);
@@ -96,9 +93,9 @@ const Player: FC<PlayerProps> = memo(({ animejoyData, animeRecord }) => {
     return (
         <div className={styles.player}>
             <Section className={styles.topSection}>
-                <div className={`${styles.currentEpLabel}${isSinglePagePlayer(currentPlayer.name) ? " hide" : " show"}`}>
-                    <span children={epLabel} />
-                    {watchedEpisodesState.has(currentEpisodeId) &&
+                <div className={styles.currentEpLabel}>
+                    <span children={`Серия ${currentEpisodeId + 1}`} />
+                    {watchedEpisodes.has(currentEpisodeId) &&
                         <button className={styles.currentEpWatched}
                                 onClick={() => removeEpisodeFromWatched(currentEpisodeId)}
                         >
@@ -142,22 +139,22 @@ const Player: FC<PlayerProps> = memo(({ animejoyData, animeRecord }) => {
             />
             <Section as={"button"}
                      className={`${styles.rightSection}${(!canChangeEpisodeId("next") &&
-                         watchedEpisodesState.has(currentEpisodeId))
+                         watchedEpisodes.has(currentEpisodeId))
                                                          ? " hide-immediate"
                                                          : " show"}`}
                      onClick={() => {
-                         if (!watchedEpisodesState.has(currentEpisodeId)) {
+                         if (!watchedEpisodes.has(currentEpisodeId)) {
+                             const newWE = new Set(watchedEpisodes);
+                             newWE.add(currentEpisodeId);
+                             updateAnimeRecord(animeRecord.animejoyID, { watchedEpisodes: newWE });
                              setEpisodeAsWatched(currentStudioId, currentPlayerId, currentEpisodeId);
                          }
                          if (canChangeEpisodeId("next")) {
                              changeEpisodeId("next");
                              iframeRef.current?.focus();
-                         } else {
-                             setEpisodeAsWatched(currentStudioId, currentPlayerId, currentEpisodeId);
                          }
                      }}
-                     disabled={!canChangeEpisodeId("next") &&
-                         watchedEpisodesState.has(currentEpisodeId)}
+                     disabled={!canChangeEpisodeId("next")}
             >
                 <div className={styles.wrapper}>
                     {canChangeEpisodeId("next") ? <MemoizedRightIcon /> :

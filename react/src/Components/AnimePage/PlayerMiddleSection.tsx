@@ -2,6 +2,7 @@ import React, { FC, RefObject, useEffect, useState } from 'react';
 import styles from "./Player.module.scss";
 import { isSinglePagePlayer } from "../../misc";
 import { PlayerData } from "../../types";
+import Player from "./Player";
 
 type PlayerMiddleSectionProps = {
     iframeRef: RefObject<HTMLIFrameElement>
@@ -45,6 +46,14 @@ const PlayerMiddleSection: FC<PlayerMiddleSectionProps> = ({
         }
     };
 
+    const source = (currentPlayer: PlayerData, currentEpisodeId: number) => {
+        if (isSinglePagePlayer(currentPlayer.name)) {
+            return currentPlayer.files[0] + (currentPlayer.files[0].includes('?') ? "&" : "?") + `episode=${currentEpisodeId + 1}`;
+        } else {
+            return currentPlayer.files[currentEpisodeId];
+        }
+    }
+
     return (
         <a onFocus={onFocusHandler}
            className={`${styles.middleSection} ${(isIFrameLoading === undefined || isIFrameLoading) ? styles.loading : styles.loaded}`}
@@ -54,9 +63,7 @@ const PlayerMiddleSection: FC<PlayerMiddleSectionProps> = ({
                     loading={"lazy"}
                     className={styles.playerIframe}
                     onLoad={onLoadHandler}
-                    src={shouldShowSkeleton ? undefined : currentPlayer.files[isSinglePagePlayer(currentPlayer.name)
-                                                                              ? 0
-                                                                              : currentEpisodeId]}
+                    src={shouldShowSkeleton ? undefined : source(currentPlayer, currentEpisodeId)}
                     allowFullScreen={true}
             />
         </a>

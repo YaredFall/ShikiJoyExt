@@ -1,15 +1,25 @@
 import { db } from "./db";
+import { extractLocalStorageData } from "../Utils/legacyLocalStorageParse";
+import { AnimeJoyData } from "../types";
 
-export const tryAddAnime = async (id: string) => {
-    let anime = await db.anime.where({ animejoyID: id }).first();
+export const tryAddAnime = async (animejoyData: AnimeJoyData) => {
+    let anime = await db.anime.where({ animejoyID: animejoyData.id }).first();
     if (!anime) {
+        const { watchedEpisodes, watchedEpisodesDetails } = extractLocalStorageData(animejoyData)
+
+        const wasWatched = watchedEpisodes.size > 0;
+
+        const lastWatchedEpisode = wasWatched ? Math.max(...watchedEpisodes) : -1;
+        const { studioID, playerID } = wasWatched ? watchedEpisodesDetails[lastWatchedEpisode].records[0] : { studioID: 0, playerID: 0}
+
         anime = {
-            animejoyID: id,
-            lastEpisode: 0,
-            lastPlayer: 0,
-            lastStudio: 0
+            animejoyID: animejoyData.id,
+            lastEpisode: animejoyData.studios[studioID].players[playerID].files[lastWatchedEpisode+1] ? lastWatchedEpisode+1 : lastWatchedEpisode,
+            lastPlayer: playerID,
+            lastStudio: studioID,
+            watchedEpisodes: watchedEpisodes
         }
-        db.anime.add(anime)
+        db.anime.add(anime);
     }
 }
 
@@ -17,6 +27,7 @@ type UpdateProps = {
     lastStudio?: number;
     lastPlayer?: number;
     lastEpisode?: number;
+    watchedEpisodes?: Set<number>;
 }
 export const updateAnimeRecord = (id: string, newProps: UpdateProps) => {
     db.anime.where("animejoyID").equals(id).modify(newProps);
