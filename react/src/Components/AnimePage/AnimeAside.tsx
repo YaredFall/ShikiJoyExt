@@ -49,9 +49,9 @@ const AnimeAside: FC<AnimeAsideProps> = () => {
     }
 
     return (
-        <section>
+        <>
             <AnimeDescription data={data} />
-        </section>
+        </>
     );
 };
 

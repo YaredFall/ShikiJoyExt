@@ -91,9 +91,9 @@ const Player: FC<PlayerProps> = memo(({ animejoyData, animeRecord }) => {
 
 
     return (
-        <div className={styles.player}>
+        <section className={styles.player}>
             <Section className={styles.topSection}>
-                <div className={styles.currentEpLabel}>
+                <h2 className={styles.currentEpLabel}>
                     <span children={`Серия ${currentEpisodeId + 1}`} />
                     {watchedEpisodes.has(currentEpisodeId) &&
                         <button className={styles.currentEpWatched}
@@ -102,7 +102,7 @@ const Player: FC<PlayerProps> = memo(({ animejoyData, animeRecord }) => {
                             <span children={"Посмотрено"} />
                             <MemoizedCrossIcon />
                         </button>}
-                </div>
+                </h2>
                 {
                     animejoyData.studios.length > 1 &&
                     <div className={styles.currentStudioLabel}>
@@ -165,7 +165,7 @@ const Player: FC<PlayerProps> = memo(({ animejoyData, animeRecord }) => {
                     />
                 </div>
             </Section>
-        </div>
+        </section>
     );
 });
 

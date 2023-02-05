@@ -27,7 +27,7 @@ const AnimeHeader: FC<AnimeHeaderProps> = ({
                         <><DotSplitter /><span children={episodesAvailable} /></>
                     }
                 </h1>
-                <h2 className={styles.titleRomanji}
+                <p className={styles.titleRomanji}
                     children={<LoadableText placeholderLength={placeholderLength} children={titles?.romanji} />}
                 />
             </div>
