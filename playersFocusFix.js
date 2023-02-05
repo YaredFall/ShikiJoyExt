@@ -122,30 +122,40 @@ let observer = new MutationObserver(mutationRecords => {
         case 'ok.ru': {
             //* (hard to fix) video plays on f key
             const img = document.querySelector("img");
+            console.log(mutationRecords)
             if (img) {
                 observer.disconnect();
                 let active = false;
+
+                img.addEventListener("click", () => {
+                    active = true;
+                    console.log("IMAGE WAS CLICKED")
+                }, { once: true })
+
                 onKeyUp = (e) => {
-                    if (e.code === "Space") {
+                    if (e.code === "Space" && document.head.querySelector('script[src*="//ad.mail.ru"]')) {
                         if (!active) {
                             img?.click();
-                            active = true;
                         }
-                        document.querySelector(".html5-vpl_panel_btn.html5-vpl_play")?.click();
+                        if (document.activeElement !== document.querySelector("#embedVideoE"))
+                            document.querySelector(".html5-vpl_panel_btn.html5-vpl_play")?.click();
                     }
-                    if (e.code === "KeyF") {
+                    if (e.code === "KeyF" && document.head.querySelector('script[src*="//ad.mail.ru"]')) {
                         if (!active) {
                             img?.click();
-                            active = true;
                             const interval = setInterval(() => {
                                 const video = document.querySelector("video");
                                 if (video) {
                                     document.querySelector(".html5-vpl_panel_btn.html5-vpl_fullscreen")?.click();
+                                    // setTimeout(() => {
+                                    //     document.querySelector(".html5-vpl_panel_btn.html5-vpl_play")?.click();
+                                    // }, 200)
                                     clearInterval(interval)
                                 }
                             }, 50)
                         } else {
-                            document.querySelector(".html5-vpl_panel_btn.html5-vpl_fullscreen")?.click();
+                            if (document.activeElement !== document.querySelector("#embedVideoE"))
+                                document.querySelector(".html5-vpl_panel_btn.html5-vpl_fullscreen")?.click();
                         }
                     }
                 }
