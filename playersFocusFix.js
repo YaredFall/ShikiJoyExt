@@ -127,7 +127,7 @@ let observer = new MutationObserver(mutationRecords => {
                 observer.disconnect();
                 let active = false;
 
-                img.addEventListener("click", () => {
+                img.parentElement.addEventListener("click", () => {
                     active = true;
                     console.log("IMAGE WAS CLICKED")
                 }, { once: true })
