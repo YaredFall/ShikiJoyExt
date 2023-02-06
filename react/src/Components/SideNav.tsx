@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { NavLink } from "react-router-dom";
 import { appRoutes } from "../Utils/appRoutes";
 import radishIcon from "/images/radish256x256.png";
-import { BsArrowCounterclockwise, IoIosLogIn, IoSearchOutline, IoSettingsOutline, TbList } from "react-icons/all";
+import { VscHistory, IoIosLogIn, IoSearchOutline, IoSettingsOutline, TbList } from "react-icons/all";
 import styles from "./SideNav.module.scss";
 
 //@ts-ignore
@@ -33,7 +33,7 @@ const SideNav: FC<SideNavProps> = () => {
                 <NavLink className={({ isActive }) => `${styles.navlink} ${styles.smaller} ${isActive ? styles.active : ""}`}
                          to={"tbd"}
                          data-label={"Последнее"}
-                         children={<BsArrowCounterclockwise />}
+                         children={<VscHistory />}
                 />
                 <NavLink className={({ isActive }) => `${styles.navlink} ${isActive ? styles.active : ""}`}
                          to={appRoutes.test}
