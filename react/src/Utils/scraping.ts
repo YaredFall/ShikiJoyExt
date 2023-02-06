@@ -71,7 +71,7 @@ export function fullStudioName(name: string | undefined) {
     })
     return fullName;
 }
-const matchPattern = /(?<name>^[^\n[]+?)(?= \d{1,4}| \[\d{1,4} из [\dXХ]{1,4}\]| \[Анонс\]|$) ?(?<count>\d{1,4}|\[\d{1,4} из [\dXХ]{1,4}\]|\[Анонс\])?/mu
+const matchPattern = /(?<name>^[^\n[]+?)(?= \d{1,4}$| \[\d{1,4} из [\dXХ]{1,4}\]| \[Анонс\]|$) ?(?<count>\d{1,4}|\[\d{1,4} из [\dXХ]{1,4}\]|\[Анонс\])?/mu
 export function splitTitleOrStudioAndEpisodeCount(titleOrStudio: string | undefined) {
     if (titleOrStudio === undefined || titleOrStudio === "undefined") return [undefined, undefined] as const;
 
