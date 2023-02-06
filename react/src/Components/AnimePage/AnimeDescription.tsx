@@ -12,7 +12,6 @@ const AnimeDescription:FC<AnimeDescriptionProps> = ( { data } ) => {
 
     return (
         <section className={styles.description}>
-            <h3 className={styles.header}>Об аниме</h3>
             <div className={styles.posterAndDetails}>
                 <Picture className={styles.img} src={data ? "https://shikimori.one" + data.image.original : undefined} />
                 <div className={styles.details}>

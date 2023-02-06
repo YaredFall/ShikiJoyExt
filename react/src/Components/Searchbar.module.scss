@@ -1,0 +1,130 @@
+.container {
+  width: 100%;
+  font-size: 1.125rem;
+  position: relative;
+  z-index: 1000;
+
+  & a {
+    display: contents;
+    text-decoration: none;
+  }
+}
+
+.searchInput {
+  border: none;
+  padding: 0.5rem 2.5rem;
+  height: 2.4em;
+  border-radius: 1.2em;
+  width: 100%;
+  outline: none;
+  background-color: var(--secondary);
+}
+
+.label {
+  position: relative;
+  display: block;
+  color: var(--primary-a25);
+
+  &:hover {
+    color: var(--primary-a50)
+  }
+  &:focus-within {
+    color: var(--primary) !important;
+  }
+}
+
+.searchIcon, .resultsToggle {
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: absolute;
+  height: 100%;
+  aspect-ratio: 1/1;
+  top: 0;
+  outline-offset: -0.25rem;
+  border-radius: 100%;
+}
+
+.searchIcon {
+  left: 0;
+  font-size: 1.25em;
+  color: inherit;
+
+}
+
+.resultsToggle {
+  padding-inline: 0.5rem;
+  padding-top: 0.25rem;
+  font-size: 0.75em;
+  color: var(--primary-a25);
+  right: 0;
+
+  &:hover {
+    color: var(--primary-a50)
+  }
+  &:focus-visible {
+    color: var(--primary) !important;
+  }
+
+}
+
+.results {
+  position: absolute;
+  top: 100%;
+  width: 100%;
+  margin-top: 0.5rem;
+  background-color: var(--secondary);
+  padding: 0.5rem 0;
+  border-radius: 1.2em;
+  display: flex;
+  flex-direction: column;
+  transition: opacity 250ms ease-in-out;
+  opacity: 0;
+}
+
+.resultItem {
+  padding: 0.5rem 1.25rem;
+  font-weight: 500;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+
+  & .ruTitle {
+    font-size: 1.125em;
+    margin-bottom: 0.125rem;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  & .romanjiTitle {
+    color: var(--primary-a50);
+    font-size: 0.875em;
+  }
+
+  & + & {
+    border-top: 2px dashed var(--primary-a12p5);
+  }
+
+  &.error {
+    align-self: center;
+    padding-block: 0.25rem;
+  }
+
+  & .poster {
+    height: 7rem;
+    width: 5rem;
+    object-fit: cover;
+    border-radius: var(--roundness);
+  }
+}
+
+.enter,.enterDone {
+  opacity: 1;
+}
+.exit, .exitDone {
+  opacity: 0;
+}

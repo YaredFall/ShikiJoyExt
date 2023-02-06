@@ -5,6 +5,8 @@ import AnimeDescription from "./AnimeDescription";
 import { useParams } from "react-router-dom";
 import { useAnimeJoyAnimePageQuery } from "../../Api/useAnimeJoyAnimePageQuery";
 import { getTitles } from "../../Utils/scraping";
+import Searchbar from "../Searchbar";
+import styles from "./AnimeAside.module.scss"
 
 type AnimeAsideProps = {}
 
@@ -49,9 +51,10 @@ const AnimeAside: FC<AnimeAsideProps> = () => {
     }
 
     return (
-        <>
+        <div className={styles.animeAside}>
+            <Searchbar className={styles.searchbar} />
             <AnimeDescription data={data} />
-        </>
+        </div>
     );
 };
 

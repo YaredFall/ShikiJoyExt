@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useRef } from 'react';
 import styles from "./AnimeHeader.module.scss";
 import { Titles } from "../../types";
 import { nestedChildrenCompareMemo } from "../../Utils/childrenCompareMemo";
@@ -24,7 +24,7 @@ const AnimeHeader: FC<AnimeHeaderProps> = ({
                 <h1 className={styles.titleRU}>
                     <LoadableText placeholderLength={placeholderLength} children={ruTitle} />
                     {episodesAvailable &&
-                        <><DotSplitter /><span children={episodesAvailable} /></>
+                        <><DotSplitter /><span className={"nowrap"}>{episodesAvailable}</span></>
                     }
                 </h1>
                 <p className={styles.titleRomanji}
