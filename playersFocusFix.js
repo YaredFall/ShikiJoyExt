@@ -120,9 +120,7 @@ let observer = new MutationObserver(mutationRecords => {
             break;
         }
         case 'ok.ru': {
-            //* (hard to fix) video plays on f key
             const img = document.querySelector("img");
-            console.log(mutationRecords)
             if (img) {
                 observer.disconnect();
                 let active = false;
@@ -147,6 +145,7 @@ let observer = new MutationObserver(mutationRecords => {
                                 const video = document.querySelector("video");
                                 if (video) {
                                     document.querySelector(".html5-vpl_panel_btn.html5-vpl_fullscreen")?.click();
+                                    //* fix video plays on f key
                                     // setTimeout(() => {
                                     //     document.querySelector(".html5-vpl_panel_btn.html5-vpl_play")?.click();
                                     // }, 200)
