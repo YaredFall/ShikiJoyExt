@@ -109,7 +109,7 @@
     border-top: 2px dashed var(--primary-a12p5);
   }
 
-  &.error {
+  &.message {
     align-self: center;
     padding-block: 0.25rem;
   }
@@ -122,9 +122,9 @@
   }
 }
 
-.enter,.enterDone {
+.enterFrom,.enterTo {
   opacity: 1;
 }
-.exit, .exitDone {
+.exitFrom, .exitTo {
   opacity: 0;
 }
