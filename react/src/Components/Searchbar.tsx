@@ -13,8 +13,9 @@ type ResultsProps = {
     isLoading: boolean
     isError: boolean
     isNothingFound: boolean
+    onLinkClick?: () => void
 }
-const Results: FC<ResultsProps> = memo(({ data, isLoading, isError, isNothingFound }) => {
+const Results: FC<ResultsProps> = memo(({ data, isLoading, isError, isNothingFound, onLinkClick }) => {
 
     if (isError) {
         return <article className={`${styles.resultItem} ${styles.message}`}>Возникла ошибка!</article>;
@@ -32,16 +33,17 @@ const Results: FC<ResultsProps> = memo(({ data, isLoading, isError, isNothingFou
     return (
         <>
             {data.map(e => {
+                console.log(e.link);
                 const [ruTitle, episodes] = splitTitleOrStudioAndEpisodeCount(e.ru);
                 return (
-                    <article key={ruTitle} className={styles.resultItem}>
-                        <Link to={e.link || ""}><img className={styles.poster} src={e.posterSrc} alt={""} /></Link>
+                    <Menu.Item as={"article"} key={ruTitle} className={styles.resultItem}>
+                        <Link to={e.link || ""} onClick={onLinkClick}><img className={styles.poster} src={e.posterSrc} alt={""} /></Link>
                         <h4 className={styles.titles}>
-                            <Link to={e.link || ""}><p className={styles.ruTitle}>{ruTitle}</p></Link>
+                            <Link to={e.link || ""} onClick={onLinkClick}><p className={styles.ruTitle}>{ruTitle}</p></Link>
                             {episodes && <p className={"nowrap"}>{episodes}</p>}
                             <p className={styles.romanjiTitle}>{e.romanji}</p>
                         </h4>
-                    </article>
+                    </Menu.Item>
                 );
             })}
 
@@ -98,6 +100,7 @@ const Searchbar: FC<SearchbarProps> = ({ className }) => {
                              isLoading={(searchTerm.length >= 3) && (isLoading || (searchTerm !== debouncedSearchTerm))}
                              isError={isError && !isLoading && (searchTerm === debouncedSearchTerm)}
                              isNothingFound={!isLoading && !isError && (searchTerm.length >= 3) && (searchTerm === debouncedSearchTerm) && !data}
+                             onLinkClick={() => setShowResults(false)}
                     />
                 </Menu.Items>
             </Transition>

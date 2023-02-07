@@ -25,7 +25,7 @@ export function useAnimeJoySearch(searchTerm: string) {
                         return undefined;
                     }
                     return articles.map(e => ({
-                        link: e.querySelector(".ntitle > a")?.getAttribute("href") || undefined,
+                        link: e.querySelector(".ntitle > a")?.getAttribute("href")?.replace("https://animejoy.ru", "") || undefined,
                         ru: e.querySelector(".ntitle")?.textContent || undefined,
                         romanji: e.querySelector(".romanji")?.textContent || undefined,
                         posterSrc: e.querySelector("img")?.getAttribute("src") || undefined
