@@ -97,7 +97,12 @@ const Player: FC<PlayerProps> = memo(({ animejoyData, animeRecord }) => {
                     <span children={`Серия ${currentEpisodeId + 1}`} />
                     {watchedEpisodes.has(currentEpisodeId) &&
                         <button className={styles.currentEpWatched}
-                                onClick={() => removeEpisodeFromWatched(currentEpisodeId)}
+                                onClick={() => {
+                                    const newWE = new Set(watchedEpisodes);
+                                    newWE.delete(currentEpisodeId);
+                                    updateAnimeRecord(animeRecord.animejoyID, { watchedEpisodes: newWE });
+                                    removeEpisodeFromWatched(currentEpisodeId);
+                                }}
                         >
                             <span children={"Посмотрено"} />
                             <MemoizedCrossIcon />
@@ -155,7 +160,7 @@ const Player: FC<PlayerProps> = memo(({ animejoyData, animeRecord }) => {
                              iframeRef.current?.focus();
                          }
                      }}
-                     disabled={!canChangeEpisodeId("next")}
+                     disabled={!canChangeEpisodeId("next") && watchedEpisodes.has(currentEpisodeId)}
             >
                 <div className={styles.wrapper}>
                     {canChangeEpisodeId("next") ? <MemoizedRightIcon /> :
