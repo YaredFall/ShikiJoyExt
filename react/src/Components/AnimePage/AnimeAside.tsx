@@ -29,9 +29,12 @@ const AnimeAside: FC<AnimeAsideProps> = () => {
 
     if (error) {
         return (
-            <section>
-                <h3>Произошла ошибка! Возможно ваш блокировщик рекламы блокирует запросы shikimori.one</h3>
-            </section>
+            <div className={styles.animeAside}>
+                <Searchbar className={styles.searchbar} />
+                <section>
+                    <h3>Произошла ошибка! Попробуйте позже</h3>
+                </section>
+            </div>
         );
     }
 
