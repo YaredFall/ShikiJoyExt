@@ -1,12 +1,15 @@
 import { FC } from 'react';
 import { useQuery } from "react-query";
-import { ShikimoriAnimeCoreData } from "../../types";
+import { ShikimoriAnimeCoreData, ShikimoriAnimePreviewData } from "../../types";
 import AnimeDescription from "./AnimeDescription";
 import { useParams } from "react-router-dom";
 import { useAnimeJoyAnimePageQuery } from "../../Api/useAnimeJoyAnimePageQuery";
 import { getTitles } from "../../Utils/scraping";
 import Searchbar from "../Searchbar";
-import styles from "./AnimeAside.module.scss"
+import styles from "./AnimeAside.module.scss";
+import ky from "ky";
+import { useShikiJoyAnimeSearch } from "../../Api/useShikiJoyAnimeSearch";
+
 
 type AnimeAsideProps = {}
 
@@ -22,25 +25,7 @@ const AnimeAside: FC<AnimeAsideProps> = () => {
         isFetching,
         error,
         data
-    } = useQuery<ShikimoriAnimeCoreData>(
-        ['shikimori', 'search', fullID],
-        () => fetch(`https://shikimori.one/api/animes?search=${getTitles(pageDocument).romanji}`)
-            .then(fres => fres.json()
-                              .then(sres =>
-                                  fetch(`https://shikimori.one/api/animes/${sres[0].id}`)
-                                      .then(animeRes => animeRes.json())
-                              )
-            ),
-        {
-            enabled: !!pageDocument,
-            staleTime: 60 * 1000 * 60 * 12,
-            cacheTime: 60 * 1000 * 60 * 12
-        }
-    );
-
-    // if (!pageDocument || isLoading || isFetching) {
-    //     return null;
-    // }
+    } = useShikiJoyAnimeSearch(pageDocument)
 
     if (error) {
         return (
@@ -53,7 +38,7 @@ const AnimeAside: FC<AnimeAsideProps> = () => {
     return (
         <div className={styles.animeAside}>
             <Searchbar className={styles.searchbar} />
-            <AnimeDescription data={data} />
+            <AnimeDescription data={data?.coreData} />
         </div>
     );
 };

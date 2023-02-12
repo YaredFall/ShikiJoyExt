@@ -19,16 +19,16 @@ export type AnimeJoyData = {
     studios: StudioData[]
 }
 
+export type ShikiJoyAnimeData = {
+    coreData: ShikimoriAnimeCoreData,
+    charData: Array<ShikimoriRole>
+}
+
 export type ShikimoriAnimePreviewData = {
     id: number,
     name: string,
     russian: string,
-    image: {
-        original: string,
-        preview: string,
-        x96: string,
-        x48: string
-    },
+    image: ShikimoriImage,
     url: string,
     kind: ShikimoriKind,
     score: string,
@@ -39,17 +39,18 @@ export type ShikimoriAnimePreviewData = {
     released_on: string | null
 };
 
+export type ShikimoriImage = {
+    "original": string,
+    "preview": string,
+    "x96": string,
+    "x48": string
+}
 
 export type ShikimoriAnimeCoreData = {
     id: number,
     name: string,
     russian: string,
-    image: {
-        "original": string,
-        "preview": string,
-        "x96": string,
-        "x48": string
-    },
+    image: ShikimoriImage,
     url: string,
     kind: ShikimoriKind,
     score: string,
@@ -122,4 +123,19 @@ export type ShikimoriUserRate = {
     rewatches: number | null,
     created_at: string,
     updated_at: string
+}
+
+export type ShikimoriCharacterOrPerson = {
+    id: number,
+    name: string,
+    russian: string,
+    image: ShikimoriImage
+}
+
+export type ShikimoriRole = {
+    roles: string[],
+    roles_russian: string[],
+    character: ShikimoriCharacterOrPerson | null,
+    url: string,
+    person: ShikimoriCharacterOrPerson | null
 }
