@@ -2,6 +2,7 @@ import { useQuery } from "react-query";
 import { StudioData } from "../types";
 import { getStudiosPlayersAndFiles } from "../Utils/scraping";
 import mockupData from "../devMockup/mockupAnimeJoyPlaylistData.json";
+import { defautlQueryConfig } from "./_config";
 
 export const useAnimeJoyPlaylistQuery = (animejoyID: string) => {
 
@@ -20,10 +21,6 @@ export const useAnimeJoyPlaylistQuery = (animejoyID: string) => {
                     return getStudiosPlayersAndFiles(doc.body)
                 })
         },
-        {
-            retry: false,
-            staleTime: 60 * 1000 * 60 * 12,
-            cacheTime: 60 * 1000 * 60 * 12
-        }
+        defautlQueryConfig
     )
 }

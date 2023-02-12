@@ -1,5 +1,6 @@
 import { useQuery } from "react-query";
 import ky from "ky";
+import { defautlQueryConfig } from "./_config";
 
 const parser = new DOMParser();
 
@@ -29,16 +30,12 @@ export function useAnimeJoySearch(searchTerm: string) {
                         ru: e.querySelector(".ntitle")?.textContent || undefined,
                         romanji: e.querySelector(".romanji")?.textContent || undefined,
                         posterSrc: e.querySelector("img")?.getAttribute("src") || undefined
-                    }))
-                })
+                    }));
+                });
             } else {
                 return undefined;
             }
         },
-        {
-            retry: false,
-            staleTime: 60 * 1000 * 60 * 12,
-            cacheTime: 60 * 1000 * 60 * 12
-        }
-        )
+        defautlQueryConfig
+    );
 }
