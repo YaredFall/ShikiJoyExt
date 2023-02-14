@@ -97,7 +97,7 @@ function nestedEqual(prevProps: any, nextProps: any): boolean {
     }
     //if multiple children
     if (Array.isArray(ch1) && Array.isArray(ch2)) {
-        return ch1.every((_, i) => nestedEqual(ch1[i].props, ch2[i].props));
+        return (ch1.length === ch2.length) && ch1.every((_, i) => nestedEqual(ch1[i]?.props, ch2[i]?.props));
     }
     //if ch1 and ch2 have structure difference
     return false;
