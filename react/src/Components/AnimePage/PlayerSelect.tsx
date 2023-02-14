@@ -77,11 +77,11 @@ const PlayerSelect: FC<PlayerSelectProps> = (({
                             <Fragment key={"fragment" + sID}>
                                 {studioName !== undefined &&
                                     <div key={studioName + sID} className={"select-options-header"}>
-                                        <span title={`Студия ${fullStudioName(studioName)}`}
+                                        <span title={fullStudioName(studioName)}
                                             children={fullStudioName(studioName)!.length < 9 ? fullStudioName(studioName) : studioName}
                                         />
                                         {studioAvailableEpisodes &&
-                                            <><DotSplitter /><span title={"Серий"} children={studioAvailableEpisodes} /></>
+                                            <><DotSplitter /><span title={`${studioAvailableEpisodes} серий`} children={studioAvailableEpisodes} /></>
                                         }
                                     </div>
                                 }

@@ -46,11 +46,12 @@ const PlayerMiddleSection: FC<PlayerMiddleSectionProps> = ({
         }
     };
 
-    const source = (currentPlayer: PlayerData, currentEpisodeId: number) => {
+    const source = (currentPlayer: PlayerData, currentEpisodeId: number): string => {
         if (isSinglePagePlayer(currentPlayer.name)) {
-            return currentPlayer.files[0] + (currentPlayer.files[0].includes('?') ? "&" : "?") + `episode=${currentEpisodeId + 1}`;
+            const file = currentPlayer.files[0].file
+            return file + (file.includes('?') ? "&" : "?") + `episode=${currentEpisodeId + 1}`;
         } else {
-            return currentPlayer.files[currentEpisodeId];
+            return currentPlayer.files[currentEpisodeId].file;
         }
     }
 

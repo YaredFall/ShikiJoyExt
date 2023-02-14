@@ -15,7 +15,7 @@ export function extractLocalStorageData(animeData: AnimeJoyData) {
     animeData.studios.forEach((s, sID) => {
         s.players.forEach((p, pID) => {
             p.files.forEach((f, i) => {
-                if (localStorage.getItem(`playlists-${animeData.id}-playlist-${f}`) === "1") {
+                if (localStorage.getItem(`playlists-${animeData.id}-playlist-${f.file}`) === "1") {
                     watchedEpisodes.add(i);
                     const ep = watchedEpisodesDetails.find(e => e.episodeID === i);
                     if (!ep) {

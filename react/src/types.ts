@@ -1,6 +1,11 @@
+export type FileData = {
+    label: string
+    file: string
+}
+
 export type PlayerData = {
     name: string
-    files: string[]
+    files: FileData[]
 }
 
 export type StudioData = {

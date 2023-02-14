@@ -94,7 +94,7 @@ const Player: FC<PlayerProps> = memo(({ animejoyData, animeRecord }) => {
         <section className={styles.player}>
             <Section className={styles.topSection}>
                 <h2 className={styles.currentEpLabel}>
-                    <span children={`Серия ${currentEpisodeId + 1}`} />
+                    <span children={animejoyData.studios[currentStudioId].players[currentPlayerId].files[currentEpisodeId].label} />
                     {watchedEpisodes.has(currentEpisodeId) &&
                         <button className={styles.currentEpWatched}
                                 onClick={() => {
@@ -111,9 +111,9 @@ const Player: FC<PlayerProps> = memo(({ animejoyData, animeRecord }) => {
                 {
                     animejoyData.studios.length > 1 &&
                     <div className={styles.currentStudioLabel}>
-                        <span title={"Студия"}>{fullStudioName(studioName)}</span>
+                        <span title={fullStudioName(studioName)}>{fullStudioName(studioName)}</span>
                         {studioEpisodesCount &&
-                            <><DotSplitter /><span title={"Серий"}>{studioEpisodesCount}</span></>
+                            <><DotSplitter /><span title={`${studioEpisodesCount} серий`}>{studioEpisodesCount}</span></>
                         }
                     </div>
                 }
