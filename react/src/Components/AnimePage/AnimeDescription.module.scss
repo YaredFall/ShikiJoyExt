@@ -1,23 +1,102 @@
 .description {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: 1.5rem;
+  line-height: 1;
+  gap: 0.25rem;
+  justify-content: space-between;
+}
+
+.shikimoriLink {
+  flex-shrink: 0;
+  display: flex;
+  border-radius: 100%;
+  cursor: alias;
+  transition: background-color 125ms ease-in-out;
+  margin-right: -0.25rem;
+
+  &:hover, &:focus-visible {
+    background-color: var(--primary-a12p5);
+  }
+}
+
+.shikimoriLogo {
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0.25rem;
+  filter: invert(1);
+  user-select: none;
 }
 
 .posterAndDetails {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(20px, 1fr));
-  gap: 1rem;
+  display: flex;
+  flex-direction: row;
+  white-space: nowrap;
+  width: min-content;
+  gap: 0.5rem;
 
-
-  & .img {
+  .poster {
+    display: flex;
+    flex-shrink: 0;
     border-radius: var(--roundness);
-    max-width: 225px;
-    width: 100%;
-    grid-column: span 5;
-    aspect-ratio: 225/338;
+    width: 12rem;
     object-fit: cover;
     overflow: hidden;
+    position: relative;
+
+    .score {
+      font-weight: 500;
+      z-index: 1;
+      position: absolute;
+      right: 0;
+      top: 0;
+      padding: 0 0.25rem 0.125rem 0.25rem;
+
+      &::before {
+        z-index: -1;
+        content: ' ';
+        position: absolute;
+        background-color: var(--accent-blue);
+        inset: 0 -25%;
+        clip-path: polygon(0 0, 100% 0%, 100% 100%, 25% 100%);
+      }
+    }
   }
 
-  & .details {
-    grid-column: span 6;
+  .details {
+    font-size: 1.125rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+
+    > div {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+
+      &.episodesAndDuration {
+        flex-direction: column;
+        align-items: start;
+      }
+    }
   }
+}
+
+.status, .ageRating, .genre, .kind {
+  border: 2px solid var(--primary);
+  padding: 0 0.25rem;
+  border-radius: var(--roundness);
+  font-size: 0.875em;
+}
+
+.genres {
+  gap: 0.25rem 0.5rem;
 }

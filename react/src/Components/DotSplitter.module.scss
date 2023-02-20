@@ -5,6 +5,7 @@
   margin-inline: 0.375em;
   height: 0.1875em;
   aspect-ratio: 1/1;
-  border-radius: 50%;
+  border-radius: 100%;
+  clip-path: circle(50% at 50% 50%);
   background-color: currentColor;
 }

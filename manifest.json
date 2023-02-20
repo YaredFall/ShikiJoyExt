@@ -34,7 +34,7 @@
                 "https://*.animejoy.ru/*"
             ],
             "resources": [
-                "react/dist/images/radish256x256.png"
+                "react/dist/images/*"
             ]
         }
     ]
