@@ -1,0 +1,39 @@
+.header {
+  grid-column: 2/2;
+  font-size: 1.5rem;
+  margin-block: .5rem;
+}
+
+.characters {
+  grid-column: 2/2;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(6.5rem, 1fr));
+  gap: 1.5rem;
+
+  a {
+    text-decoration: none;
+    cursor: alias;
+  }
+
+  a:hover, a:focus-visible {
+    text-decoration: underline;
+  }
+
+  img {
+    border-radius: var(--roundness);
+    width: 100%;
+    aspect-ratio: 154/240;
+    object-fit: cover;
+  }
+
+  p {
+    padding-top: 0.5rem;
+    word-break: break-word;
+    max-height: 46px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    text-overflow: ellipsis;
+  }
+}

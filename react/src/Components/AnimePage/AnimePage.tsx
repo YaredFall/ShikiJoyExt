@@ -10,6 +10,7 @@ import { useParams } from "react-router-dom";
 import { tryAddAnime } from "../../Dexie";
 import PlayerSkeleton from "./PlayerSkeleton";
 import { useAnimeRecord } from "../../Hooks/useAnimeRecord";
+import Characters from "./Characters";
 
 
 type AnimePageProps = {}
@@ -55,6 +56,7 @@ const AnimePage: FC<AnimePageProps> = memo(({}) => {
         <section className={styles.animePage}>
             <AnimeHeader titles={animejoyData.titles}/>
             <Player animejoyData={animejoyData} animeRecord={animeRecord}/>
+            <Characters />
         </section>
     );
 
