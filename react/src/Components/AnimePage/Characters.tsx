@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 import { useParams } from "react-router-dom";
 import { useAnimeJoyAnimePageQuery } from "../../Api/useAnimeJoyAnimePageQuery";
 import { useShikiJoyAnimeSearch } from "../../Api/useShikiJoyAnimeSearch";
@@ -6,6 +6,7 @@ import { getTitles } from "../../Utils/scraping";
 import { ShikimoriRole } from "../../types";
 import styles from "./Characters.module.scss";
 import Picture from "../Picture";
+import LoadableText from "../LoadableText";
 
 
 const CharacterCard = ({ charData }: { charData: ShikimoriRole }) => {
@@ -18,6 +19,15 @@ const CharacterCard = ({ charData }: { charData: ShikimoriRole }) => {
         </article>
     );
 };
+
+const CharacterCardSkeleton = () => {
+    return (
+    <article className={styles.charCard}>
+            <Picture className={styles.imgSkeleton}/>
+        <LoadableText placeholderLength={12} />
+    </article>
+    )
+}
 
 type CharactersProps = {}
 
@@ -33,14 +43,20 @@ const Characters: FC<CharactersProps> = () => {
         data
     } = useShikiJoyAnimeSearch(getTitles(pageDocument)?.romanji);
 
+    const sortedChars = useMemo(() => {
+        if (data)
+            return data.charData.sort((a, b) => a.character!.russian > b.character!.russian ? 1 : -1)
+        else return undefined
+    }, [data])
+
+    console.log(data)
     return (
         <section>
             <h3 className={styles.header}>Персонажи</h3>
             <div className={styles.characters}>
-                {data ?
-                 data.charData.sort((a, b) => a.character!.russian > b.character!.russian ? 1 : -1)
-                     .map(e => <CharacterCard key={e.character?.id} charData={e} />)
-                      : !error ? "Загрузка..." : "Возникла ошибка!"
+                {sortedChars ?
+                 sortedChars.map(e => <CharacterCard key={e.character?.id} charData={e} />)
+                      : [...Array(10)].map((_,i) => <CharacterCardSkeleton key={i} />)
                 }
             </div>
         </section>

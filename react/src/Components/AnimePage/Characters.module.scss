@@ -19,7 +19,7 @@
     text-decoration: underline;
   }
 
-  img {
+  img, .imgSkeleton {
     border-radius: var(--roundness);
     width: 100%;
     aspect-ratio: 154/240;
@@ -27,7 +27,7 @@
   }
 
   p {
-    padding-top: 0.5rem;
+    margin-top: 0.5rem;
     word-break: break-word;
     max-height: 46px;
     overflow: hidden;
@@ -35,5 +35,9 @@
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
     text-overflow: ellipsis;
+  }
+
+  span {
+    margin-top: 0.5rem;
   }
 }
