@@ -50,7 +50,7 @@ body {
     height: 100%;
     width: 100%;
     display: grid;
-    grid-template-columns: var(--navbar-width) 12fr auto;
+    grid-template-columns: var(--navbar-width) 12fr 29rem;
 }
 
 @keyframes pulse {
