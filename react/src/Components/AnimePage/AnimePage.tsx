@@ -48,6 +48,7 @@ const AnimePage: FC<AnimePageProps> = memo(({}) => {
             <section className={styles.animePage}>
                 <AnimeHeader titles={undefined}/>
                 <PlayerSkeleton />
+                <Characters />
             </section>
         );
     }
