@@ -7,10 +7,13 @@
 .image {
   width: 100%;
   height: 100%;
+  opacity: 1;
+  transition: var(--transition-opacity-fast);
+
 }
 
 .loading {
-  display: none;
+  opacity: 0;
 }
 
 .placeholder {
@@ -20,6 +23,7 @@
   animation: var(--animation-pulse);
   opacity: 1;
   transition: var(--transition-opacity-fast);
+
 }
 
 .hide {
