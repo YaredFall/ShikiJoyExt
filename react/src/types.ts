@@ -134,6 +134,7 @@ export type ShikimoriCharacterOrPerson = {
     id: number,
     name: string,
     russian: string,
+    url: string,
     image: ShikimoriImage
 }
 
@@ -141,6 +142,5 @@ export type ShikimoriRole = {
     roles: string[],
     roles_russian: string[],
     character: ShikimoriCharacterOrPerson | null,
-    url: string,
     person: ShikimoriCharacterOrPerson | null
 }
