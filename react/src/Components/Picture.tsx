@@ -36,7 +36,7 @@ const Picture: FC<PictureProps> = ({
     );
 
     return (
-        <div className={`${styles.container} ${className}`}>
+        <div className={`${styles.container} ${className ? className : ""}`}>
             <img alt={""} onLoad={onLoad} src={src} className={`${styles.image} ${isLoading ? styles.loading : ""}`} />
             {shouldRenderPlaceholder &&
                 <div onTransitionEnd={onTransitionEnd} className={`${styles.placeholder} ${isLoading ? "" : styles.hide}`} />
