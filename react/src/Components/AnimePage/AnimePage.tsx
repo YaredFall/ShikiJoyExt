@@ -24,7 +24,7 @@ const AnimePage: FC<AnimePageProps> = memo(({}) => {
 
     const animejoyData: AnimeJoyData | undefined = (animeID && studioData && pageDocument) ? {
         id: animeID,
-        titles: getTitles(pageDocument),
+        titles: getTitles(pageDocument)!,
         studios: studioData
     } : undefined;
 

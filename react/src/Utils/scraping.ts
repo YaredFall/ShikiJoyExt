@@ -1,10 +1,10 @@
 import { StudioData, Titles } from "../types";
 
-export function getTitles(parentNode: ParentNode = document): Titles {
-    return {
+export function getTitles(parentNode: ParentNode = document): Titles | undefined {
+    return parentNode ? {
         ru: parentNode.querySelector(".ntitle")!.textContent!,
         romanji: parentNode.querySelector(".romanji")!.textContent!
-    };
+    } : undefined;
 }
 
 /**

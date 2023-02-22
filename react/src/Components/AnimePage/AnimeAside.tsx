@@ -25,7 +25,7 @@ const AnimeAside: FC<AnimeAsideProps> = () => {
         isFetching,
         error,
         data
-    } = useShikiJoyAnimeSearch(pageDocument)
+    } = useShikiJoyAnimeSearch(getTitles(pageDocument)?.romanji)
 
     if (error) {
         return (
