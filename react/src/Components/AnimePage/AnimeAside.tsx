@@ -4,7 +4,7 @@ import { ShikimoriAnimeCoreData, ShikimoriAnimePreviewData } from "../../types";
 import AnimeDescription from "./AnimeDescription";
 import { useParams } from "react-router-dom";
 import { useAnimeJoyAnimePageQuery } from "../../Api/useAnimeJoyAnimePageQuery";
-import { getTitles } from "../../Utils/scraping";
+import { getShikimoriID, getTitles } from "../../Utils/scraping";
 import Searchbar from "../Searchbar";
 import styles from "./AnimeAside.module.scss";
 import ky from "ky";
@@ -25,7 +25,7 @@ const AnimeAside: FC<AnimeAsideProps> = () => {
         isFetching,
         error,
         data
-    } = useShikiJoyAnimeSearch(getTitles(pageDocument)?.romanji)
+    } = useShikiJoyAnimeSearch(getShikimoriID(pageDocument))
 
     if (error) {
         return (

@@ -88,3 +88,15 @@ export function splitTitleOrStudioAndEpisodeCount(titleOrStudio: string | undefi
     const match = titleOrStudio.match(matchPattern);
     return match ? [match.groups?.name, match.groups?.count] as const : [titleOrStudio, undefined] as const;
 }
+
+export function getShikimoriLink(page: Document | undefined) {
+    if (!page) return undefined;
+    const links = [...page.querySelectorAll(".block .abasel li")].map(e => e.querySelector("a"));
+    return links ? links.find(e => e!.textContent === "Shikimori")?.getAttribute("href") : undefined
+}
+
+export function getShikimoriID(page: Document | undefined) {
+    const link = getShikimoriLink(page);
+    console.log(link?.match(/https:\/\/shikimori\.one\/animes\/\D?(?<id>\d*)-.*/mi)?.groups?.id)
+    return link?.match(/https:\/\/shikimori\.one\/animes\/\D?(?<id>\d*)-.*/mi)?.groups?.id;
+}

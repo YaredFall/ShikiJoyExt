@@ -2,7 +2,7 @@ import { FC, useMemo } from 'react';
 import { useParams } from "react-router-dom";
 import { useAnimeJoyAnimePageQuery } from "../../Api/useAnimeJoyAnimePageQuery";
 import { useShikiJoyAnimeSearch } from "../../Api/useShikiJoyAnimeSearch";
-import { getTitles } from "../../Utils/scraping";
+import { getShikimoriID, getTitles } from "../../Utils/scraping";
 import { ShikimoriRole } from "../../types";
 import styles from "./Characters.module.scss";
 import Picture from "../Picture";
@@ -41,7 +41,7 @@ const Characters: FC<CharactersProps> = () => {
         isFetching,
         error,
         data
-    } = useShikiJoyAnimeSearch(getTitles(pageDocument)?.romanji);
+    } = useShikiJoyAnimeSearch(getShikimoriID(pageDocument));
 
     const sortedChars = useMemo(() => {
         if (data)

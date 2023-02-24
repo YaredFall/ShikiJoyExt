@@ -17,7 +17,15 @@ function removeDefaultStyles() {
 function prepareDOM() {
     const usefulNodes = document.createElement("div");
     usefulNodes.classList.add("animejoy-useful-nodes", "remove");
-    usefulNodes.append(document.querySelector(".ntitle")!, document.querySelector(".romanji")!)
+    usefulNodes.append(
+        document.querySelector(".ntitle")!,
+        document.querySelector(".romanji")!,
+    )
+
+    const linksBlock = [...document.querySelectorAll("div.block")].find(e => e.querySelector("ul li .ansdb"))
+    if (linksBlock) {
+        usefulNodes.append(linksBlock);
+    }
 
     document.body.textContent = null;
 
