@@ -13,51 +13,108 @@ export function getTitles(parentNode: ParentNode = document): Titles | undefined
 export function getStudiosPlayersAndFiles(playlistsHTML: Element) {
     const playlistCategoriesHTML = Array.from(playlistsHTML.querySelectorAll(".playlists-player .playlists-lists .playlists-items"));
     let playlistCategoriesItemsHTML = playlistCategoriesHTML.map(c => c.querySelectorAll("ul li"));
-    playlistCategoriesItemsHTML = playlistCategoriesItemsHTML.filter((ci => ci.length > 1)); // ? Not sure
-    const studiosHTML = playlistCategoriesItemsHTML.length > 1 ? playlistCategoriesItemsHTML[0]
-                                                         : null;
-    const playersHTML = playlistCategoriesItemsHTML.at(-1)!;
-    const studios = studiosHTML === null ? [{ id: '0', name: undefined }] : Array.from(studiosHTML).map(s => ({
-        id: s.getAttribute("data-id")!.split("_").at(-1)!,
-        name: s.textContent!
-    }));
-    const players = Array.from(playersHTML).map(p => {
-        const ids = p.getAttribute("data-id")!.split("_");
-        return ({
-            studioId: ids.at(-2)!,
-            playerId: ids.at(-1)!,
-            name: p.textContent === "Наш плеер" ? "AnimeJoy" : p.textContent!
-        });
-    });
 
-    const filesHTML = playlistsHTML.querySelectorAll(".playlists-player .playlists-videos .playlists-items ul li");
-    const files = Array.from(filesHTML).map(f => {
-        const ids = f.getAttribute("data-id")!.split("_");
-        return ({
-            studioId: ids.at(-2)!,
-            playerId: ids.at(-1)!,
-            file: f.getAttribute("data-file")!,
-            label: f.textContent as string
-        });
-    });
+    const filesHTML = Array.from(playlistsHTML.querySelectorAll(".playlists-player .playlists-videos .playlists-items ul li"));
 
-    const studiosPlayersAndFiles: StudioData[] = studios.map(s => ({
-        name: s.name,
-        players: players.filter(p => p.studioId === s.id).map(p => ({
-            name: p.name,
-            files: files.filter(f => f.studioId === s.id && f.playerId === p.playerId).map(f => ({
-                file: f.file,
-                label: f.label.replace(/(\d*) (серия)/, '$2 $1')
+    type Category = {
+        label: string,
+        children: Category[] | string | undefined
+    }
+
+    let categories = (
+        function category(parentID: string = "0", n: number = 0): Category[] | undefined {
+            if (playlistCategoriesItemsHTML[n]) {
+                return Array.from(playlistCategoriesItemsHTML[n]).map(c => {
+                    const id = c.getAttribute("data-id")!;
+
+                    let files = filesHTML.filter(f => id === f.getAttribute("data-id")!).map(f => ({
+                        label: f.textContent!,
+                        children: f.getAttribute("data-file")!
+                    }));
+
+                    return id.startsWith(parentID + "_") ? {
+                        label: c.textContent!,
+                        children: files.length > 0 ? files : category(id, n + 1)
+                    } : null;
+                }).filter(c => c !== null) as Category[];
+            } else {
+                return undefined;
+            }
+        })();
+
+    const episodeSetPattern = /^(\d*)(?:\+|-\d*)/i;
+    if (playlistCategoriesItemsHTML.length > 1 && categories) {
+        categories = (function mergeEpisodeSets(categories: Category[]): Category[] {
+            if (!Array.isArray(categories)) {
+                return categories;
+            } else if (categories.some(c => c.label.match(episodeSetPattern))) {
+                const shouldInvert = +categories[0].label.match(episodeSetPattern)![1] < +categories.at(-1)!.label.match(episodeSetPattern)![1];
+                    return (shouldInvert ? categories : categories.reverse()).reduce((acc, c) => {
+                        if ((c.children as Category[]).some(sc => typeof sc.children === "string")) {
+                            acc.push(...(c.children as Category[]));
+                        } else {
+                            (c.children as Category[]).forEach(sc => {
+                                const match = acc.find(uc => uc.label === sc.label);
+                                if (match) {
+                                    (match.children as Category[]).push(...(sc.children as Category[]));
+                                } else {
+                                    acc.push(sc);
+                                }
+                            });
+                        }
+                        return acc;
+                    }, Array<Category>());
+
+            } else {
+                return categories.map(c => ({ label: c.label, children: mergeEpisodeSets((c.children as Category[])) }));
+            }
+        })(categories);
+    }
+
+    console.log({ categories });
+
+    const studiosPlayersAndFiles: StudioData[] = ((categories![0].children as Category[])[0].children as Category[])[0]?.children ? categories!.map(c => ({
+        name: c.label,
+        players: (c.children as Category[]).map(sc => ({
+            name: sc.label,
+            files: (sc.children as Category[]).map(fc => ({
+                label: fc.label,
+                file: fc.children as string
             }))
         }))
-    }));
-    console.log(studiosPlayersAndFiles);
+    })) : [{
+        name: undefined,
+        players: categories!.map(c => ({
+            name: c.label,
+            files: (c.children as Category[]).map(fc => ({
+                label: fc.label,
+                file: fc.children as string
+            }))
+        }))
+    }]
+
+    console.log({ studiosPlayersAndFiles });
 
     return studiosPlayersAndFiles;
 }
 
 // * May be incomplete
-const namesList: { short: string, full: string }[] = [
+const playerNames = [
+    "Sibnet",
+    "OK",
+    "VK",
+    "AllVideo",
+    "uStore",
+    "Zen",
+    "CDA",
+    "Kodik",
+    "Alloha",
+    "Наш плеер", // ? choose
+    "AnimeJoy" //   ?  one
+];
+
+// * May be incomplete
+const studioNames: { short: string, full: string }[] = [
     { short: "AL", full: "AniLibria" },
     { short: "SR", full: "SovetRomantica" },
     { short: "YRT", full: "YRteam" },
@@ -71,7 +128,7 @@ const namesList: { short: string, full: string }[] = [
 export function fullStudioName(name: string | undefined) {
     if (name === undefined || name === "undefined") return undefined;
     let fullName = name;
-    namesList.forEach(n => {
+    studioNames.forEach(n => {
         if (fullName.includes(n.short)) {
             fullName = fullName.replace(n.short, n.full);
             return fullName;
@@ -92,11 +149,10 @@ export function splitTitleOrStudioAndEpisodeCount(titleOrStudio: string | undefi
 export function getShikimoriLink(page: Document | undefined) {
     if (!page) return undefined;
     const links = [...page.querySelectorAll(".block .abasel li")].map(e => e.querySelector("a"));
-    return links ? links.find(e => e!.textContent === "Shikimori")?.getAttribute("href") : undefined
+    return links ? links.find(e => e!.textContent === "Shikimori")?.getAttribute("href") : undefined;
 }
 
 export function getShikimoriID(page: Document | undefined) {
     const link = getShikimoriLink(page);
-    console.log(link?.match(/https:\/\/shikimori\.one\/animes\/\D?(?<id>\d*)-.*/mi)?.groups?.id)
     return link?.match(/https:\/\/shikimori\.one\/animes\/\D?(?<id>\d*)-.*/mi)?.groups?.id;
 }
