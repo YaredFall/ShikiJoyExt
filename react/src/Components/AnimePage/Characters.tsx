@@ -14,7 +14,7 @@ const CharacterCard = ({ charData }: { charData: ShikimoriRole }) => {
         <article className={styles.charCard}>
             <a href={"https://shikimori.one" + charData.character?.url}>
                 <Picture src={"https://shikimori.one" + charData.character!.image.preview} />
-                <p>{charData.character?.russian}</p>
+                <p>{charData.character?.russian || charData.character?.name}</p>
             </a>
         </article>
     );
@@ -22,12 +22,12 @@ const CharacterCard = ({ charData }: { charData: ShikimoriRole }) => {
 
 const CharacterCardSkeleton = () => {
     return (
-    <article className={styles.charCard}>
-            <Picture className={styles.imgSkeleton}/>
-        <LoadableText placeholderLength={12} />
-    </article>
-    )
-}
+        <article className={styles.charCard}>
+            <Picture className={styles.imgSkeleton} />
+            <LoadableText placeholderLength={12} />
+        </article>
+    );
+};
 
 type CharactersProps = {}
 
@@ -44,19 +44,22 @@ const Characters: FC<CharactersProps> = () => {
     } = useShikiJoyAnimeSearch(getShikimoriID(pageDocument));
 
     const sortedChars = useMemo(() => {
-        if (data)
-            return data.charData.sort((a, b) => a.character!.russian > b.character!.russian ? 1 : -1)
-        else return undefined
-    }, [data])
+        if (data) {
+            const collator = new Intl.Collator();
+            return data.charData.sort((a, b) =>
+                collator.compare(a.character!.russian || a.character!.name, b.character!.russian || b.character!.name));
+        } else {
+            return undefined;
+        }
+    }, [data]);
 
-    console.log(data)
     return (
         <section>
             <h3 className={styles.header}>Персонажи</h3>
             <div className={styles.characters}>
                 {sortedChars ?
                  sortedChars.map(e => <CharacterCard key={e.character?.id} charData={e} />)
-                      : [...Array(10)].map((_,i) => <CharacterCardSkeleton key={i} />)
+                             : [...Array(10)].map((_, i) => <CharacterCardSkeleton key={i} />)
                 }
             </div>
         </section>
