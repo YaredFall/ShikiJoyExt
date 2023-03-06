@@ -68,7 +68,7 @@ const AnimeDescription: FC<AnimeDescriptionProps> = ({ data }) => {
                               children={shikimoriAgeRatingMap.get(data.rating)!.short}
                          />
                      </div>
-                     {data.aired_on ? <div children={`С ${new Intl.DateTimeFormat('ru-RU', {
+                     {data.aired_on ? <div children={(data.status === "ongoing" || data.released_on ? "С " : "") + `${new Intl.DateTimeFormat('ru-RU', {
                          year: "numeric",
                          month: "long",
                          day: "numeric"
@@ -81,7 +81,7 @@ const AnimeDescription: FC<AnimeDescriptionProps> = ({ data }) => {
                      }).format(new Date(data.released_on))}`}
                      /> : ""}
                      <div className={styles.episodesAndDuration}>
-                         {`${plural(data.episodes, '', '%d эпизода по', '%d эпизодов по')} ${
+                         {`${plural(data.episodes || data.episodes_aired, '', '%d эпизода по', '%d эпизодов по')} ${
                              plural(data.duration, '%d минуте', '%d минуты', '%d мин.')}`}
                      </div>
                      <div className={styles.genres}>{data?.genres.map(
