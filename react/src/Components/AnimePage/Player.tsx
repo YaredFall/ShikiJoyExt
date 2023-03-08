@@ -94,7 +94,7 @@ const Player: FC<PlayerProps> = memo(({ animejoyData, animeRecord }) => {
         <section className={styles.player}>
             <Section className={styles.topSection}>
                 <h2 className={styles.currentEpLabel}>
-                    <span children={animejoyData.studios[currentStudioId].players[currentPlayerId].files[currentEpisodeId].label} />
+                    <span children={animejoyData.studios[currentStudioId].players[currentPlayerId].files[currentEpisodeId]?.label} />
                     {watchedEpisodes.has(currentEpisodeId) &&
                         <button className={styles.currentEpWatched}
                                 onClick={() => {
