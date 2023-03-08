@@ -28,12 +28,12 @@ export function getStudiosPlayersAndFiles(playlistsHTML: Element) {
                     const id = c.getAttribute("data-id")!;
 
                     let files = filesHTML.filter(f => id === f.getAttribute("data-id")!).map(f => ({
-                        label: f.textContent!,
+                        label: f.textContent! ,
                         children: f.getAttribute("data-file")!
                     }));
 
                     return id.startsWith(parentID + "_") ? {
-                        label: c.textContent!,
+                        label: c.textContent! === "Наш плеер" ? "AnimeJoy" : c.textContent!,
                         children: files.length > 0 ? files : category(id, n + 1)
                     } : null;
                 }).filter(c => c !== null) as Category[];
@@ -97,21 +97,6 @@ export function getStudiosPlayersAndFiles(playlistsHTML: Element) {
 
     return studiosPlayersAndFiles;
 }
-
-// * May be incomplete
-const playerNames = [
-    "Sibnet",
-    "OK",
-    "VK",
-    "AllVideo",
-    "uStore",
-    "Zen",
-    "CDA",
-    "Kodik",
-    "Alloha",
-    "Наш плеер", // ? choose
-    "AnimeJoy" //   ?  one
-];
 
 // * May be incomplete
 const studioNames: { short: string, full: string }[] = [
