@@ -129,7 +129,6 @@ const Player: FC<PlayerProps> = memo(({ animejoyData, animeRecord }) => {
                      className={`${styles.leftSection}${!canChangeEpisodeId("prev") ? " hide" : " show"}`}
                      onClick={() => {
                          changeEpisodeId("prev");
-                         iframeRef.current?.focus();
                      }}
                      disabled={!canChangeEpisodeId("prev")}
             >
@@ -157,7 +156,6 @@ const Player: FC<PlayerProps> = memo(({ animejoyData, animeRecord }) => {
                          }
                          if (canChangeEpisodeId("next")) {
                              changeEpisodeId("next");
-                             iframeRef.current?.focus();
                          }
                      }}
                      disabled={!canChangeEpisodeId("next") && watchedEpisodes.has(currentEpisodeId)}

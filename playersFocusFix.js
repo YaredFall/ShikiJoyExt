@@ -2,14 +2,14 @@ let observer = new MutationObserver(mutationRecords => {
     if (!document.body) return;
 
     const domain = document.domain;
-    let onKeyUp = undefined;
+    let onKeyDown = undefined;
     switch (domain) {
         //AllVideo
         case 'secvideo1.online': {
             const frame = document.querySelector("iframe");
             if (frame) {
                 frame.setAttribute("tabindex", "-1");
-                onKeyUp = dealWithPlayerJS(15, 62, {playFlags: [(mouseIn) => !mouseIn]})
+                onKeyDown = dealWithPlayerJS(15, 62, {playFlags: [(mouseIn) => !mouseIn]})
             }
             break;
         }
@@ -19,7 +19,7 @@ let observer = new MutationObserver(mutationRecords => {
             const frame = document.querySelector("iframe");
             if (frame) {
                 document.querySelectorAll("iframe").forEach(e => e.setAttribute("tabindex", "-1"));
-                onKeyUp = dealWithPlayerJS(17, 99, {playFlags: [(mouseIn) => !mouseIn]})
+                onKeyDown = dealWithPlayerJS(17, 99, {playFlags: [(mouseIn) => !mouseIn]})
             }
             break;
         }
@@ -36,7 +36,7 @@ let observer = new MutationObserver(mutationRecords => {
         }
         case 'animejoy.ru': {
             if (document.URL.startsWith("https://animejoy.ru/player/playerjs.html")) {
-                onKeyUp = dealWithPlayerJS(17, 83, {playFlags: [(mouseIn) => !mouseIn]})
+                onKeyDown = dealWithPlayerJS(17, 83, {playFlags: [(mouseIn) => !mouseIn]})
             }
             break;
         }
@@ -55,7 +55,7 @@ let observer = new MutationObserver(mutationRecords => {
                 window.onfocus = () => {
                     active = false;
                 }
-                onKeyUp = (e) => {
+                onKeyDown = (e) => {
                     if (e.code === "Space" && !active) {
                         const playBtn = document.querySelector('[data-control-name="play"]');
                         if (playBtn) {
@@ -130,7 +130,7 @@ let observer = new MutationObserver(mutationRecords => {
                     console.log("IMAGE WAS CLICKED")
                 }, { once: true })
 
-                onKeyUp = (e) => {
+                onKeyDown = (e) => {
                     if (e.code === "Space" && document.head.querySelector('script[src*="//ad.mail.ru"]')) {
                         if (!active) {
                             img?.click();
@@ -166,7 +166,7 @@ let observer = new MutationObserver(mutationRecords => {
             const fsBtn = document.querySelector(".b-video-controls__fullscreen-button")
             if (video && fsBtn) {
                 video.focus();
-                onKeyUp = (e) => {
+                onKeyDown = (e) => {
                     if (e.code === "KeyF") {
                         fsBtn.click();
                     }
@@ -176,20 +176,20 @@ let observer = new MutationObserver(mutationRecords => {
             break;
         }
     }
-    if (onKeyUp) {
-        document.removeEventListener("keyup", onKeyUp);
+    if (onKeyDown) {
+        document.removeEventListener("keydown", onKeyDown);
         document.body.addEventListener("focus", () => {
-            document.removeEventListener("keyup", onKeyUp);
+            document.removeEventListener("keydown", onKeyDown);
             console.log("got focus", document)
         })
         document.body.addEventListener("blur", () => {
             if (!document.fullscreenElement) {
-                document.addEventListener("keyup", onKeyUp)
+                document.addEventListener("keydown", onKeyDown)
             }
             console.log("lost focus", document)
         })
-        document.addEventListener("keyup", onKeyUp)
-        console.log("added onKeyUp to", document)
+        document.addEventListener("keydown", onKeyDown)
+        console.log("added keydown to", document)
     }
 });
 
@@ -245,7 +245,7 @@ function dealWithPlayerJS(
 
         //prevents unwanted behavior after player being clicked
         document.body.addEventListener("click", () => {
-            document.removeEventListener("keyup", handler);
+            document.removeEventListener("keydown", handler);
         })
         return handler;
     } else
