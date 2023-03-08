@@ -47,7 +47,7 @@ export function Render() {
 
 export function prepareAndRender() {
     window.addEventListener("DOMContentLoaded", () => {
-        window.stop();
+        // window.stop();
         removeDefaultStyles();
         setTimeout(() => {
             prepareDOM();
