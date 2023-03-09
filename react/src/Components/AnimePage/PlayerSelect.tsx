@@ -1,5 +1,5 @@
 import { Listbox, Transition } from '@headlessui/react';
-import React, { FC, Fragment, memo } from 'react';
+import React, { FC, Fragment, memo, useRef } from 'react';
 import { SlArrowDown } from 'react-icons/sl';
 import { StudioData } from "../../types";
 import { fullStudioName, splitTitleOrStudioAndEpisodeCount } from "../../Utils/scraping";
@@ -51,6 +51,8 @@ const PlayerSelect: FC<PlayerSelectProps> = (({
     const currentStudio = availableStudiosAndPlayers[currentStudioId];
     const currentPlayer = currentStudio.players[currentPlayerId];
 
+    const btnRef = useRef(null);
+
     return (
         <Listbox as={"div"}
                  className={`select ${styles.playerSelect}`}
@@ -63,38 +65,54 @@ const PlayerSelect: FC<PlayerSelectProps> = (({
                          lastStudio: +ids[0],
                          lastPlayer: +ids[1]
                      });
+
                  }}
         >
-            <Listbox.Button className="select-btn" title={"Выбор плеера"}>
+            <Listbox.Button
+                ref={btnRef}
+                className="select-btn"
+                title={"Выбор плеера"}
+                onKeyDown={(e: React.KeyboardEvent) => {
+                    console.log("active on down", document.activeElement);
+
+                    if (e.code !== "Space" && e.code !== "Enter" && e.code !== "Tab") {
+                        if (document.activeElement instanceof HTMLElement) {
+                            document.activeElement.blur();
+                        }
+                    }
+                }}
+            >
                 <span>{currentPlayer.name}</span>
                 <MemoizedIcon />
             </Listbox.Button>
             <Transition as={Fragment}>
                 <Listbox.Options key={"options"} className={"select-options"} children={
                     availableStudiosAndPlayers.map((studio, sID) => {
-                        const [studioName, studioAvailableEpisodes] = splitTitleOrStudioAndEpisodeCount(studio.name);
-                        return (
-                            <Fragment key={"fragment" + sID}>
-                                {studioName !== undefined &&
-                                    <div key={studioName + sID} className={"select-options-header"}>
+                            const [studioName, studioAvailableEpisodes] = splitTitleOrStudioAndEpisodeCount(studio.name);
+                            return (
+                                <Fragment key={"fragment" + sID}>
+                                    {studioName !== undefined &&
+                                        <div key={studioName + sID} className={"select-options-header"}>
                                         <span title={fullStudioName(studioName)}
-                                            children={fullStudioName(studioName)!.length < 9 ? fullStudioName(studioName) : studioName}
+                                              children={fullStudioName(studioName)!.length < 9 ? fullStudioName(studioName) : studioName}
                                         />
-                                        {studioAvailableEpisodes &&
-                                            <><DotSplitter /><span title={`${studioAvailableEpisodes} серий`} children={studioAvailableEpisodes} /></>
-                                        }
-                                    </div>
-                                }
-                                {
-                                    studio.players.map((player, pID) => <Listbox.Option
-                                        key={"player" + sID + "-" + pID}
-                                        className={({ active, selected }) =>
-                                            `select-option${active ? " active" : ""}${selected ? " selected" : ""}`}
-                                        value={`${sID}-${pID}`}
-                                        children={player.name}
+                                            {studioAvailableEpisodes &&
+                                                <><DotSplitter /><span title={`${studioAvailableEpisodes} серий`}
+                                                                       children={studioAvailableEpisodes}
+                                                /></>
+                                            }
+                                        </div>
+                                    }
+                                    {
+                                        studio.players.map((player, pID) => <Listbox.Option
+                                            key={"player" + sID + "-" + pID}
+                                            className={({ active, selected }) =>
+                                                `select-option${active ? " active" : ""}${selected ? " selected" : ""}`}
+                                            value={`${sID}-${pID}`}
+                                            children={player.name}
                                         />)
-                                }
-                            </Fragment>
+                                    }
+                                </Fragment>
                             );
                         }
                     )

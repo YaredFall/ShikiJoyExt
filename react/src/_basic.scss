@@ -35,6 +35,10 @@ button {
     cursor: default !important;
     pointer-events: none !important;
   }
+  
+  &:has(:focus-visible) .select-btn {
+    outline: -webkit-focus-ring-color auto 1px;
+  }
 }
 
 .select-btn {

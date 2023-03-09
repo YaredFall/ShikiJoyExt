@@ -2,14 +2,14 @@ let observer = new MutationObserver(mutationRecords => {
     if (!document.body) return;
 
     const domain = document.domain;
-    let onKeyDown = undefined;
+    let onKeyUp = undefined;
     switch (domain) {
         //AllVideo
         case 'secvideo1.online': {
             const frame = document.querySelector("iframe");
             if (frame) {
                 frame.setAttribute("tabindex", "-1");
-                onKeyDown = dealWithPlayerJS(15, 62, {playFlags: [(mouseIn) => !mouseIn]})
+                onKeyUp = dealWithPlayerJS(15, 62, {playFlags: [(mouseIn) => !mouseIn], fsFlags: [(mouseIn) => !mouseIn]})
             }
             break;
         }
@@ -19,7 +19,7 @@ let observer = new MutationObserver(mutationRecords => {
             const frame = document.querySelector("iframe");
             if (frame) {
                 document.querySelectorAll("iframe").forEach(e => e.setAttribute("tabindex", "-1"));
-                onKeyDown = dealWithPlayerJS(17, 99, {playFlags: [(mouseIn) => !mouseIn]})
+                onKeyUp = dealWithPlayerJS(17, 99, {playFlags: [(mouseIn) => !mouseIn], fsFlags: [(mouseIn) => !mouseIn]})
             }
             break;
         }
@@ -27,16 +27,18 @@ let observer = new MutationObserver(mutationRecords => {
             const wrapper = document.querySelector("div#video_html5_wrapper");
             const videoEl = document.querySelector("video");
             if (wrapper && videoEl) {
-                setTimeout(() => {
-                    wrapper.focus()
-                }, 0)
+                window.addEventListener("focus", () => {
+                    setTimeout(() => {
+                        wrapper.focus()
+                    }, 0)
+                })
                 observer.disconnect();
             }
             break;
         }
         case 'animejoy.ru': {
             if (document.URL.startsWith("https://animejoy.ru/player/playerjs.html")) {
-                onKeyDown = dealWithPlayerJS(17, 83, {playFlags: [(mouseIn) => !mouseIn]})
+                onKeyUp = dealWithPlayerJS(17, 83, {playFlags: [(mouseIn) => !mouseIn], fsFlags: [(mouseIn) => !mouseIn]})
             }
             break;
         }
@@ -55,7 +57,7 @@ let observer = new MutationObserver(mutationRecords => {
                 window.onfocus = () => {
                     active = false;
                 }
-                onKeyDown = (e) => {
+                onKeyUp = (e) => {
                     if (e.code === "Space" && !active) {
                         const playBtn = document.querySelector('[data-control-name="play"]');
                         if (playBtn) {
@@ -130,7 +132,7 @@ let observer = new MutationObserver(mutationRecords => {
                     console.log("IMAGE WAS CLICKED")
                 }, { once: true })
 
-                onKeyDown = (e) => {
+                onKeyUp = (e) => {
                     if (e.code === "Space" && document.head.querySelector('script[src*="//ad.mail.ru"]')) {
                         if (!active) {
                             img?.click();
@@ -164,11 +166,15 @@ let observer = new MutationObserver(mutationRecords => {
         case 'mail.ru': {
             const video = document.querySelector("video")
             const fsBtn = document.querySelector(".b-video-controls__fullscreen-button")
-            if (video && fsBtn) {
+            const playBtn = document.querySelector(".b-video-controls__play-button")
+            if (video && fsBtn && playBtn) {
                 video.focus();
-                onKeyDown = (e) => {
+                onKeyUp = (e) => {
                     if (e.code === "KeyF") {
                         fsBtn.click();
+                    }
+                    if (e.code === "Space") {
+                        playBtn.click();
                     }
                 }
                 observer.disconnect()
@@ -176,20 +182,20 @@ let observer = new MutationObserver(mutationRecords => {
             break;
         }
     }
-    if (onKeyDown) {
-        document.removeEventListener("keydown", onKeyDown);
+    if (onKeyUp) {
+        document.removeEventListener("keyup", onKeyUp);
         document.body.addEventListener("focus", () => {
-            document.removeEventListener("keydown", onKeyDown);
+            document.removeEventListener("keyup", onKeyUp);
             console.log("got focus", document)
         })
         document.body.addEventListener("blur", () => {
             if (!document.fullscreenElement) {
-                document.addEventListener("keydown", onKeyDown)
+                document.addEventListener("keyup", onKeyUp)
             }
             console.log("lost focus", document)
         })
-        document.addEventListener("keydown", onKeyDown)
-        console.log("added keydown to", document)
+        document.addEventListener("keyup", onKeyUp)
+        console.log("added keyup to", document)
     }
 });
 
@@ -245,7 +251,7 @@ function dealWithPlayerJS(
 
         //prevents unwanted behavior after player being clicked
         document.body.addEventListener("click", () => {
-            document.removeEventListener("keydown", handler);
+            document.removeEventListener("keyup", handler);
         })
         return handler;
     } else
