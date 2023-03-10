@@ -10,6 +10,7 @@ port.onMessage.addListener(function(msg) {
     }
 });
 port.postMessage({request: "tabId"})
+let sentInitialMessage = false; //used only for Alloha
 
 
 let observer = new MutationObserver(mutationRecords => {
@@ -220,6 +221,12 @@ let observer = new MutationObserver(mutationRecords => {
                         currentEpisodeID: episodeSelect.value-1
                     })
                 })
+                
+                onKeyUp = (e) => {
+                    if (e.code === "Space") {
+                        document.querySelector(".fp-x-play")?.click() || document.querySelector(".play_button")?.click();
+                    }
+                }
             }
             break;
         }
@@ -234,8 +241,9 @@ let observer = new MutationObserver(mutationRecords => {
             }
             
             const episodesSelect = document.querySelector(".list[data-episodes]");
-            if (episodesSelect) {
-                observer.disconnect();
+            if (episodesSelect && !sentInitialMessage) {
+                sentInitialMessage = true;
+                
                 const selectItems = episodesSelect.querySelectorAll(".list__drop button")
                 port.postMessage({
                     currentEpisodeID: episodesSelect.getAttribute("data-episodes") - 1,
@@ -244,6 +252,43 @@ let observer = new MutationObserver(mutationRecords => {
                 selectItems.forEach(b => b.addEventListener("click", () => {
                     port.postMessage({currentEpisodeID: b.getAttribute("data-episode") - 1})
                 }))
+            }
+
+            const a = document.querySelectorAll("pjsdiv");
+
+            if (a.length > 0) {
+                observer.disconnect();
+
+                let mouseIn = false;
+                document.addEventListener("mouseenter", () => {
+                    mouseIn = true
+                });
+                document.addEventListener("mouseleave", () => {
+                    mouseIn = false
+                })
+
+                const playBtn = a[17];
+                const fsBtn = a[104];
+                let evenSpacePress = false;
+
+                onKeyUp = (e) => {
+                    console.log({e, mouseIn})
+                    if (e.code === "Space" && !mouseIn) {
+                        if (!evenSpacePress) {
+                            playBtn?.click();
+                        }
+                        evenSpacePress = !evenSpacePress;
+                    }
+                    if (e.code === "KeyF" && !mouseIn) {
+                        fsBtn?.click();
+                    }
+                }
+
+                //prevents unwanted behavior after player being clicked
+                document.body.addEventListener("click", () => {
+                    document.removeEventListener("keyup", onKeyUp);
+                    evenSpacePress = false;
+                })
             }
             break;
         }
@@ -300,6 +345,8 @@ function dealWithPlayerJS(
     const a = document.querySelectorAll("pjsdiv");
 
     if (a.length > 0) {
+        observer.disconnect();
+
         let mouseIn = false;
         document.addEventListener("mouseenter", () => {
             mouseIn = true
@@ -308,16 +355,15 @@ function dealWithPlayerJS(
             mouseIn = false
         })
 
-        observer.disconnect();
         const playBtn = a[playBtnId];
         const fsBtn = a[fsBtnId]
         const handler = (e) => {
-            console.log({e})
+            console.log({e, mouseIn})
             if (e.code === "Space" && options.playFlags.every(f => f(mouseIn) === true)) {
-                playBtn.click();
+                playBtn?.click();
             }
             if (e.code === "KeyF" && options.fsFlags.every(f => f(mouseIn) === true)) {
-                fsBtn.click();
+                fsBtn?.click();
             }
         }
 
