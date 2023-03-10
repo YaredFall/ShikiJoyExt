@@ -1,3 +1,17 @@
+
+let tabId = undefined;
+const port = chrome.runtime.connect({name: "fixes"});
+port.onMessage.addListener(function(msg) {
+    // console.log("Fixes got message: ", msg);
+    if (msg.tabId) {
+        tabId ||= msg.tabId
+    } else if (tabId && tabId === msg.to) {
+
+    }
+});
+port.postMessage({request: "tabId"})
+
+
 let observer = new MutationObserver(mutationRecords => {
     if (!document.body) return;
 
@@ -181,6 +195,63 @@ let observer = new MutationObserver(mutationRecords => {
             }
             break;
         }
+        //Kodik
+        case 'aniqit.com': {
+            const episodeSelect = document.querySelector(".serial-series-box>select");
+            const dropdownContent = document.querySelector(".serial-series-box .dropdown-content");
+            if (episodeSelect && dropdownContent) {
+                observer.disconnect();
+
+                port.postMessage({
+                    currentEpisodeID: episodeSelect.value-1,
+                    episodesAvailable: episodeSelect.children.length
+                })
+                
+                dropdownContent.childNodes.forEach(div => {
+                    div.addEventListener("click", () => {
+                        port.postMessage({
+                            currentEpisodeID: div.getAttribute("data-link") - 1
+                        })
+                    })
+                });
+                
+                document.querySelector(".serial-next-button").addEventListener("click", () => {
+                    port.postMessage({
+                        currentEpisodeID: episodeSelect.value-1
+                    })
+                })
+            }
+            break;
+        }
+        //Alloha
+        case 'politician.as.alloeclub.com': {
+            const error = document.querySelector(".error_player");
+            if (error) {
+                port.postMessage({
+                    currentEpisodeID: 0,
+                    episodesAvailable: 0
+                })
+            }
+            
+            const episodesSelect = document.querySelector(".list[data-episodes]");
+            if (episodesSelect) {
+                observer.disconnect();
+                const selectItems = episodesSelect.querySelectorAll(".list__drop button")
+                port.postMessage({
+                    currentEpisodeID: episodesSelect.getAttribute("data-episodes") - 1,
+                    episodesAvailable: selectItems.length
+                })
+                selectItems.forEach(b => b.addEventListener("click", () => {
+                    port.postMessage({currentEpisodeID: b.getAttribute("data-episode") - 1})
+                }))
+            }
+            break;
+        }
+        default: {
+            console.warn("Unhandled domain:", domain);
+            observer.disconnect();
+            break;
+        }
     }
     if (onKeyUp) {
         document.removeEventListener("keyup", onKeyUp);
@@ -241,6 +312,7 @@ function dealWithPlayerJS(
         const playBtn = a[playBtnId];
         const fsBtn = a[fsBtnId]
         const handler = (e) => {
+            console.log({e})
             if (e.code === "Space" && options.playFlags.every(f => f(mouseIn) === true)) {
                 playBtn.click();
             }

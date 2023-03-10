@@ -4,8 +4,7 @@
     "manifest_version": 3,
     "permissions": [
         "storage",
-        "scripting",
-        "tabs"
+        "scripting"
     ],
     "host_permissions": [
         "https://*.animejoy.ru/*",
@@ -15,7 +14,9 @@
         "*://vk.com/*",
         "*://dzen.ru/*",
         "*://ok.ru/*",
-        "*://*.mail.ru/*"
+        "*://*.mail.ru/*",
+        "*://aniqit.com/*",
+        "*://politician.as.alloeclub.com/*"
     ],
     "icons": {
         "128": "logo.png"

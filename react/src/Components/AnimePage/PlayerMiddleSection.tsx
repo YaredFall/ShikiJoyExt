@@ -7,28 +7,24 @@ import Player from "./Player";
 type PlayerMiddleSectionProps = {
     iframeRef: RefObject<HTMLIFrameElement>
     leftBtnRef: RefObject<HTMLButtonElement>
-    currentPlayer: PlayerData
-    currentEpisodeId: number
+    source: string
 } | {
     iframeRef?: undefined
     leftBtnRef?: undefined
-    currentPlayer?: undefined
-    currentEpisodeId?: undefined
+    source?: undefined
 }
 
 const PlayerMiddleSection: FC<PlayerMiddleSectionProps> = ({
-    currentPlayer,
-    currentEpisodeId,
+    source,
     iframeRef,
     leftBtnRef
 }) => {
     const [isIFrameLoading, setIsIFrameLoading] = useState(true);
     useEffect(() => {
         setIsIFrameLoading(true);
-    }, [currentEpisodeId, currentPlayer]);
+    }, [source]);
 
-    const shouldShowSkeleton = iframeRef === undefined || leftBtnRef === undefined ||
-        currentPlayer === undefined || currentEpisodeId === undefined;
+    const shouldShowSkeleton = iframeRef === undefined || leftBtnRef === undefined || source === undefined;
 
     const onLoadHandler = () => {
         if (shouldShowSkeleton) return;
@@ -46,15 +42,6 @@ const PlayerMiddleSection: FC<PlayerMiddleSectionProps> = ({
         }
     };
 
-    const source = (currentPlayer: PlayerData, currentEpisodeId: number): string => {
-        if (isSinglePagePlayer(currentPlayer.name)) {
-            const file = currentPlayer.files[0].file
-            return file + (file.includes('?') ? "&" : "?") + `episode=${currentEpisodeId + 1}`;
-        } else {
-            return currentPlayer.files[currentEpisodeId].file;
-        }
-    }
-
     return (
         <a onFocus={onFocusHandler}
            className={`${styles.middleSection} ${(isIFrameLoading === undefined || isIFrameLoading) ? styles.loading : styles.loaded}`}
@@ -64,7 +51,7 @@ const PlayerMiddleSection: FC<PlayerMiddleSectionProps> = ({
                     loading={"lazy"}
                     className={styles.playerIframe}
                     onLoad={onLoadHandler}
-                    src={shouldShowSkeleton ? undefined : source(currentPlayer, currentEpisodeId)}
+                    src={shouldShowSkeleton ? undefined : source}
                     allowFullScreen={true}
             />
         </a>

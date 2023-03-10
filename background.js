@@ -1,4 +1,40 @@
 chrome.runtime.onInstalled.addListener(async (details) => {
+
+    let reactPorts = [];
+    let fixesPorts = [];
+    chrome.runtime.onConnect.addListener(function(port) {
+        console.assert(port.name === "react" || port.name === "fixes");
+        if (port.name === "react") {
+            
+            reactPorts = reactPorts.filter(rp => rp.sender.tab.id !== port.sender.tab.id);
+            reactPorts.push(port);
+            
+            reactPorts.at(-1).onMessage.addListener(function(msg, sender) {
+                if (msg.request) {
+                    if (msg.request === "tabId") {
+                        reactPorts.at(-1).postMessage({tabId: sender.sender.tab.id})
+                    }
+                } else {
+                    fixesPorts.find(fp => fp.sender.tab.id === sender.sender.tab.id)?.postMessage({...msg, to: sender.sender.tab.id});
+                }
+            });
+        } else if (port.name === "fixes") {
+
+            fixesPorts = fixesPorts.filter(fp => fp.sender.tab.id !== port.sender.tab.id);
+            fixesPorts.push(port);
+            
+            fixesPorts.at(-1).onMessage.addListener(function(msg, sender) {
+                if (msg.request) {
+                    if (msg.request === "tabId") {
+                        fixesPorts.at(-1).postMessage({tabId: sender.sender.tab.id})
+                    }
+                } else {
+                    reactPorts.find(rp => rp.sender.tab.id === sender.sender.tab.id)?.postMessage({...msg, to: sender.sender.tab.id});
+                }
+            });
+        }
+    });
+
     if (details.reason === "install") {
         chrome.storage.local.set({ enabled: true, usePlayersFixes: true });
     } else if (details.reason === "update") {
@@ -48,7 +84,9 @@ const injectFixes = async () => {
             "*://vk.com/*",
             "*://dzen.ru/*",
             "*://ok.ru/*",
-            "*://*.mail.ru/*"
+            "*://*.mail.ru/*",
+            "*://aniqit.com/*",
+            "*://politician.as.alloeclub.com/*"
         ],
         runAt: "document_start",
         js: ["playersFocusFix.js"]
