@@ -69,10 +69,17 @@ let observer = new MutationObserver(mutationRecords => {
                 observer.disconnect();
                 let active = false;
                 let muted = true;
-                window.onfocus = () => {
+                window.onfocus = (e) => {
+                    if (document.activeElement !== document.querySelector("._1gZJUfw"))
                     active = false;
                 }
+                document.onclick = (e) => {
+                    if (!active && e.isTrusted) {
+                        active = true;
+                    }
+                }
                 onKeyUp = (e) => {
+                    console.log({active})
                     if (e.code === "Space" && !active) {
                         const playBtn = document.querySelector('[data-control-name="play"]');
                         if (playBtn) {
