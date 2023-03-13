@@ -377,7 +377,7 @@ function dealWithPlayerJS(
         //prevents unwanted behavior after player being clicked
         document.body.addEventListener("click", () => {
             document.removeEventListener("keyup", handler);
-        })
+        }, true)
         return handler;
     } else
         return undefined;
