@@ -35,7 +35,7 @@
                 "https://*.animejoy.ru/*"
             ],
             "resources": [
-                "images/*"
+                "bundled/images/*"
             ]
         }
     ]

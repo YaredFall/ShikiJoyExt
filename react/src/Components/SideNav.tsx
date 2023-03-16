@@ -6,7 +6,7 @@ import { VscHistory, IoIosLogIn, IoSearchOutline, IoSettingsOutline, TbList } fr
 import styles from "./SideNav.module.scss";
 
 //@ts-ignore
-const radishIconExt = chrome.runtime?.getURL("images/radish256x256.png");
+const radishIconExt = chrome.runtime?.getURL("bundled/images/radish256x256.png");
 
 type SideNavProps = {}
 
