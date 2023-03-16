@@ -1,7 +1,7 @@
 import { useQuery } from "react-query";
-import mockupPage from "../devMockup/mockupAnimePage.html?raw";
 import { useRef } from "react";
 import { defautlQueryConfig } from "./_config";
+import ky from "ky";
 
 const parser = new DOMParser();
 
@@ -13,15 +13,16 @@ export const useAnimeJoyAnimePageQuery = (animejoyFullID: string) => {
         ['animejoy', 'anime', animejoyFullID],
         () => {
             if (import.meta.env.DEV)
-                return parser.parseFromString(mockupPage, "text/html");
+                return ky(`http://localhost:3000/api/test/animejoy/tv-serialy/${animejoyFullID}`)
+                    .text().then(page => parser.parseFromString(page, "text/html"))
 
             if (firstFetch.current) {
                 firstFetch.current = false;
                 return document;
             }
 
-            return fetch(`https://animejoy.ru/tv-serialy/${animejoyFullID}`)
-                .then(response => response.text().then(page => parser.parseFromString(page, "text/html")))
+            return ky(`https://animejoy.ru/tv-serialy/${animejoyFullID}`)
+                .text().then(page => parser.parseFromString(page, "text/html"))
         },
         defautlQueryConfig
     )
