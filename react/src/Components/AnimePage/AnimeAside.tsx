@@ -1,13 +1,10 @@
 import { FC } from 'react';
-import { useQuery } from "react-query";
-import { ShikimoriAnimeCoreData, ShikimoriAnimePreviewData } from "../../types";
 import AnimeDescription from "./AnimeDescription";
 import { useParams } from "react-router-dom";
 import { useAnimeJoyAnimePageQuery } from "../../Api/useAnimeJoyAnimePageQuery";
-import { getShikimoriID, getTitles } from "../../Utils/scraping";
+import { getShikimoriID } from "../../Utils/scraping";
 import Searchbar from "../Searchbar";
 import styles from "./AnimeAside.module.scss";
-import ky from "ky";
 import { useShikiJoyAnimeSearch } from "../../Api/useShikiJoyAnimeSearch";
 
 

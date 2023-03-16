@@ -3,7 +3,7 @@ import { BsCheck2 } from 'react-icons/bs';
 import { IoClose } from "react-icons/io5";
 import { SlArrowLeft, SlArrowRight } from 'react-icons/sl';
 import { useAnimeJoyLegacyStorage } from "../../Hooks/useAnimeJoyLegacyStorage";
-import { isSinglePagePlayer } from '../../misc';
+import { isSinglePagePlayer } from '../../Utils/misc';
 import { AnimeJoyData } from "../../types";
 import { fullStudioName, splitTitleOrStudioAndEpisodeCount } from "../../Utils/scraping";
 import styles from './Player.module.scss';

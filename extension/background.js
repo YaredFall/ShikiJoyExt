@@ -58,8 +58,8 @@ const injectMainScript = async () => {
             "https://*.animejoy.ru/*.png"
         ],
         runAt: "document_start",
-        js: ["react/dist/index.js"],
-        css: ["react/dist/index.scss"]
+        js: ["content.js"],
+        css: ["content.scss"]
     }
     return await chrome.scripting.registerContentScripts([script], () => {
         console.log("injected React");

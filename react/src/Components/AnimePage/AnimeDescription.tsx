@@ -7,7 +7,7 @@ import plural from 'plural-ru';
 import DotSplitter from "../DotSplitter";
 
 //@ts-ignore
-const shikimoriLogoExt = chrome.runtime?.getURL("react/dist/images/shikimori_logo.png");
+const shikimoriLogoExt = chrome.runtime?.getURL("images/shikimori_logo.png");
 
 //"tv" | "ova" | "ona" | "movie" | "special" | "music"
 const shikimoriKindMap = new Map([

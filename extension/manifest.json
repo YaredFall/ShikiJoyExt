@@ -35,7 +35,7 @@
                 "https://*.animejoy.ru/*"
             ],
             "resources": [
-                "react/dist/images/*"
+                "images/*"
             ]
         }
     ]
