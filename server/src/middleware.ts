@@ -5,13 +5,12 @@ export function middleware(request: NextRequest) {
 
     const response = NextResponse.next();
     const origin = request.headers.get('Origin');
-    // ! TODO: remove localhost on release
-    if (origin === 'https://animejoy.ru' || origin === "http://127.0.0.1:5173")
-        response.headers.set('Access-Control-Allow-Origin', origin)
+    if (origin === 'https://animejoy.ru' || process.env.NODE_ENV === "development")
+        response.headers.set('Access-Control-Allow-Origin', origin!)
 
     return response
 }
 
 export const config = {
-    matcher: '/api/shikimori/:path*'
+    matcher: '/api/:path*'
 }

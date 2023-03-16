@@ -9,8 +9,6 @@ export default async function handler(
 ) {
     const { page, ...query } = req.query;
     const url = (Array.isArray(page) ? page?.join('/') : page);
-    console.log(query, page, `https://animejoy.ru/${url + "/"}${
-        Object.entries(query).length ? "?" + Object.entries(query).map(e => e[0] + "=" + e[1]).join('&') : ""}`);
     try {
         const response = await got(`https://animejoy.ru/${url + "/"}${
             Object.entries(query).length ? "?" + Object.entries(query).map(e => e[0] + "=" + e[1]).join('&') : ""}`).text()
