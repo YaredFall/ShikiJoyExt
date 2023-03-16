@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build && copy dist\\content.* ..\\extension\\bundled && xcopy dist\\images ..\\extension\\bundled\\images /i /Y",
+    "build": "tsc && vite build && npm run copy-builded",
+    "copy-builded": "xcopy dist\\content.* ..\\extension\\bundled /i /Y & xcopy dist\\images ..\\extension\\bundled\\images /i /Y",
     "preview": "vite preview"
   },
   "dependencies": {
