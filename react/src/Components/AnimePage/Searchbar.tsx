@@ -1,9 +1,9 @@
 import { FC, Fragment, memo, useRef, useState } from 'react';
 import styles from "./Searchbar.module.scss";
 import { IoSearchOutline } from "react-icons/all";
-import { useAnimeJoySearch } from "../Api/useAnimeJoySearch";
-import { useDebouncedValue } from "../Hooks/useDebouncedValue";
-import { splitTitleOrStudioAndEpisodeCount } from "../Utils/scraping";
+import { useAnimeJoySearch } from "../../Api/useAnimeJoySearch";
+import { useDebouncedValue } from "../../Hooks/useDebouncedValue";
+import { splitTitleOrStudioAndEpisodeCount } from "../../Utils/scraping";
 import { SlArrowDown } from "react-icons/sl";
 import { Menu, Transition } from '@headlessui/react';
 import { Link } from "react-router-dom";
@@ -33,7 +33,6 @@ const Results: FC<ResultsProps> = memo(({ data, isLoading, isError, isNothingFou
     return (
         <>
             {data.map(e => {
-                console.log(e.link);
                 const [ruTitle, episodes] = splitTitleOrStudioAndEpisodeCount(e.ru);
                 return (
                     <Menu.Item as={"article"} key={ruTitle} className={styles.resultItem}>

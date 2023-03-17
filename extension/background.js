@@ -55,6 +55,7 @@ const injectMainScript = async () => {
         matches: ["https://*.animejoy.ru/*"],
         excludeMatches: [
             "https://*.animejoy.ru/engine/*",
+            "https://*.animejoy.ru/uploads/*",
             "https://*.animejoy.ru/*.png"
         ],
         runAt: "document_start",

@@ -29,7 +29,8 @@ export function useAnimeJoySearch(searchTerm: string) {
                         link: e.querySelector(".ntitle > a")?.getAttribute("href")?.replace("https://animejoy.ru", "") || undefined,
                         ru: e.querySelector(".ntitle")?.textContent || undefined,
                         romanji: e.querySelector(".romanji")?.textContent || undefined,
-                        posterSrc: e.querySelector("img")?.getAttribute("src") || undefined
+                        posterSrc: e.querySelector("img")?.getAttribute("src")
+                                    ?.replace(/^/, (import.meta.env.DEV ? ApiLinks.get("dev/animejoy")! : "")) || undefined
                     }));
                 });
             } else {

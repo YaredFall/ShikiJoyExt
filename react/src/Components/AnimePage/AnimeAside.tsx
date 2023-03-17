@@ -3,7 +3,7 @@ import AnimeDescription from "./AnimeDescription";
 import { useParams } from "react-router-dom";
 import { useAnimeJoyAnimePageQuery } from "../../Api/useAnimeJoyAnimePageQuery";
 import { getShikimoriID } from "../../Utils/scraping";
-import Searchbar from "../Searchbar";
+import Searchbar from "./Searchbar";
 import styles from "./AnimeAside.module.scss";
 import { useShikiJoyAnimeSearch } from "../../Api/useShikiJoyAnimeSearch";
 
