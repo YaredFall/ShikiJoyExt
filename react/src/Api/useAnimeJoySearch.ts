@@ -1,6 +1,6 @@
 import { useQuery } from "react-query";
 import ky from "ky";
-import { defautlQueryConfig } from "./_config";
+import { ApiLinks, defautlQueryConfig } from "./_config";
 
 const parser = new DOMParser();
 
@@ -17,7 +17,7 @@ export function useAnimeJoySearch(searchTerm: string) {
                 formData.append("result_from", "1");
                 formData.append("story", searchTerm);
 
-                return ky.post("/index.php?do=search", {
+                return ky.post((import.meta.env.DEV ? ApiLinks.get("dev/animejoy") : "") + "/index.php?do=search", {
                     body: formData
                 }).text().then(page => {
                     const doc = parser.parseFromString(page, "text/html");
