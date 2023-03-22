@@ -35,11 +35,14 @@ const SideNav: FC<SideNavProps> = () => {
                          data-label={"Поиск"}
                          children={<IoSearchOutline />}
                 />
-                <NavLink className={({ isActive }) => `${styles.navItem} ${isActive ? styles.active : ""}`}
-                         to={"tbd"}
-                         data-label={"Мой список"}
-                         children={<TbList />}
-                />
+                {user ? <a className={`${styles.navItem} ${styles.external}`}
+                                 target={"_blank"}
+                                 href={user.url + "/list/anime"}
+                                 data-label={"Мой список"}
+                                 children={<TbList />}
+                      />
+                      : null
+                }
                 <NavLink className={({ isActive }) => `${styles.navItem} ${styles.smaller} ${isActive ? styles.active : ""}`}
                          to={"tbd"}
                          data-label={"Последнее"}
