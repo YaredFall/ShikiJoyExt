@@ -21,15 +21,30 @@
   justify-content: center;
   padding: 1rem;
   outline-offset: -0.125rem;
-  transition: color 125ms ease-in-out, box-shadow 250ms ease-in-out;
+  transition: color 125ms ease-in-out;//, box-shadow 250ms ease-in-out;
   color: var(--primary-a50);
   position: relative;
   box-shadow: transparent 2px 0;
 
+  &::before {
+    content: ' ';
+    width: 2px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: -2px;
+    transition: opacity 250ms ease-in-out;
+    background: linear-gradient(0deg, transparent, var(--primary-a50), transparent);
+    opacity: 0;
+  }
+
   &.active {
-    box-shadow: var(--primary-a50) 2px 0 ;
-    margin-right: -2px;
+    //box-shadow: var(--primary-a50) 2px 0 ;
+    //margin-right: -2px;
     pointer-events: none;
+    &::before {
+      opacity: 1;
+    }
   }
   
   &.external {
