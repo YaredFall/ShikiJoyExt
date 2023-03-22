@@ -15,6 +15,7 @@ import PlayerMiddleSection from "./PlayerMiddleSection";
 import { Anime } from "../../Dexie/db";
 import DotSplitter from "../DotSplitter";
 import { addMessageListener, removeMessageListener } from "../../Utils/messaging";
+import { useQueryClient } from "react-query";
 
 
 const MemoizedLeftIcon = memo(SlArrowLeft);
@@ -28,18 +29,15 @@ type PlayerProps = {
 }
 const Player: FC<PlayerProps> = memo(({ animejoyData, animeRecord }) => {
 
+    const queryClient = useQueryClient();
+
     const { setEpisodeAsWatched, removeEpisodeFromWatched, } = useAnimeJoyLegacyStorage(animejoyData);
     const watchedEpisodes = animeRecord.watchedEpisodes;
 
-    const [currentStudioId, setCurrentStudioId] = useState(animeRecord.lastStudio);
-    const [currentPlayerId, setCurrentPlayerId] = useState(animeRecord.lastPlayer);
+    const currentStudioId = animeRecord.lastStudio;
+    const currentPlayerId = animeRecord.lastPlayer;
     const currentStudio = animejoyData.studios[currentStudioId];
     const currentPlayer = currentStudio.players[currentPlayerId];
-
-    useEffect(() => {
-        setCurrentStudioId(animeRecord.lastStudio);
-        setCurrentPlayerId(animeRecord.lastPlayer);
-    }, [animeRecord]);
 
     const [currentEpisodeId, setCurrentEpisodeId] = useState(0);
     console.log({ currentStudioId, currentPlayerId, currentEpisodeId, animejoyData });
@@ -93,7 +91,7 @@ const Player: FC<PlayerProps> = memo(({ animejoyData, animeRecord }) => {
         }
 
         setCurrentEpisodeId(_ => +newId);
-        updateAnimeRecord(animejoyData.id, { lastEpisode: +newId });
+        updateAnimeRecord(animejoyData.id, { lastEpisode: +newId }, () => queryClient.refetchQueries(['animeRecord', animejoyData.id]));
     };
 
     const canChangeEpisodeId = (to: "next" | "prev" | number) => {
@@ -164,7 +162,8 @@ const Player: FC<PlayerProps> = memo(({ animejoyData, animeRecord }) => {
                                 onClick={() => {
                                     const newWE = new Set(watchedEpisodes);
                                     newWE.delete(currentEpisodeId);
-                                    updateAnimeRecord(animeRecord.animejoyID, { watchedEpisodes: newWE });
+                                    updateAnimeRecord(animeRecord.animejoyID, { watchedEpisodes: newWE },
+                                        () => queryClient.refetchQueries(['animeRecord', animejoyData.id]));
                                     removeEpisodeFromWatched(currentEpisodeId);
                                 }}
                         >
@@ -184,8 +183,10 @@ const Player: FC<PlayerProps> = memo(({ animejoyData, animeRecord }) => {
                 <PlayerSelect availableStudiosAndPlayers={animejoyData.studios}
                               currentStudioId={currentStudioId}
                               currentPlayerId={currentPlayerId}
-                              setCurrentPlayerId={setCurrentPlayerId}
-                              setCurrentStudioId={setCurrentStudioId}
+                              setCurrentPlayerId={(newId) => updateAnimeRecord(animejoyData.id, { lastPlayer: +newId },
+                                  () => queryClient.refetchQueries(['animeRecord', animejoyData.id]))}
+                              setCurrentStudioId={(newId) => updateAnimeRecord(animejoyData.id, { lastStudio: +newId },
+                                  () => queryClient.refetchQueries(['animeRecord', animejoyData.id]))}
                 />
             </Section>
             <Section as={"button"}
@@ -214,7 +215,8 @@ const Player: FC<PlayerProps> = memo(({ animejoyData, animeRecord }) => {
                          if (!watchedEpisodes.has(currentEpisodeId)) {
                              const newWE = new Set(watchedEpisodes);
                              newWE.add(currentEpisodeId);
-                             updateAnimeRecord(animeRecord.animejoyID, { watchedEpisodes: newWE });
+                             updateAnimeRecord(animeRecord.animejoyID, { watchedEpisodes: newWE },
+                                 () => queryClient.refetchQueries(['animeRecord', animejoyData.id]));
                              setEpisodeAsWatched(currentStudioId, currentPlayerId, currentEpisodeId);
                          }
                          if (canChangeEpisodeId("next")) {

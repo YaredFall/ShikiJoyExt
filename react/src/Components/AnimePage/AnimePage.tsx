@@ -11,14 +11,10 @@ import { tryAddAnime } from "../../Dexie";
 import PlayerSkeleton from "./PlayerSkeleton";
 import { useAnimeRecord } from "../../Hooks/useAnimeRecord";
 import Characters from "./Characters";
-import MainContainer from "../MainContainer";
-import AsideContainer from "../AsideContainer";
-import AnimeAside from "./AnimeAside";
+import MainAndAsideWrapper from "../MainAndAsideWrapper";
 
 
-type AnimePageProps = {}
-
-const AnimePage: FC<AnimePageProps> = memo(({}) => {
+const MainSection: FC = memo(({}) => {
 
     const { id: fullID } = useParams();
     const animeID = fullID!.split('-')[0];
@@ -33,48 +29,45 @@ const AnimePage: FC<AnimePageProps> = memo(({}) => {
     } : undefined;
 
     useEffect(() => {
-        if (animejoyData)
-            tryAddAnime(animejoyData)
+        if (animejoyData) {
+            tryAddAnime(animejoyData);
+        }
     }, [animeID, pageDocument, studioData]);
 
-    const animeRecord = useAnimeRecord(animeID);
-    console.log(animeRecord);
+    const { data: animeRecord } = useAnimeRecord(animeID);
+    console.log({ animeRecord, animejoyData });
 
-    const MainSection:FC = () => {
-        if ((!isLoadingStudios && !studioData) || (!isLoadingPage && !pageDocument)) {
-            return (
-                <section><h1>Data was not found or some error occurred!</h1></section>
-            );
-        } else if (isLoadingPage || isLoadingStudios || isFetchingPage || isFetchingStudios || !animeRecord || !animejoyData) {
-            return (
-                <section className={styles.animePage}>
-                    <AnimeHeader titles={undefined} />
-                    <PlayerSkeleton />
-                    <Characters />
-                </section>
-            );
-        } else {
-            return (
-                <section className={styles.animePage}>
-                    <AnimeHeader titles={animejoyData.titles} />
-                    <Player animejoyData={animejoyData} animeRecord={animeRecord} />
-                    <Characters />
-                </section>
-            );
-        }
+    if ((!isLoadingStudios && !studioData) || (!isLoadingPage && !pageDocument)) {
+        return (
+            <section><h1>Data was not found or some error occurred!</h1></section>
+        );
     }
-
+    if (isLoadingPage || isLoadingStudios || isFetchingPage || isFetchingStudios || !animeRecord || !animejoyData) {
+        return (
+            <section className={styles.animePage}>
+                <AnimeHeader titles={undefined} />
+                <PlayerSkeleton />
+                <Characters />
+            </section>
+        );
+    }
+    
     return (
-        <>
-            <MainContainer>
-                <MainSection />
-            </MainContainer>
-            <AsideContainer>
-                <AnimeAside />
-            </AsideContainer>
-        </>
+        <section className={styles.animePage}>
+            <AnimeHeader titles={animejoyData.titles} />
+            <Player animejoyData={animejoyData} animeRecord={animeRecord} />
+            <Characters />
+        </section>
     );
 
 });
+
+const AnimePage:FC = memo(() => {
+    return (
+        <MainAndAsideWrapper>
+            <MainSection />
+        </MainAndAsideWrapper>
+    )
+})
 
 export default AnimePage;
