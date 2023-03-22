@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { fetchShikimoriAPI } from '@/api'
+import { fetchShikimoriAPI } from '@/shikimori_cfg'
 import { NextApiRequestWithCache, cacheData } from '@/utils/caching';
 import withCache from '@/middleware/withCache';
 import { redis } from '@/lib/redis';

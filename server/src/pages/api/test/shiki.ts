@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { fetchShikimoriAPI } from '@/api'
+import { fetchShikimoriAPI } from '@/shikimori_cfg'
 
 export default async function handler(
   req: NextApiRequest,

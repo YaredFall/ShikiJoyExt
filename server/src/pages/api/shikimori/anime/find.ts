@@ -1,9 +1,9 @@
 import { cacheData, getCachedData, NextApiRequestWithCache } from '@/utils/caching';
 import type { NextApiResponse } from 'next'
-import { fetchShikimoriAPI } from '@/api'
+import { fetchShikimoriAPI } from '@/shikimori_cfg'
 import withCache from '@/middleware/withCache';
 
-const animeDataCacheKeyBase = '/api/shikimori/anime/'; //preprend to keys
+const animeDataCacheKeyBase = '/api/shikimori/anime/'; //prepend to keys
 const charactersKey = '/characters'; //append to keys
 
 async function handler(
