@@ -31,6 +31,5 @@ type UpdateProps = {
     watchedEpisodes?: Set<number>;
 }
 export const updateAnimeRecord = (id: string, newProps: UpdateProps, onUpdate?: () => void) => {
-    db.anime.where("animejoyID").equals(id).modify(newProps);
-    onUpdate && onUpdate();
+    db.anime.where("animejoyID").equals(id).modify(newProps).then(_ => onUpdate && onUpdate());
 }
