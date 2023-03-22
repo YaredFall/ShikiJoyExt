@@ -11,6 +11,9 @@ import { tryAddAnime } from "../../Dexie";
 import PlayerSkeleton from "./PlayerSkeleton";
 import { useAnimeRecord } from "../../Hooks/useAnimeRecord";
 import Characters from "./Characters";
+import MainContainer from "../MainContainer";
+import AsideContainer from "../AsideContainer";
+import AnimeAside from "./AnimeAside";
 
 
 type AnimePageProps = {}
@@ -37,28 +40,39 @@ const AnimePage: FC<AnimePageProps> = memo(({}) => {
     const animeRecord = useAnimeRecord(animeID);
     console.log(animeRecord);
 
-    if ((!isLoadingStudios && !studioData) || (!isLoadingPage && !pageDocument)) {
-        return (
-            <section><h1>Data was not found or some error occurred!</h1></section>
-        );
-    }
-
-    if (isLoadingPage || isLoadingStudios || isFetchingPage || isFetchingStudios || !animeRecord || !animejoyData) {
-        return (
-            <section className={styles.animePage}>
-                <AnimeHeader titles={undefined}/>
-                <PlayerSkeleton />
-                <Characters />
-            </section>
-        );
+    const MainSection:FC = () => {
+        if ((!isLoadingStudios && !studioData) || (!isLoadingPage && !pageDocument)) {
+            return (
+                <section><h1>Data was not found or some error occurred!</h1></section>
+            );
+        } else if (isLoadingPage || isLoadingStudios || isFetchingPage || isFetchingStudios || !animeRecord || !animejoyData) {
+            return (
+                <section className={styles.animePage}>
+                    <AnimeHeader titles={undefined} />
+                    <PlayerSkeleton />
+                    <Characters />
+                </section>
+            );
+        } else {
+            return (
+                <section className={styles.animePage}>
+                    <AnimeHeader titles={animejoyData.titles} />
+                    <Player animejoyData={animejoyData} animeRecord={animeRecord} />
+                    <Characters />
+                </section>
+            );
+        }
     }
 
     return (
-        <section className={styles.animePage}>
-            <AnimeHeader titles={animejoyData.titles}/>
-            <Player animejoyData={animejoyData} animeRecord={animeRecord}/>
-            <Characters />
-        </section>
+        <>
+            <MainContainer>
+                <MainSection />
+            </MainContainer>
+            <AsideContainer>
+                <AnimeAside />
+            </AsideContainer>
+        </>
     );
 
 });

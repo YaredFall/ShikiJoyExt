@@ -1,0 +1,23 @@
+.container {
+  z-index: 999999;
+  position: fixed;
+  inset: 0;
+  background-color: var(--tertiarty);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo {
+  width: 6rem;
+  animation: pulse 5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 50% {
+    opacity: 1;
+  }
+  25% {
+    opacity: 0;
+  }
+}

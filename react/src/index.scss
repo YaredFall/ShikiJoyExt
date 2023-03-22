@@ -49,8 +49,21 @@ body {
 #app {
     height: 100%;
     width: 100%;
-    display: grid;
-    grid-template-columns: var(--navbar-width) 12fr 29rem;
+    &:has(> :nth-child(1):last-child) {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    &:has(> :nth-child(2):last-child) {
+        display: grid;
+        grid-template-columns: var(--navbar-width) auto;
+    }
+    
+    &:has(> :nth-child(3):last-child) {
+        display: grid;
+        grid-template-columns: var(--navbar-width) 12fr 29rem;
+    }
 }
 
 @keyframes pulse {

@@ -13,7 +13,7 @@
   padding-bottom: 0.5rem;
 }
 
-.navlink {
+.navItem {
   display: flex;
   width: 100%;
   aspect-ratio: 1/1;
@@ -29,6 +29,11 @@
   &.active {
     box-shadow: var(--primary-a50) 2px 0 ;
     margin-right: -2px;
+    pointer-events: none;
+  }
+  
+  &.external {
+    cursor: alias;
   }
 
   &[data-label]::after {
@@ -69,5 +74,12 @@ img.radish {
   max-width: 2.125rem;
   max-height: 2.125rem;
   margin-left: 8px;
+  margin-bottom: 4px;
+}
+
+img.avatar {
+  max-width: 2.5rem;
+  max-height: 2.5rem;
+  border-radius: 4px;
   margin-bottom: 4px;
 }
