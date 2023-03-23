@@ -141,3 +141,18 @@ export function getShikimoriID(page: Document | undefined) {
     const link = getShikimoriLink(page);
     return link?.match(/https:\/\/shikimori\.one\/animes\/\D?(?<id>\d*)-.*/mi)?.groups?.id;
 }
+
+export function getFranchise(page: Document | undefined) {
+    if (!page) return undefined;
+    
+    const container = page.querySelector(".text_spoiler");
+    if (!container) return undefined;
+    
+    const lis = container.querySelectorAll("ol li");
+    if (lis.length === 0) return undefined;
+    
+    return [...lis].map(e => ({
+        label: e.textContent!,
+        url: e.className === "rfa" ? null : e.children[0].getAttribute("href")
+    }))
+}

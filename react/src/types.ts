@@ -18,9 +18,12 @@ export type Titles = {
     romanji: string
 }
 
+export type FranchiseData = Array<{label: string, url: string | null}>
+
 export type AnimeJoyData = {
     id: string
     titles: Titles
+    franchise?: FranchiseData
     studios: StudioData[]
 }
 

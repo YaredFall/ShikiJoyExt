@@ -5,13 +5,14 @@ import AnimeHeader from "./AnimeHeader";
 import { useAnimeJoyPlaylistQuery } from "../../Api/useAnimeJoyPlaylistQuery";
 import { AnimeJoyData } from "../../types";
 import { useAnimeJoyAnimePageQuery } from "../../Api/useAnimeJoyAnimePageQuery";
-import { getTitles } from "../../Utils/scraping";
+import { getFranchise, getTitles } from "../../Utils/scraping";
 import { useParams } from "react-router-dom";
 import { tryAddAnime } from "../../Dexie";
 import PlayerSkeleton from "./PlayerSkeleton";
 import { useAnimeRecord } from "../../Hooks/useAnimeRecord";
 import Characters from "./Characters";
 import MainAndAsideWrapper from "../MainAndAsideWrapper";
+import Franchise from "./Franchise";
 
 
 const MainSection: FC = memo(({}) => {
@@ -25,6 +26,7 @@ const MainSection: FC = memo(({}) => {
     const animejoyData: AnimeJoyData | undefined = (animeID && studioData && pageDocument) ? {
         id: animeID,
         titles: getTitles(pageDocument)!,
+        franchise: getFranchise(pageDocument),
         studios: studioData
     } : undefined;
 
@@ -55,6 +57,7 @@ const MainSection: FC = memo(({}) => {
     return (
         <section className={styles.animePage}>
             <AnimeHeader titles={animejoyData.titles} />
+            <Franchise franchise={animejoyData.franchise} />
             <Player animejoyData={animejoyData} animeRecord={animeRecord} />
             <Characters />
         </section>

@@ -1,0 +1,36 @@
+.container > * {
+  grid-column: 2/2;
+  padding: 0.25rem 1rem;
+  border: 2px solid var(--primary-a12p5);
+}
+
+.panel {
+  border-top: none
+}
+
+.list {
+  list-style-position: inside;
+  padding: 0.25rem 0;
+  
+  li {
+    padding: 0.25rem 0;
+    
+    a {
+      margin-left: 0.5rem;
+      text-decoration: none;
+    }
+    
+    &:not(.current):hover a {
+      text-decoration: underline;
+    }
+  }
+  
+  li + li {
+    margin-top: 0.25rem
+  }
+  
+  li.current {
+    font-weight: 600;
+    pointer-events: none;
+  }
+}

@@ -1,5 +1,4 @@
 import { useQuery } from "react-query";
-import { useRef } from "react";
 import { ApiLinks, defautlQueryConfig } from "./_config";
 import ky from "ky";
 
