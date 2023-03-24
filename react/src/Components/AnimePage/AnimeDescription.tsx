@@ -5,6 +5,7 @@ import Picture from "../Picture";
 import shikimoriLogo from '/images/shikimori_logo.png';
 import plural from 'plural-ru';
 import DotSplitter from "../DotSplitter";
+import LoadableText from "../LoadableText";
 
 //@ts-ignore
 const shikimoriLogoExt = chrome.runtime?.getURL("bundled/images/shikimori_logo.png");
@@ -53,8 +54,8 @@ const AnimeDescription: FC<AnimeDescriptionProps> = ({ data }) => {
             </header>
             <div className={styles.posterAndDetails}>
                 <div className={styles.poster}>
-                    <Picture src={data ? "https://shikimori.one" + data.image.original : undefined} />
-                    <div className={styles.score} children={"★ " + data?.score} />
+                    <Picture className={styles.picture} src={data ? "https://shikimori.one" + data.image.original : undefined} />
+                    {data && <div className={styles.score} children={"★ " + data.score } />}
                 </div>
                 {data ?
                  <div className={styles.details}>
@@ -88,7 +89,7 @@ const AnimeDescription: FC<AnimeDescriptionProps> = ({ data }) => {
                          (g, i) => (<div className={styles.genre} children={`${g.russian}`} key={i} />))}</div>
 
                  </div>
-                      : null
+                      : <DescriptionSkeleton />
                 }
             </div>
         </section>
@@ -96,3 +97,17 @@ const AnimeDescription: FC<AnimeDescriptionProps> = ({ data }) => {
 };
 
 export default AnimeDescription;
+
+const DescriptionSkeleton: FC = () => {
+    return (
+        <div className={styles.details}>
+            <LoadableText placeholderLength={20} />
+            <LoadableText placeholderLength={12} />
+            <LoadableText placeholderLength={16} />
+            <LoadableText placeholderLength={14} />
+            <LoadableText placeholderLength={17} />
+            <LoadableText placeholderLength={10} />
+            <LoadableText placeholderLength={15} />
+        </div>
+    )
+}

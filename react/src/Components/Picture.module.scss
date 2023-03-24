@@ -9,11 +9,11 @@
   height: 100%;
   opacity: 1;
   transition: var(--transition-opacity-fast);
-
 }
 
 .loading {
   opacity: 0;
+  transition-duration: 0ms;
 }
 
 .placeholder {

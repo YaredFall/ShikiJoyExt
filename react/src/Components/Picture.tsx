@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useRef, useState } from 'react';
+import { FC, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import styles from './Picture.module.scss';
 
 type PictureProps = {
@@ -16,7 +16,7 @@ const Picture: FC<PictureProps> = ({
 
     const loadedImages = useRef(new Set<string>());
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (!src || !loadedImages.current.has(src)) {
             setIsLoading(true);
             setShouldRenderPlaceholder(true);
@@ -32,13 +32,14 @@ const Picture: FC<PictureProps> = ({
 
     const onTransitionEnd = useCallback(() => {
             setShouldRenderPlaceholder(false);
+            console.log("transition end")
         }, [],
     );
 
     return (
         <div className={`${styles.container} ${className ? className : ""}`}>
-            <img alt={""} onLoad={onLoad} src={src} className={`${styles.image} ${isLoading ? styles.loading : ""}`} />
-            {shouldRenderPlaceholder &&
+            <img alt={"pic"} onLoad={onLoad} src={src} className={`${styles.image} ${isLoading ? styles.loading : ""}`} />
+            { shouldRenderPlaceholder &&
                 <div onTransitionEnd={onTransitionEnd} className={`${styles.placeholder} ${isLoading ? "" : styles.hide}`} />
             }
         </div>
