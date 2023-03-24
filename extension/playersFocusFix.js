@@ -204,7 +204,8 @@ let observer = new MutationObserver(mutationRecords => {
             break;
         }
         //Kodik
-        case 'aniqit.com': {
+        case 'aniqit.com':
+        case 'kodik.cc': {
             const episodeSelect = document.querySelector(".serial-series-box>select");
             const dropdownContent = document.querySelector(".serial-series-box .dropdown-content");
             if (episodeSelect && dropdownContent) {

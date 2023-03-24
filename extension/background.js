@@ -87,6 +87,7 @@ const injectFixes = async () => {
             "*://ok.ru/*",
             "*://*.mail.ru/*",
             "*://aniqit.com/*",
+            "*://kodik.cc/*",
             "*://politician.as.alloeclub.com/*"
         ],
         runAt: "document_start",
