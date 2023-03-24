@@ -1,5 +1,5 @@
 const singlePagePlayers = ["Alloha", "Kodik"]
 
-export const isSinglePagePlayer = (name: string) => {
-    return singlePagePlayers.includes(name);
+export const isSinglePagePlayer = (name: string | undefined) => {
+    return name && singlePagePlayers.includes(name);
 }

@@ -8,7 +8,7 @@ export function extractLocalStorageData(animeData: AnimeJoyData) {
             studioID: number,
             studioName: string | undefined,
             playerID: number,
-            playerName: string
+            playerName: string | undefined
         }>
     }>()
 

@@ -73,7 +73,7 @@ export function getStudiosPlayersAndFiles(playlistsHTML: Element) {
 
     console.log({ categories });
 
-    const studiosPlayersAndFiles: StudioData[] = ((categories![0].children as Category[])[0].children as Category[])[0]?.children ? categories!.map(c => ({
+    const studiosPlayersAndFiles: StudioData[] = categories ? ((categories[0].children as Category[])[0].children as Category[])[0]?.children ? categories!.map(c => ({
         name: c.label,
         players: (c.children as Category[]).map(sc => ({
             name: sc.label,
@@ -91,7 +91,17 @@ export function getStudiosPlayersAndFiles(playlistsHTML: Element) {
                 file: fc.children as string
             }))
         }))
+    }] : [{
+        name: undefined,
+        players: [{
+            name: undefined,
+            files: filesHTML.map(f => ({
+                label: f.textContent!,
+                file: f.getAttribute("data-file")!
+            }))
+        }]
     }]
+    
 
     console.log({ studiosPlayersAndFiles });
 

@@ -4,7 +4,7 @@ export type FileData = {
 }
 
 export type PlayerData = {
-    name: string
+    name: string | undefined
     files: FileData[]
 }
 

@@ -70,7 +70,8 @@ const Player: FC<PlayerProps> = memo(({ animejoyData, animeRecord }) => {
 
     useEffect(() => {
         let availableEps;
-        if (isSinglePagePlayer(currentPlayer.name) && singlePageEpisodesAvailable && currentPlayer.files.length === 1) {
+        if ((isSinglePagePlayer(currentPlayer.name) || isSinglePagePlayer(currentPlayer.files[0].label)) 
+            && singlePageEpisodesAvailable && currentPlayer.files.length === 1) {
             availableEps = singlePageEpisodesAvailable;
         } else if (!isSinglePagePlayer(currentPlayer.name) || currentPlayer.files.length > 1) {
             availableEps = currentPlayer.files.length;
@@ -102,8 +103,8 @@ const Player: FC<PlayerProps> = memo(({ animejoyData, animeRecord }) => {
             newId = currentEpisodeId - 1;
         }
 
-        if (isSinglePagePlayer(
-            currentPlayer.name) && currentPlayer.files.length === 1 && singlePageEpisodesAvailable && singlePageEpisodeID !== undefined) {
+        if ((isSinglePagePlayer(currentPlayer.name) || isSinglePagePlayer(currentPlayer.files[0].label))
+            && currentPlayer.files.length === 1 && singlePageEpisodesAvailable && singlePageEpisodeID !== undefined) {
             return newId >= 0 && newId < singlePageEpisodesAvailable;
         }
 
@@ -131,7 +132,7 @@ const Player: FC<PlayerProps> = memo(({ animejoyData, animeRecord }) => {
     }, []);
 
     const episodeLabel = () => {
-        if (isSinglePagePlayer(currentPlayer.name)) {
+        if (isSinglePagePlayer(currentPlayer.name) || isSinglePagePlayer(currentPlayer.files[0].label)) {
             const season = currentPlayer.files.length > 1 ? `${currentEpisodeId + 1} Сезон  ` : "";
             return singlePageEpisodeID !== undefined ? (season || `${currentEpisodeId + 1} Серия`) : `${animeRecord.lastEpisode + 1} Серия`;
         } else {
@@ -140,7 +141,7 @@ const Player: FC<PlayerProps> = memo(({ animejoyData, animeRecord }) => {
     };
 
     const source = useMemo(() => {
-        if (isSinglePagePlayer(currentPlayer.name)) {
+        if (isSinglePagePlayer(currentPlayer.name) || isSinglePagePlayer(currentPlayer.files[0].label)) {
             if (currentPlayer.files.length === 1) {
                 const file = currentPlayer.files[0].file;
                 return file + (file.includes('?') ? "&" : "?") + `episode=${animeRecord.lastEpisode + 1}`;
@@ -180,14 +181,16 @@ const Player: FC<PlayerProps> = memo(({ animejoyData, animeRecord }) => {
                         }
                     </div>
                 }
-                <PlayerSelect availableStudiosAndPlayers={animejoyData.studios}
-                              currentStudioId={currentStudioId}
-                              currentPlayerId={currentPlayerId}
-                              setCurrentPlayerId={(newId) => updateAnimeRecord(animejoyData.id, { lastPlayer: +newId },
-                                  () => queryClient.refetchQueries(['animeRecord', animejoyData.id]))}
-                              setCurrentStudioId={(newId) => updateAnimeRecord(animejoyData.id, { lastStudio: +newId },
-                                  () => queryClient.refetchQueries(['animeRecord', animejoyData.id]))}
-                />
+                { currentStudio.players.length === 1 && currentPlayer.name === undefined ? null :
+                  <PlayerSelect availableStudiosAndPlayers={animejoyData.studios}
+                                currentStudioId={currentStudioId}
+                                currentPlayerId={currentPlayerId}
+                                setCurrentPlayerId={(newId) => updateAnimeRecord(animejoyData.id, { lastPlayer: +newId },
+                                    () => queryClient.refetchQueries(['animeRecord', animejoyData.id]))}
+                                setCurrentStudioId={(newId) => updateAnimeRecord(animejoyData.id, { lastStudio: +newId },
+                                    () => queryClient.refetchQueries(['animeRecord', animejoyData.id]))}
+                  />
+                }
             </Section>
             <Section as={"button"}
                      ref={leftBtnRef}
