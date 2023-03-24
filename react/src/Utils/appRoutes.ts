@@ -4,6 +4,9 @@ export enum appRoutes {
     test2 = "tv-serialy/3009-angel-po-sosedstvu.html",
     home = "/",
     serials = "tv-serialy",
+    films = "anime-films",
+    ova = "ova",
+    dorams = "dorams",
     idParam = ":id",
     nonexistent = "nonexistent",
     any = "*"

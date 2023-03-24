@@ -35,6 +35,19 @@ const App: FC = () => {
                             <Route index element={"Сериалы"} />
                             <Route path={appRoutes.idParam} element={<AnimePage />} />
                         </Route>
+                        <Route path={appRoutes.films}>
+                            <Route index element={"Аниме фильмы"} />
+                            <Route path={appRoutes.idParam} element={<AnimePage />} />
+                        </Route>
+                        <Route path={appRoutes.ova}>
+                            <Route index element={"OVA/ONA/OAV"} />
+                            <Route path={appRoutes.idParam} element={<AnimePage />} />
+                        </Route>
+                        {/* Needs separate page! */}
+                        {/*<Route path={appRoutes.dorams}>*/}
+                        {/*    <Route index element={"Дорамы"} />*/}
+                        {/*    <Route path={appRoutes.idParam} element={<AnimePage />} />*/}
+                        {/*</Route>*/}
                         <Route path={appRoutes.home} element={<div>Home Page</div>} />
 
                         <Route path={appRoutes.any} element={<div>Not found</div>} />
