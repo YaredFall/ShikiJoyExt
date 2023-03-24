@@ -20,7 +20,7 @@ export const tryAddAnime = async (animejoyData: AnimeJoyData) => {
             lastStudio: studioID,
             watchedEpisodes: watchedEpisodes
         }
-        db.anime.add(anime);
+        await db.anime.add(anime);
     }
 }
 

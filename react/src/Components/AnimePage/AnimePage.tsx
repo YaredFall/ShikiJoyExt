@@ -13,9 +13,12 @@ import { useAnimeRecord } from "../../Hooks/useAnimeRecord";
 import Characters from "./Characters";
 import MainAndAsideWrapper from "../MainAndAsideWrapper";
 import Franchise from "./Franchise";
+import { useQueryClient } from "react-query";
 
 
 const MainSection: FC = memo(({}) => {
+    
+    const queryClient = useQueryClient();
 
     const { id: fullID } = useParams();
     const animeID = fullID!.split('-')[0];
@@ -32,7 +35,9 @@ const MainSection: FC = memo(({}) => {
 
     useEffect(() => {
         if (animejoyData) {
-            tryAddAnime(animejoyData);
+            tryAddAnime(animejoyData).then(async _ => {
+                await queryClient.refetchQueries(["animeRecord", animeID])
+            });
         }
     }, [animeID, pageDocument, studioData]);
 
