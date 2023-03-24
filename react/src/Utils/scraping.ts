@@ -153,6 +153,6 @@ export function getFranchise(page: Document | undefined) {
     
     return [...lis].map(e => ({
         label: e.textContent!,
-        url: e.className === "rfa" ? null : e.children[0].getAttribute("href")
+        url: e.className === "rfa" ? null : e.children[0].getAttribute("href")!.replace("https://animejoy.ru", "")
     }))
 }
