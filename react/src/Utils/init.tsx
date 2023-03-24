@@ -20,6 +20,7 @@ function prepareDOM() {
     usefulNodes.append(
         document.querySelector(".ntitle")!,
         document.querySelector(".romanji")!,
+        document.querySelector(".text_spoiler")!,
     )
 
     const linksBlock = [...document.querySelectorAll("div.block")].find(e => e.querySelector("ul li .ansdb"))
