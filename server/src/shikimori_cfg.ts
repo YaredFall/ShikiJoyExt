@@ -1,5 +1,14 @@
 import got, { OptionsOfUnknownResponseBody } from "got";
 
+export type AuthResponse = {
+    access_token: string,
+    token_type: "Bearer",
+    expires_in: number,
+    refresh_token: string,
+    scope: string,
+    created_at: number
+}
+
 const baseURL = "https://shikimori.one";
 const baseApiURL = baseURL + "/api"
 const defaultHeaders = {
@@ -18,7 +27,6 @@ export async function fetchShikimoriAPI<ResponseType = unknown>(route: string, o
 
     try {
         const reqOptions = { ...options, headers: { ...defaultHeaders, ...options?.headers} };
-        console.log(reqOptions);
         const data = await got(url, reqOptions).json<ResponseType>();
         return data;
     } catch (err) {
