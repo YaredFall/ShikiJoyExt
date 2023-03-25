@@ -9,11 +9,7 @@
     "dev:client": "npm run dev --prefix react",
     "build": "npm run build --prefix react",
     "deploy": "npm run deploy --prefix server",
-    "preview": "npm run preview --prefix react"
-  },
-  "engines": {
-    "npm": "please-use-yarn",
-    "yarn": ">= 1.17.3",
-    "node": ">= 12.5.0"
+    "preview": "npm run preview --prefix react",
+    "install": "conc --names \"SERVER,CLIENT\" -c \"blue,yellow\" \"cd server && npm i\" \"cd react && npm i\""
   }
 }
