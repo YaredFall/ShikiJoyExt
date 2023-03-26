@@ -1,8 +1,7 @@
 import { FC, useMemo } from 'react';
-import { useParams } from "react-router-dom";
 import { useAnimeJoyAnimePageQuery } from "../../Api/useAnimeJoyAnimePageQuery";
 import { useShikiJoyAnimeSearch } from "../../Api/useShikiJoyAnimeSearch";
-import { getShikimoriID, getTitles } from "../../Utils/scraping";
+import { getShikimoriID } from "../../Utils/scraping";
 import { ShikimoriRole } from "../../types";
 import styles from "./Characters.module.scss";
 import Picture from "../Picture";
@@ -32,9 +31,8 @@ const CharacterCardSkeleton = () => {
 type CharactersProps = {}
 
 const Characters: FC<CharactersProps> = () => {
-
-    const { id: fullID } = useParams();
-    const { data: pageDocument } = useAnimeJoyAnimePageQuery(fullID!);
+    
+    const { data: pageDocument } = useAnimeJoyAnimePageQuery(window.location.pathname);
 
     const {
         isLoading,

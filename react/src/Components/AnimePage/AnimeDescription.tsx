@@ -48,7 +48,7 @@ const AnimeDescription: FC<AnimeDescriptionProps> = ({ data }) => {
         <section className={styles.description}>
             <header className={styles.header}>
                 <h4>Информация</h4>
-                <a className={styles.shikimoriLink} href={data ? "https://shikimori.one" + data.url : undefined}>
+                <a className={styles.shikimoriLink} href={data ? "https://shikimori.one" + data.url : undefined} target={"_blank"}>
                     <img className={styles.shikimoriLogo} src={shikimoriLogoExt || shikimoriLogo} alt={"Shikimori"} />
                 </a>
             </header>

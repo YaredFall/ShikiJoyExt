@@ -1,6 +1,5 @@
 import { FC } from 'react';
 import AnimeDescription from "./AnimeDescription";
-import { useParams } from "react-router-dom";
 import { useAnimeJoyAnimePageQuery } from "../../Api/useAnimeJoyAnimePageQuery";
 import { getShikimoriID } from "../../Utils/scraping";
 import Searchbar from "./Searchbar";
@@ -12,10 +11,7 @@ type AnimeAsideProps = {}
 
 const AnimeAside: FC<AnimeAsideProps> = () => {
 
-    const { id: fullID } = useParams();
-    const id = fullID!.split('-')[0];
-
-    const { data: pageDocument } = useAnimeJoyAnimePageQuery(fullID!);
+    const { data: pageDocument } = useAnimeJoyAnimePageQuery(window.location.pathname);
 
     const {
         isLoading,

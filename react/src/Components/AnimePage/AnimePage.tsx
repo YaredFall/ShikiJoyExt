@@ -24,7 +24,7 @@ const MainSection: FC = memo(({}) => {
     const animeID = fullID!.split('-')[0];
 
     const { isLoading: isLoadingStudios, isFetching: isFetchingStudios, data: studioData } = useAnimeJoyPlaylistQuery(animeID);
-    const { isLoading: isLoadingPage, isFetching: isFetchingPage, data: pageDocument } = useAnimeJoyAnimePageQuery(fullID!);
+    const { isLoading: isLoadingPage, isFetching: isFetchingPage, data: pageDocument } = useAnimeJoyAnimePageQuery(window.location.pathname);
 
     const animejoyData: AnimeJoyData | undefined = (animeID && studioData && pageDocument) ? {
         id: animeID,
