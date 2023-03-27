@@ -32,7 +32,6 @@ const Picture: FC<PictureProps> = ({
 
     const onTransitionEnd = useCallback(() => {
             setShouldRenderPlaceholder(false);
-            console.log("transition end")
         }, [],
     );
 
