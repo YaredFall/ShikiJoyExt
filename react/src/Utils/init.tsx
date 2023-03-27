@@ -18,9 +18,9 @@ function prepareDOM() {
     const usefulNodes = document.createElement("div");
     usefulNodes.classList.add("animejoy-useful-nodes", "remove");
     usefulNodes.append(
-        document.querySelector(".ntitle")!,
-        document.querySelector(".romanji")!,
-        document.querySelector(".text_spoiler")!,
+        document.querySelector(".block.story.fullstory")?.querySelector(".titleup") || "",
+        document.querySelector(".text_spoiler") || "",
+        ...document.querySelectorAll(".block.story.shortstory")
     )
 
     const linksBlock = [...document.querySelectorAll("div.block")].find(e => e.querySelector("ul li .ansdb"))

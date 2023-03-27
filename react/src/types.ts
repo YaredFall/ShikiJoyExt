@@ -18,6 +18,16 @@ export type Titles = {
     romanji: string
 }
 
+export type StoryData = {
+    title: Titles,
+    url: string,
+    poster: string,
+    status?: "FULL" | "ONGOING",
+    description?: string,
+    info: Array<{label?: string, value: Array<{text: string, url?: string}>}>,
+    editDate?: string
+}
+
 export type FranchiseData = Array<{label: string, url: string | null}>
 
 export type AnimeJoyData = {

@@ -14,17 +14,19 @@ import Characters from "./Characters";
 import MainAndAsideWrapper from "../MainAndAsideWrapper";
 import Franchise from "./Franchise";
 import { useQueryClient } from "react-query";
+import AnimeAside from "./AnimeAside";
 
 
-const MainSection: FC = memo(({}) => {
-    
+const MainElement: FC = memo(({}) => {
+
     const queryClient = useQueryClient();
 
     const { id: fullID } = useParams();
     const animeID = fullID!.split('-')[0];
 
     const { isLoading: isLoadingStudios, isFetching: isFetchingStudios, data: studioData } = useAnimeJoyPlaylistQuery(animeID);
-    const { isLoading: isLoadingPage, isFetching: isFetchingPage, data: pageDocument } = useAnimeJoyAnimePageQuery(window.location.pathname);
+    const { isLoading: isLoadingPage, isFetching: isFetchingPage, data: pageDocument } = useAnimeJoyAnimePageQuery(
+        window.location.pathname);
 
     const animejoyData: AnimeJoyData | undefined = (animeID && studioData && pageDocument) ? {
         id: animeID,
@@ -36,7 +38,7 @@ const MainSection: FC = memo(({}) => {
     useEffect(() => {
         if (animejoyData) {
             tryAddAnime(animejoyData).then(async _ => {
-                await queryClient.refetchQueries(["animeRecord", animeID])
+                await queryClient.refetchQueries(["animeRecord", animeID]);
             });
         }
     }, [animeID, pageDocument, studioData]);
@@ -46,36 +48,34 @@ const MainSection: FC = memo(({}) => {
 
     if ((!isLoadingStudios && !studioData) || (!isLoadingPage && !pageDocument)) {
         return (
-            <section><h1>Data was not found or some error occurred!</h1></section>
+            <div><h1>Data was not found or some error occurred!</h1></div>
         );
     }
     if (isLoadingPage || isLoadingStudios || isFetchingPage || isFetchingStudios || !animeRecord || !animejoyData) {
         return (
-            <section className={styles.animePage}>
+            <div className={styles.animePage}>
                 <AnimeHeader titles={undefined} />
                 <PlayerSkeleton />
                 <Characters />
-            </section>
+            </div>
         );
     }
-    
+
     return (
-        <section className={styles.animePage}>
+        <div className={styles.animePage}>
             <AnimeHeader titles={animejoyData.titles} />
             <Franchise franchise={animejoyData.franchise} />
             <Player animejoyData={animejoyData} animeRecord={animeRecord} />
             <Characters />
-        </section>
+        </div>
     );
 
 });
 
-const AnimePage:FC = memo(() => {
+const AnimePage: FC = memo(() => {
     return (
-        <MainAndAsideWrapper>
-            <MainSection />
-        </MainAndAsideWrapper>
-    )
-})
+        <MainAndAsideWrapper main={<MainElement />} aside={<AnimeAside />} />
+    );
+});
 
 export default AnimePage;

@@ -1,21 +1,25 @@
 import { FC, ReactNode } from 'react';
 import MainContainer from "./MainContainer";
 import AsideContainer from "./AsideContainer";
-import AnimeAside from "./AnimePage/AnimeAside";
 
 type MainAndAsideWrapperProps = {
-    children?: ReactNode
+    main?: ReactNode,
+    aside?: ReactNode
 }
 
-const MainAndAsideWrapper:FC<MainAndAsideWrapperProps> = ({children}) => {
+const MainAndAsideWrapper: FC<MainAndAsideWrapperProps> = ({ main, aside }) => {
     return (
         <>
-            <MainContainer>
-                {children}
-            </MainContainer>
-            <AsideContainer>
-                <AnimeAside />
-            </AsideContainer>
+            {main &&
+                <MainContainer>
+                    {main}
+                </MainContainer>
+            }
+            {aside &&
+                <AsideContainer>
+                    {aside}
+                </AsideContainer>
+            }
         </>
     );
 };

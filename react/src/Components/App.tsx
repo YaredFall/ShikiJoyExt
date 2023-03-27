@@ -8,6 +8,7 @@ import { appRoutes } from "../Utils/appRoutes";
 import AuthCallbackPage from "../Pages/AuthCallbackPage";
 import { useGlobalLoadingStore } from "../Store/globalLoadingStore";
 import LoadingPage from "../Pages/LoadingPage";
+import HomePage from "./HomePage/HomePage";
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -48,7 +49,7 @@ const App: FC = () => {
                         {/*    <Route index element={"Дорамы"} />*/}
                         {/*    <Route path={appRoutes.idParam} element={<AnimePage />} />*/}
                         {/*</Route>*/}
-                        <Route path={appRoutes.home} element={<div>Home Page</div>} />
+                        <Route path={appRoutes.home} element={<HomePage />} />
 
                         <Route path={appRoutes.any} element={<div>Not found</div>} />
                     </Route>
