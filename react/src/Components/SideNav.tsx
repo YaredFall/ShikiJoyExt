@@ -25,7 +25,7 @@ const SideNav: FC<SideNavProps> = () => {
     return (
         <header className={styles.headerContainer}>
             <nav className={styles.navbar}>
-                <NavLink className={({ isActive }) => `${styles.navItem} ${isActive ? styles.active : ""}`}
+                <NavLink className={({ isActive }) => `${styles.navItem} ${isActive || window.location.pathname.startsWith("/page/") ? styles.active : ""}`}
                          to={appRoutes.home}
                          data-label={"Главная"}
                          children={<img className={styles.radish} src={radishIconExt || radishIcon} alt={"Лого"} />}

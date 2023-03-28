@@ -21,8 +21,8 @@ const AnimeStorycard: FC<AnimeStorycardProps> = ({ data }) => {
             <div className={styles.posterAndInfo}>
                 <Link to={data?.url || ""}><Picture className={styles.poster} src={data?.poster} /></Link>
                 <div className={styles.info}>
-                    {data ? data.info.map(e => (
-                              <p key={e.label}>
+                    {data ? data.info.map((e, k) => (
+                              <p key={k}>
                                   <span className={styles.label}>{e.label}</span>
                                   {e.value.map((v, i) =>
                                       v.url ? <Link key={i} to={v.url} children={v.text} />
