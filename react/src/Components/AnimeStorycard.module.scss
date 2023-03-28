@@ -5,12 +5,16 @@
   
   header {
     font-weight: 600;
-    font-size: 1.5rem;
+    font-size: 1.625rem;
     
     p {
       font-size: 1.125rem;
       color: var(--primary-a50);
     }
+  }
+
+  a:not(:hover) {
+    text-decoration: none;
   }
 }
 
@@ -26,18 +30,29 @@
   flex-direction: column;
   gap: 0.125rem;
   
+  max-height: 354px;
+  
   .label {
     font-weight: 500;
   }
   
+  & > :last-child {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 7;
+  }
+
   a:not(:hover) {
-    text-decoration: none;
+    color: var(--primary-a75);
   }
 }
 
 .poster {
-  aspect-ratio: 250/354;
-  width: 220px;
+  //aspect-ratio: 250/354;
+  flex-shrink: 0;
+  width: 250px;
+  height: 354px;
   border-radius: var(--roundness);
 }
 

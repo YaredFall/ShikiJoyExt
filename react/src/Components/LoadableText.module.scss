@@ -4,8 +4,17 @@
   max-width: min-content;
   pointer-events: none;
   display: block;
-  border-radius: var(--roundess, 0.25rem);
-  animation: var(--animation-pulse);
   overflow: hidden;
   text-overflow: ellipsis;
+  position: relative;
+  
+  &::after {
+    content: '';
+    animation: var(--animation-pulse);
+    border-radius: var(--roundess, 0.25rem);
+
+    position: absolute;
+    inset: 0;
+    top: 0.2em;
+  }
 }

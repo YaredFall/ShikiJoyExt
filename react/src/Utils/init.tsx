@@ -20,7 +20,8 @@ function prepareDOM() {
     usefulNodes.append(
         document.querySelector(".block.story.fullstory")?.querySelector(".titleup") || "",
         document.querySelector(".text_spoiler") || "",
-        ...document.querySelectorAll(".block.story.shortstory")
+        ...document.querySelectorAll(".block.story.shortstory"),
+        document.querySelector(".block.navigation") || ""
     )
 
     const linksBlock = [...document.querySelectorAll("div.block")].find(e => e.querySelector("ul li .ansdb"))

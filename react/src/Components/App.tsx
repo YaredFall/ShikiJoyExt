@@ -32,6 +32,8 @@ const App: FC = () => {
                 <Routes>
                     <Route path={appRoutes.authCallback} element={<AuthCallbackPage />} />
                     <Route path={"/"} element={<><SideNav /><Outlet /></>}>
+                        <Route path={appRoutes.home} element={<HomePage />} />
+                        <Route path={appRoutes.page} element={<HomePage />} />
                         <Route path={appRoutes.serials}>
                             <Route index element={"Сериалы"} />
                             <Route path={appRoutes.idParam} element={<AnimePage />} />
@@ -49,7 +51,6 @@ const App: FC = () => {
                         {/*    <Route index element={"Дорамы"} />*/}
                         {/*    <Route path={appRoutes.idParam} element={<AnimePage />} />*/}
                         {/*</Route>*/}
-                        <Route path={appRoutes.home} element={<HomePage />} />
 
                         <Route path={appRoutes.any} element={<div>Not found</div>} />
                     </Route>

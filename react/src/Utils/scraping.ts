@@ -188,3 +188,11 @@ export function getStoryList(page: Document | undefined): StoryData[] | undefine
         editDate: story.querySelector(".editdate")?.textContent || undefined
     }))
 }
+
+export function getNavigationPagesCount(page: Document | undefined) {
+    if (!page) return undefined;
+    
+    const options = page.querySelector(".block.navigation .pages")?.children;
+    const last = options ? [...options].at(-1)?.textContent : undefined;
+    return last ? +last : undefined;
+}
