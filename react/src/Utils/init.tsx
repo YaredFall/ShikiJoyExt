@@ -49,11 +49,13 @@ export function Render() {
 
 export function prepareAndRender() {
     window.addEventListener("DOMContentLoaded", () => {
-        // window.stop();
-        removeDefaultStyles();
-        setTimeout(() => {
-            prepareDOM();
-            Render();
-        }, 0)
+        if (document.title !== "Just a moment...") {
+            // window.stop();
+            removeDefaultStyles();
+            setTimeout(() => {
+                prepareDOM();
+                Render();
+            }, 0)
+        }
     })
 }
