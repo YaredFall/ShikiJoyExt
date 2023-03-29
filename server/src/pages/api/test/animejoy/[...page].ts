@@ -1,4 +1,6 @@
-import got, { Method } from 'got';
+// @ts-ignore
+import got from 'cloudflare-scraper';
+import { Method } from 'got';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(

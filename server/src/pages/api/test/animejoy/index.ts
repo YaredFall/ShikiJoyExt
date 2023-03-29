@@ -1,4 +1,5 @@
-import got from 'got'
+// @ts-ignore
+import got from 'cloudflare-scraper';
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 
@@ -9,7 +10,8 @@ export default async function handler(
   try {
     const response = await got('https://animejoy.ru/').text()
     res.status(200).send(response)
-  } catch (err) {
-    res.status(500).send(`<h1>${err}</h1>`)
+  } catch (err: any) {
+    // res.status(500).send(`<h1>${err}</h1>`)
+    res.status(500).json(err.response)
   }
 }
