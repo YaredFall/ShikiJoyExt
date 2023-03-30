@@ -1,5 +1,4 @@
-// @ts-ignore
-import got from 'cloudflare-scraper';
+import got from '@yaredfall/cloudflare-scraper';
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 
