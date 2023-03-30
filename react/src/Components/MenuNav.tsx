@@ -34,7 +34,8 @@ const MenuNav: FC<NavMenuProps> = ({ className, isOpen, setIsOpen }) => {
     return (
         <nav className={className + (isClosed ? " remove" : "")} onTransitionEnd={onTransitionEnd}>
             {[...Categories.entries()].map((t, i) => {
-                    const isActive = path === '/' + t[1] || path.startsWith(`${t[1]}/page/`) || path.startsWith(`/${t[1]}/page/`);
+                    const isActive = (path === '/' + t[1]) || path === `/${t[1]}/` 
+                        || path.startsWith(`${t[1]}/page/`) || path.startsWith(`/${t[1]}/page/`);
                     return (
                         <NavLink key={t[0]}
                                  style={{ "--i": i } as CSSProperties}
