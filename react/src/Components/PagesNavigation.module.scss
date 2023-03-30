@@ -1,12 +1,10 @@
 .container {
-  width: 100%;
   height: 3.4rem;
   display: flex;
   flex-direction: row;
-  flex-shrink: 0;
   align-items: center;
-  padding: 0 3rem;
   gap: 0.5rem;
+  flex-basis: 100%;
   
   & > * {
     color: var(--primary-a75);
@@ -14,13 +12,14 @@
     flex: 1 0 0;
     max-width: 3rem;
     transition: color 125ms ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   :first-child, :last-child {
     padding-inline: 1rem;
     max-width: 5rem;
-    display: flex;
-    align-items: center;
     flex: 1 0 auto;
   }
 

@@ -25,22 +25,29 @@
   font-size: 1rem;
 }
 
-.info {
+.infoAndDesc {
   display: flex;
   flex-direction: column;
   gap: 0.125rem;
+  line-height: 20.18px;
   
-  max-height: 354px;
+  max-height: 364px;
   
   .label {
     font-weight: 500;
+  }
+  
+  .info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
   }
   
   & > :last-child {
     overflow: hidden;
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 7;
+    -webkit-line-clamp: var(--max-lines);
   }
 
   a:not(:hover) {
@@ -51,9 +58,10 @@
 .poster {
   //aspect-ratio: 250/354;
   flex-shrink: 0;
-  width: 250px;
-  height: 354px;
+  width: 254px;
+  height: 360px;
   border-radius: var(--roundness);
+  object-fit: cover;
 }
 
 .description {
@@ -62,4 +70,8 @@
 
 .editDate {
   color: var(--primary-a50);
+}
+
+.disabled {
+  pointer-events: none;
 }

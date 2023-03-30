@@ -4,11 +4,11 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import AnimePage from './AnimePage/AnimePage';
 import "../index.scss";
 import SideNav from "./SideNav";
-import { appRoutes } from "../Utils/appRoutes";
+import { appRoutes, Categories } from "../Utils/appRoutes";
 import AuthCallbackPage from "../Pages/AuthCallbackPage";
 import { useGlobalLoadingStore } from "../Store/globalLoadingStore";
 import LoadingPage from "../Pages/LoadingPage";
-import HomePage from "./HomePage/HomePage";
+import CategoryPage from "./HomePage/CategoryPage";
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -32,26 +32,15 @@ const App: FC = () => {
                 <Routes>
                     <Route path={appRoutes.authCallback} element={<AuthCallbackPage />} />
                     <Route path={"/"} element={<><SideNav /><Outlet /></>}>
-                        <Route path={appRoutes.home} element={<HomePage />} />
-                        <Route path={appRoutes.page} element={<HomePage />} />
-                        <Route path={appRoutes.serials}>
-                            <Route index element={"Сериалы"} />
-                            <Route path={appRoutes.idParam} element={<AnimePage />} />
-                        </Route>
-                        <Route path={appRoutes.films}>
-                            <Route index element={"Аниме фильмы"} />
-                            <Route path={appRoutes.idParam} element={<AnimePage />} />
-                        </Route>
-                        <Route path={appRoutes.ova}>
-                            <Route index element={"OVA/ONA/OAV"} />
-                            <Route path={appRoutes.idParam} element={<AnimePage />} />
-                        </Route>
-                        {/* Needs separate page! */}
-                        {/*<Route path={appRoutes.dorams}>*/}
-                        {/*    <Route index element={"Дорамы"} />*/}
-                        {/*    <Route path={appRoutes.idParam} element={<AnimePage />} />*/}
-                        {/*</Route>*/}
-
+                        <Route index element={<CategoryPage />} />
+                        <Route path={"page/:id/"} element={<CategoryPage />} />
+                        {[...Categories.values()].filter(c => c !== "").map(c =>
+                            <Route key={c} path={c+'/'}>
+                                <Route index element={<CategoryPage />} />
+                                <Route path={":id"} element={<AnimePage />} />
+                                <Route path={"page/:id/"} element={<CategoryPage />} />
+                            </Route>
+                        )}
                         <Route path={appRoutes.any} element={<div>Not found</div>} />
                     </Route>
                 </Routes>

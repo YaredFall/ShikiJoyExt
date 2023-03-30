@@ -8,7 +8,21 @@ export enum appRoutes {
     films = "anime-films",
     ova = "ova",
     dorams = "dorams",
+    ongoing = "ongoing",
+    full_tv = "full_tv",
+    anons = "anons",
     idParam = ":id",
     nonexistent = "nonexistent",
     any = "*"
 }
+
+export const Categories = new Map([
+    ["Главная", ""],
+    ["TV Сериалы", appRoutes.serials],
+    ["Аниме фильмы", appRoutes.films],
+    ["Дорамы", appRoutes.dorams],
+    ["Онгоинги", appRoutes.ongoing],
+    ["Завершенные", appRoutes.full_tv],
+    ["OVA/ONA/OAV", appRoutes.ova],
+    ["Анонсы", appRoutes.anons]
+]);

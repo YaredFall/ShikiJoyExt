@@ -18,9 +18,12 @@ export const useAnimeJoyAnimePageQuery = (path: string) => {
                 firstFetch = false;
                 return document;
             }
+            const endSlash = !path.match(/(?:\/|\.[a-z]{1,4})$/)
 
-            return ky((import.meta.env.DEV ? ApiLinks.get("dev/animejoy") : "") + path)
-                .text().then(page => parser.parseFromString(page, "text/html"))
+            const url = import.meta.env.DEV ? ApiLinks.get("dev/animejoy") + path.replace(/\/$/, '') 
+                                            : path + (endSlash ? "/" : "")
+            
+            return ky(url).text().then(page => parser.parseFromString(page, "text/html"))
         },
         defautlQueryConfig
     )

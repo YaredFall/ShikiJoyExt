@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, memo, useState } from 'react';
 import { NavLink } from "react-router-dom";
 import { appRoutes } from "../Utils/appRoutes";
 import radishIcon from "/images/radish256x256.png";
@@ -8,13 +8,20 @@ import { openLogInPopup } from "../Utils/openLogInPopup";
 import { useGetShikimoriUser } from "../Api/useGetShikimoriUser";
 import { useQueryClient } from "react-query";
 import { useGlobalLoadingStore } from "../Store/globalLoadingStore";
+import { TfiClose } from "react-icons/all";
+import MenuNav from "./MenuNav";
 
 //@ts-ignore
 const radishIconExt = chrome.runtime?.getURL("bundled/images/radish256x256.png");
 
+
+const MemoizedCrossIcon = memo(TfiClose);
+
 type SideNavProps = {}
 
 const SideNav: FC<SideNavProps> = () => {
+
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const queryClient = useQueryClient();
 
@@ -25,21 +32,36 @@ const SideNav: FC<SideNavProps> = () => {
     return (
         <header className={styles.headerContainer}>
             <nav className={styles.navbar}>
-                <NavLink className={({ isActive }) => `${styles.navItem} ${isActive || window.location.pathname.startsWith("/page/") ? styles.active : ""}`}
-                         to={appRoutes.home}
-                         data-label={"Главная"}
-                         children={<img className={styles.radish} src={radishIconExt || radishIcon} alt={"Лого"} />}
-                />
+                {/*<NavLink className={({ isActive }) => `${styles.navItem} ${isActive || window.location.pathname.startsWith("/page/") ? styles.active : ""}`}*/}
+                {/*         to={appRoutes.home}*/}
+                {/*         data-label={"Главная"}*/}
+                {/*         children={<img className={styles.radish} src={radishIconExt || radishIcon} alt={"Лого"} />}*/}
+                {/*/>*/}
+                <div>
+                    <button className={`${styles.navItem} ${styles.menuButton} ${isMenuOpen ? styles.open : ""}`}
+                            data-label={isMenuOpen ? "Закрыть" : "Меню"}
+                            onClick={() => setIsMenuOpen(prevState => !prevState)}
+                    >
+                        <div className={`${styles.radish}`}>
+                            <img className={styles.radish} src={radishIconExt || radishIcon} alt={"Лого"} />
+                            <div className={styles.title} children={"ShikiJoy"} />
+                        </div>
+                        <div className={`${styles.closeMenu}`}
+                             children={<MemoizedCrossIcon />}
+                        />
+                    </button>
+                    <MenuNav className={`${styles.menu} ${isMenuOpen ? styles.open : styles.closed}`} isOpen={isMenuOpen} setIsOpen={setIsMenuOpen}/>
+                </div>
                 <NavLink className={({ isActive }) => `${styles.navItem} ${isActive ? styles.active : ""}`}
                          to={"tbd"}
                          data-label={"Поиск"}
                          children={<IoSearchOutline />}
                 />
                 {user ? <a className={`${styles.navItem} ${styles.external}`}
-                                 target={"_blank"}
-                                 href={user.url + "/list/anime"}
-                                 data-label={"Мой список"}
-                                 children={<TbList />}
+                           target={"_blank"}
+                           href={user.url + "/list/anime"}
+                           data-label={"Мой список"}
+                           children={<TbList />}
                       />
                       : null
                 }
@@ -55,10 +77,6 @@ const SideNav: FC<SideNavProps> = () => {
                 <NavLink className={({ isActive }) => `${styles.navItem} ${isActive ? styles.active : ""}`}
                          to={appRoutes.test2}
                          children={<div>Test 2</div>}
-                />
-                <NavLink className={({ isActive }) => `${styles.navItem} ${isActive ? styles.active : ""}`}
-                         to={appRoutes.nonexistent}
-                         children={<div>404</div>}
                 />
                 {user ? <a className={`${styles.navItem} ${styles.bottom} ${styles.external}`}
                            target={"_blank"}

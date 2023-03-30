@@ -18,8 +18,10 @@ export default async function handler(
         const formFields = Object.fromEntries(matches.map(m => {
             return [m.groups?.name, m.groups?.value]
         }))
+
+        const endSlash = !url.match(/(?:\/|\.[a-z]{1,4})$/)
         
-        const response = got(`https://animejoy.ru/${url + (url.endsWith(".jpg") ? "" : "/")}${
+        const response = got(`https://animejoy.ru/${url + (endSlash ? "/" : "")}${
                 Object.entries(query).length ? "?" + Object.entries(query).map(e => e[0] + "=" + e[1]).join('&') : ""}`,
             {
                 method: req.method as Method,
