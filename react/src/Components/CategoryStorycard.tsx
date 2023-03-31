@@ -1,7 +1,7 @@
 import { CSSProperties, FC, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { StoryData } from "../types";
 import Picture from "./Picture";
-import styles from "./AnimeStorycard.module.scss";
+import styles from "./CategoryStorycard.module.scss";
 import { Link } from "react-router-dom";
 import LoadableText from "./LoadableText";
 
@@ -12,7 +12,7 @@ type AnimeStorycardProps = {
 }
 
 
-const AnimeStorycard: FC<AnimeStorycardProps> = ({ data }) => {
+const CategoryStorycard: FC<AnimeStorycardProps> = ({ data }) => {
 
     const [linesAvailable, setLinesAvailable] = useState(0);
     const infoRef = useRef<HTMLDivElement>(null);
@@ -74,7 +74,7 @@ const AnimeStorycard: FC<AnimeStorycardProps> = ({ data }) => {
     );
 };
 
-export default AnimeStorycard;
+export default CategoryStorycard;
 
 function InfoSkeleton() {
     return (

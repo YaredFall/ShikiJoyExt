@@ -1,7 +1,7 @@
 import { FC, useLayoutEffect, useRef, useState } from 'react';
 import { useAnimeJoyAnimePageQuery } from "../../Api/useAnimeJoyAnimePageQuery";
 import { getNavigationPagesCount, getStoryList } from "../../Utils/scraping";
-import AnimeStorycard from "../AnimeStorycard";
+import CategoryStorycard from "../CategoryStorycard";
 import styles from "./CategoryPage.module.scss";
 import MainAndAsideWrapper from "../MainAndAsideWrapper";
 import CategoryAside from "./CategoryAside";
@@ -59,8 +59,8 @@ function MainElement() {
                 <PagesNavigation pagesCount={pagesCount} currentPage={id ? +id : 1} category={category ? "/" + category : undefined} />
             </div>
             <section className={styles.storylist}>
-                {stories ? stories.map((s, i) => <AnimeStorycard key={i} data={s} />)
-                         : [...Array(10)].map((s, i) => <AnimeStorycard key={i} data={undefined} />)
+                {stories ? stories.map((s, i) => <CategoryStorycard key={i} data={s} />)
+                         : [...Array(10)].map((s, i) => <CategoryStorycard key={i} data={undefined} />)
                 }
             </section>
             <div className={styles.pagesNav}>
