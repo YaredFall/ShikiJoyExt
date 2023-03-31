@@ -25,6 +25,9 @@ export const useAnimeJoyAnimePageQuery = (path: string) => {
             
             return ky(url).text().then(page => parser.parseFromString(page, "text/html"))
         },
-        defautlQueryConfig
+        { 
+            ...defautlQueryConfig ,
+            useErrorBoundary: true
+        }
     )
 }

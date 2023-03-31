@@ -1,7 +1,7 @@
 import { CSSProperties, Dispatch, FC, SetStateAction, useCallback, useLayoutEffect, useState } from 'react';
 import { NavLink, useLocation } from "react-router-dom";
 import styles from "./SideNav.module.scss";
-import { Categories } from "../Utils/appRoutes";
+import { appRoutes, Categories } from "../Utils/appRoutes";
 
 type NavMenuProps = {
     className?: string
@@ -48,6 +48,13 @@ const MenuNav: FC<NavMenuProps> = ({ className, isOpen, setIsOpen }) => {
                     );
                 }
             )}
+            <NavLink style={{ "--i": Categories.size } as CSSProperties}
+                     onClick={onClick}
+                     to={`/${appRoutes.news}/`}
+                     children={"Новости"}
+                     className={path === "/news/" ? styles.active : undefined}
+                     tabIndex={path === "/news/" ? -1 : undefined}
+            />
         </nav>
     );
 };

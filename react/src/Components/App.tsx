@@ -9,6 +9,8 @@ import AuthCallbackPage from "../Pages/AuthCallbackPage";
 import { useGlobalLoadingStore } from "../Store/globalLoadingStore";
 import LoadingPage from "../Pages/LoadingPage";
 import CategoryPage from "./HomePage/CategoryPage";
+import NotFound from "../Pages/NotFound";
+import ErrorPage from "../Pages/ErrorPage";
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -22,7 +24,7 @@ const queryClient = new QueryClient({
     },
 });
 
-const shouldEndWithSlashLoader = (props: any) => {
+const shouldEndWithSlash = (props: any) => {
     if (!props.request.url.endsWith("/")) {
         const path = props.request.url.replace(location.origin, "");
         return redirect(path + "/");
@@ -30,20 +32,37 @@ const shouldEndWithSlashLoader = (props: any) => {
     return null;
 };
 
+const shouldHaveNaturalNumberID = (props: any) => {
+    const id: string | undefined = props?.params?.id;
+    if (id && id.match(/^(?:[1-9]\d?|[1-3]\d{2})$/)) {
+        return null;
+    }
+    else {
+        console.error("Not Found. Wrong ID")
+        throw new Response("Not Found", { status: 404 });
+    }
+}
+
+const shouldEndWithSlashAndHaveNaturalID = (props: any) => {
+    const l1 = shouldEndWithSlash(props);
+    const l2 = shouldHaveNaturalNumberID(props);
+    return l1 ?? l2;
+}
+
 const router = createBrowserRouter(createRoutesFromElements(
     <>
         <Route path={appRoutes.authCallback} element={<AuthCallbackPage />} />
         <Route path={"/"} element={<><SideNav /><Outlet /></>}>
             <Route index element={<CategoryPage />} />
-            <Route path={"page/:id/"} loader={shouldEndWithSlashLoader} element={<CategoryPage />} />
+            <Route path={"page/:id/"} loader={shouldEndWithSlashAndHaveNaturalID} errorElement={<ErrorPage />} element={<CategoryPage />} />
             {[...Categories.values()].filter(c => c !== "").map(c =>
                 <Route key={c} path={c + '/'}>
-                    <Route index loader={shouldEndWithSlashLoader} element={<CategoryPage />} />
+                    <Route index loader={shouldEndWithSlash} element={<CategoryPage />} />
                     <Route path={":id"} element={<AnimePage />} />
-                    <Route path={"page/:id/"} loader={shouldEndWithSlashLoader} element={<CategoryPage />} />
+                    <Route path={"page/:id/"} loader={shouldEndWithSlashAndHaveNaturalID} errorElement={<ErrorPage />} element={<CategoryPage />} />
                 </Route>
             )}
-            <Route path={appRoutes.any} element={<div>Not found</div>} />
+            <Route path={appRoutes.any} element={<NotFound />} />
         </Route>
     </>
 ));
