@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
+import { createBrowserRouter, createRoutesFromElements, Outlet, redirect, Route, RouterProvider } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from 'react-query';
 import AnimePage from './AnimePage/AnimePage';
 import "../index.scss";
@@ -22,29 +22,39 @@ const queryClient = new QueryClient({
     },
 });
 
+const shouldEndWithSlashLoader = (props: any) => {
+    if (!props.request.url.endsWith("/")) {
+        const path = props.request.url.replace(location.origin, "");
+        return redirect(path + "/");
+    }
+    return null;
+};
+
+const router = createBrowserRouter(createRoutesFromElements(
+    <>
+        <Route path={appRoutes.authCallback} element={<AuthCallbackPage />} />
+        <Route path={"/"} element={<><SideNav /><Outlet /></>}>
+            <Route index element={<CategoryPage />} />
+            <Route path={"page/:id/"} loader={shouldEndWithSlashLoader} element={<CategoryPage />} />
+            {[...Categories.values()].filter(c => c !== "").map(c =>
+                <Route key={c} path={c + '/'}>
+                    <Route index loader={shouldEndWithSlashLoader} element={<CategoryPage />} />
+                    <Route path={":id"} element={<AnimePage />} />
+                    <Route path={"page/:id/"} loader={shouldEndWithSlashLoader} element={<CategoryPage />} />
+                </Route>
+            )}
+            <Route path={appRoutes.any} element={<div>Not found</div>} />
+        </Route>
+    </>
+));
+
 const App: FC = () => {
     const isLoading = useGlobalLoadingStore((state) => state.count) > 0;
 
     return (
         <QueryClientProvider client={queryClient}>
-            <BrowserRouter>
-                {isLoading && <LoadingPage />}
-                <Routes>
-                    <Route path={appRoutes.authCallback} element={<AuthCallbackPage />} />
-                    <Route path={"/"} element={<><SideNav /><Outlet /></>}>
-                        <Route index element={<CategoryPage />} />
-                        <Route path={"page/:id/"} element={<CategoryPage />} />
-                        {[...Categories.values()].filter(c => c !== "").map(c =>
-                            <Route key={c} path={c+'/'}>
-                                <Route index element={<CategoryPage />} />
-                                <Route path={":id"} element={<AnimePage />} />
-                                <Route path={"page/:id/"} element={<CategoryPage />} />
-                            </Route>
-                        )}
-                        <Route path={appRoutes.any} element={<div>Not found</div>} />
-                    </Route>
-                </Routes>
-            </BrowserRouter>
+            {isLoading && <LoadingPage />}
+            <RouterProvider router={router} />
         </QueryClientProvider>
     );
 };
