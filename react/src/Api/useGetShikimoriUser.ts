@@ -11,6 +11,7 @@ export const useGetShikimoriUser = (enabled: boolean = true) => {
         ["shikimori", "whoami"],
         async () => {
             if (import.meta.env.DEV) {
+                await new Promise(res => setTimeout(res, 750));
                 decrease();
                 return userMockup;
             } else {
