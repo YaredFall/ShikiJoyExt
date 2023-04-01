@@ -11,10 +11,6 @@ export function useShikiJoyAnimeSearch(shikimoriID:  string | undefined) {
     return useQuery(
         ['shikijoy', 'find', fullID],
         () => {
-            if (import.meta.env.DEV)
-                return ky(`http://localhost:3000/api/shikimori/anime/find?id=${shikimoriID}`)
-                    .json<ShikiJoyAnimeData>();
-            
             return ky.get((import.meta.env.DEV ? ApiLinks.get("dev/shikijoy") : ApiLinks.get("shikijoy")) + `api/shikimori/anime/find?id=${shikimoriID}`)
               .json<ShikiJoyAnimeData>();
         }
