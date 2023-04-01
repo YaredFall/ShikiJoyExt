@@ -1,11 +1,15 @@
 .container {
   z-index: 999999;
-  position: fixed;
+  position: absolute;
   inset: 0;
   background-color: var(--tertiarty);
   display: flex;
   align-items: center;
   justify-content: center;
+  
+  &.fullscreen {
+    position: fixed;
+  }
 }
 
 .logo {
