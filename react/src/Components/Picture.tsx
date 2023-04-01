@@ -1,14 +1,25 @@
-import { FC, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import {
+    DetailedHTMLProps,
+    FC,
+    HTMLProps,
+    ImgHTMLAttributes,
+    SyntheticEvent,
+    useCallback,
+    useEffect,
+    useLayoutEffect,
+    useRef,
+    useState
+} from 'react';
 import styles from './Picture.module.scss';
 
-type PictureProps = {
-    src?: string
-    className?: string
-}
+type PictureProps = DetailedHTMLProps<ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>
 
 const Picture: FC<PictureProps> = ({
     src,
-    className
+    className,
+    onLoad,
+    alt,
+    ...otherProps
 }) => {
 
     const [isLoading, setIsLoading] = useState(true);
@@ -23,11 +34,12 @@ const Picture: FC<PictureProps> = ({
         }
     }, [src]);
 
-    const onLoad = useCallback(() => {
+    const onLoadHandler = useCallback((e: SyntheticEvent<HTMLImageElement, Event>) => {
         setIsLoading(false);
         if (src) {
             loadedImages.current.add(src);
         }
+        onLoad && onLoad(e)
     }, [src]);
 
     const onTransitionEnd = useCallback(() => {
@@ -37,7 +49,7 @@ const Picture: FC<PictureProps> = ({
 
     return (
         <div className={`${styles.container} ${className ? className : ""}`}>
-            <img alt={"pic"} onLoad={onLoad} src={src} className={`${styles.image} ${isLoading ? styles.loading : ""}`} />
+            <img alt={alt ?? "pic"} onLoad={onLoadHandler} src={src} className={`${styles.image} ${isLoading ? styles.loading : ""}`} {...otherProps}/>
             { shouldRenderPlaceholder &&
                 <div onTransitionEnd={onTransitionEnd} className={`${styles.placeholder} ${isLoading ? "" : styles.hide}`} />
             }
