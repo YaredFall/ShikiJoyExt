@@ -1,0 +1,17 @@
+.container {
+  z-index: 900;
+  position: absolute;
+  isolation: isolate;
+  height: 300px;
+  width: 480px;
+  border-radius: var(--roundness);
+  overflow: hidden;
+  background-color: var(--secondary);
+  border: 2px solid var(--primary-a12p5);
+  margin-left: 1.25rem;
+  padding: 1rem;
+  
+  > :global(.loader) {
+    background-color: inherit;
+  }
+}
