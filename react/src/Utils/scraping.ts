@@ -1,6 +1,6 @@
 import { StoryData, StudioData, Titles } from "../types";
 
-export function getTitles(parentNode: ParentNode = document): Titles | undefined {
+export function getShowTitle(parentNode: ParentNode = document): Titles | undefined {
     return parentNode ? {
         ru: parentNode.querySelector(".ntitle")!.textContent!,
         romanji: parentNode.querySelector(".romanji")!.textContent!
@@ -173,7 +173,7 @@ export function getStoryList(page: Document | undefined): StoryData[] | undefine
     const stories = page.querySelectorAll(".block.story.shortstory");
     
     return [...stories].map(story => ({
-        title: getTitles(story)!,
+        title: getShowTitle(story)!,
         url: story.querySelector(".ntitle a")!.getAttribute("href")!.replace("https://animejoy.ru", ""),
         poster: story.querySelector("img")!.getAttribute("src")!,
         status: story.querySelector(".full_tv") && "FULL" || story.querySelector(".ongoinmark") && "ONGOING" || undefined,
@@ -195,4 +195,8 @@ export function getNavigationPagesCount(page: Document | undefined) {
     const options = page.querySelector(".block.navigation .pages")?.children;
     const last = options ? [...options].at(-1)?.textContent : undefined;
     return last ? +last : undefined;
+}
+
+export function getDocumentTitle(page: Document | undefined) {
+    return page?.title
 }
