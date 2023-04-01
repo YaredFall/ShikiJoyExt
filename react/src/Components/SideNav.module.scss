@@ -1,7 +1,11 @@
 .headerContainer {
   width: var(--navbar-width);
-  z-index: 1000;
   isolation: isolate;
+  z-index: 1000;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
 }
 
 .navbar {
