@@ -64,6 +64,12 @@ body {
         display: grid;
         grid-template-columns: var(--navbar-width) 12fr 29rem;
     }
+
+    &:has(> .loader) {
+        & > :not(.loader) {
+            display: none;
+        }
+    }
 }
 
 @keyframes pulse {

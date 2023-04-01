@@ -11,7 +11,7 @@ type LoadingPageProps = {
 
 const LoadingPage:FC<LoadingPageProps> = () => {
     return (
-        <div className={styles.container}>
+        <div className={`loader ${styles.container}`}>
             <img className={styles.logo} src={radishIconExt || radishIcon} alt={"Лого"} />
         </div>
     );
