@@ -7,7 +7,7 @@ Chrome extension that replaces [animejoy.ru](https://animejoy.ru) website pages 
 - Absence of API and Cloudflare protection makes it very problematic to build a separate website that would consume animejoy data.
 
 ## Notes
-This is a development repo. Releases will be available later.
+The project is under development. Pre-releases can be found in the **[releases](https://github.com/YaredFall/ShikiJoyExt/releases)** section.
 
 Run `npm run install` **([concurrently](https://github.com/open-cli-tools/concurrently) is required)** to install dependencies. Then you can run 
 * `npm run dev` **([concurrently](https://github.com/open-cli-tools/concurrently) is required)** to run demo on your machine.
