@@ -53,13 +53,13 @@ const router = createBrowserRouter(createRoutesFromElements(
     <>
         <Route path={appRoutes.authCallback} element={<AuthCallbackPage />} />
         <Route path={"/"} element={<><SideNav /><Outlet /></>}>
-            <Route index element={<CategoryPage />} />
+            <Route index element={<CategoryPage />} errorElement={<ErrorPage />} />
             <Route path={"page/:id/"} loader={shouldEndWithSlashAndHaveNaturalID} errorElement={<ErrorPage />} element={<CategoryPage />} />
             {[...Categories.values()].filter(c => c !== "").map(c =>
-                <Route key={c} path={c + '/'}>
+                <Route key={c} path={c + '/'} errorElement={<ErrorPage />}>
                     <Route index loader={shouldEndWithSlash} element={<CategoryPage />} />
                     <Route path={":id"} element={<AnimePage />} />
-                    <Route path={"page/:id/"} loader={shouldEndWithSlashAndHaveNaturalID} errorElement={<ErrorPage />} element={<CategoryPage />} />
+                    <Route path={"page/:id/"} loader={shouldEndWithSlashAndHaveNaturalID} element={<CategoryPage />} />
                 </Route>
             )}
             <Route path={appRoutes.any} element={<NotFound />} />
