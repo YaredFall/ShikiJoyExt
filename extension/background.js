@@ -138,6 +138,6 @@ async function refreshAnimeJoyTabs() {
     let queryOptions = { url: "https://animejoy.ru/*" };
     let tabs = await chrome.tabs.query(queryOptions);
     if (tabs) {
-        tabs.forEach(tab => chrome.tabs.reload(tab.id));
+        tabs.forEach(tab => chrome.tabs.reload(tab.id, { bypassCache: true }));
     }
 }
