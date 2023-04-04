@@ -1,7 +1,7 @@
 import { FC, useLayoutEffect, useRef, useState } from 'react';
 import { useAnimeJoyAnimePageQuery } from "../../Api/useAnimeJoyAnimePageQuery";
 import { getNavigationPagesCount, getStoryList } from "../../Utils/scraping";
-import CategoryStorycard from "../CategoryStorycard";
+import CategoryStorycard from "./CategoryStorycard";
 import styles from "./CategoryPage.module.scss";
 import MainAndAsideWrapper from "../MainAndAsideWrapper";
 import CategoryAside from "./CategoryAside";

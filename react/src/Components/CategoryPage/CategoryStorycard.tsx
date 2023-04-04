@@ -1,9 +1,9 @@
 import { CSSProperties, FC, useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { StoryData } from "../types";
-import Picture from "./Picture";
+import { StoryData } from "../../types";
+import Picture from "../Picture";
 import styles from "./CategoryStorycard.module.scss";
 import { Link } from "react-router-dom";
-import LoadableText from "./LoadableText";
+import LoadableText from "../LoadableText";
 
 const LINES_TOTAL = 17;
 
