@@ -8,7 +8,7 @@ import { appRoutes, Categories } from "../Utils/appRoutes";
 import AuthCallbackPage from "../Pages/AuthCallbackPage";
 import { useGlobalLoadingStore } from "../Store/globalLoadingStore";
 import LoadingPage from "../Pages/LoadingPage";
-import CategoryPage from "./HomePage/CategoryPage";
+import CategoryPage from "./CategoryPage/CategoryPage";
 import NotFound from "../Pages/NotFound";
 import ErrorPage from "../Pages/ErrorPage";
 
