@@ -1,9 +1,12 @@
-import { CSSProperties, FC, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { CSSProperties, FC, useLayoutEffect, useRef, useState } from 'react';
 import { StoryData } from "../../types";
 import Picture from "../Picture";
 import styles from "./CategoryStorycard.module.scss";
 import { Link } from "react-router-dom";
 import LoadableText from "../LoadableText";
+import DotSplitter from "../DotSplitter";
+import { Categories } from "../../Utils/appRoutes";
+import { IoMdArrowDropright, MdOutlineModeComment } from "react-icons/all";
 
 const LINES_TOTAL = 17;
 
@@ -21,10 +24,10 @@ const CategoryStorycard: FC<AnimeStorycardProps> = ({ data }) => {
             const linesUsed = ~~(infoRef.current.clientHeight / 20.18);
             setLinesAvailable(LINES_TOTAL - linesUsed);
         }
-    }
+    };
 
     useLayoutEffect(() => {
-        window.addEventListener("resize", calcAvailableLines)
+        window.addEventListener("resize", calcAvailableLines);
         return () => {
             window.removeEventListener("resize", calcAvailableLines);
         };
@@ -33,8 +36,7 @@ const CategoryStorycard: FC<AnimeStorycardProps> = ({ data }) => {
     useLayoutEffect(() => {
         calcAvailableLines();
     }, [data]);
-    
-    
+
 
     return (
         <article className={styles.card}>
@@ -68,8 +70,25 @@ const CategoryStorycard: FC<AnimeStorycardProps> = ({ data }) => {
                     }
                 </div>
             </div>
-
             {data?.editDate && <div className={styles.editDate}>{data?.editDate}</div>}
+            <div className={styles.categoryAndComments}>
+                <div className={styles.category}>
+                    {data ?
+                     <>
+                         <IoMdArrowDropright />
+                         {data.category.map((c, i) => (i === 0
+                                                       ? <Link to={"/" + Categories.get(c)} key={c} children={c} />
+                                                       : <><DotSplitter /><Link to={"/" + Categories.get(c) + "/"} key={c} children={c} /></>
+                         ))}
+                     </> : <LoadableText placeholderLength={16} />}
+                </div>
+                <div className={styles.comments} title={"Комментарии"}>
+                    {data?.comments ?
+                     <><MdOutlineModeComment /><span children={data.comments} /></>
+                                    : <LoadableText placeholderLength={4} />
+                    }
+                </div>
+            </div>
         </article>
     );
 };

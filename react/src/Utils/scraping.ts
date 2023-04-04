@@ -185,7 +185,11 @@ export function getStoryList(page: Document | undefined): StoryData[] | undefine
                 url: (c as Element).getAttribute && (c as Element).getAttribute("href")?.replace("https://animejoy.ru/", "") || undefined
             }))
         })),
-        editDate: story.querySelector(".editdate")?.textContent || undefined
+        editDate: story.querySelector(".editdate")?.textContent || undefined,
+        category: [...story.querySelector(".category")?.children || []].slice(1).map(
+            e => e.textContent!.replace("Ongoing", "Онгоинги").replace("Ф", "ф").replace("Анонс", "Анонсы")
+                                                                       ),
+        comments: story.querySelector(".meta_coms")?.textContent ? +story.querySelector(".meta_coms")?.textContent! : undefined
     }))
 }
 

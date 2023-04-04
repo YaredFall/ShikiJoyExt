@@ -19,9 +19,9 @@ export enum appRoutes {
 
 export const Categories = new Map([
     ["Главная", ""],
-    ["TV Сериалы", appRoutes.serials],
+    ["TV сериалы", appRoutes.serials],
     ["Онгоинги", appRoutes.ongoing],
-    ["Завершенные", appRoutes.full_tv],
+    ["Завершённые", appRoutes.full_tv],
     ["OVA/ONA/OAV", appRoutes.ova],
     ["Аниме фильмы", appRoutes.films],
     ["Анонсы", appRoutes.anons],

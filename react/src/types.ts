@@ -25,7 +25,9 @@ export type StoryData = {
     status?: "FULL" | "ONGOING",
     description?: string,
     info: Array<{label?: string, value: Array<{text: string, url?: string}>}>,
-    editDate?: string
+    editDate?: string,
+    category: string[],
+    comments?: number
 }
 
 export type FranchiseData = Array<{label: string, url: string | null}>
