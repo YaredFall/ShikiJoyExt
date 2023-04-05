@@ -18,7 +18,10 @@ async function handler(req: NextApiRequestWithCache, res: NextApiResponse) {
         
         res.status(200).json(data);
         
-    } catch (err) {
+    } catch (err: any) {
+        if (err.name === "TimeoutError") {
+            res.status(503).send(`<h1>Shikimori Unavailable</h1>`)
+        }
         res.status(400).send(`<h1>${err}</h1>`)
     }
 }
