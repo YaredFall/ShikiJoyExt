@@ -1,7 +1,7 @@
 .headerContainer {
   width: var(--navbar-width);
   isolation: isolate;
-  z-index: 1000;
+  z-index: 10000;
   position: fixed;
   left: 0;
   top: 0;
@@ -27,11 +27,12 @@
   justify-content: center;
   padding: 1rem;
   outline: none;
-  transition: color 125ms ease-in-out;//, box-shadow 250ms ease-in-out;
+  transition: color 125ms ease-in-out; //, box-shadow 250ms ease-in-out;
   color: var(--primary-a50);
   position: relative;
   box-shadow: transparent 2px 0;
   border-radius: 5px;
+
   &:focus-visible {
     outline-offset: -3px;
     outline: white 2px solid;
@@ -53,11 +54,12 @@
     //box-shadow: var(--primary-a50) 2px 0 ;
     //margin-right: -2px;
     pointer-events: none;
+
     &::before {
       opacity: 1;
     }
   }
-  
+
   &.external {
     cursor: alias;
   }
@@ -87,6 +89,7 @@
   & > svg {
     font-size: 2rem;
   }
+
   &.smaller > svg {
     font-size: 1.75rem;
   }
@@ -111,6 +114,7 @@ img.avatar {
 }
 
 .menu {
+  z-index: -1;
   position: absolute;
   height: 100%;
   width: 15rem;
@@ -118,7 +122,6 @@ img.avatar {
   bottom: 0;
   transition: translate 250ms ease-in-out;
   animation: translateIn 250ms ease-in-out;
-  z-index: -100;
   left: 100%;
   border-right: 2px solid var(--primary-a12p5);
   background-color: var(--secondary);
@@ -130,41 +133,41 @@ img.avatar {
   &.closed {
     translate: -100%;
   }
-  
+
   a {
     text-decoration: none;
     color: var(--primary-a50);
-    
+
     &:hover {
       color: var(--primary);
     }
   }
-  
+
   .active {
     color: var(--primary-a12p5);
     pointer-events: none;
   }
-  
+
   > * {
     padding: 1rem;
     opacity: 0;
     --delay: calc(375ms + 50ms * var(--i, 1));
     animation: fadeIn 250ms var(--delay) ease-in-out forwards,
-    translateIn 250ms var(--delay)  ease-in-out forwards;
+    translateIn 250ms var(--delay) ease-in-out forwards;
   }
 }
 
 .menuButton {
   z-index: 1;
   position: relative;
-  
+
   .closeMenu {
     position: absolute;
     font-size: 1.5rem;
     opacity: 0;
     transition: opacity 250ms ease-in-out;
   }
-  
+
   .radish {
     transition: translate 250ms ease-in-out;
     pointer-events: none;
@@ -191,17 +194,35 @@ img.avatar {
     translate: 2.875rem;
     filter: none;
     position: relative;
-    
+
     .title {
       opacity: 1;
       transition-delay: 250ms;
     }
   }
-  
+
   .closeMenu {
     opacity: 1;
   }
 }
+
+.menuBG {
+  z-index: -1000;
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.25);
+  opacity: 0;
+  transition: opacity 125ms ease-in-out;
+  pointer-events: none;
+  animation: fadeIn 125ms ease-in-out;
+}
+
+.menu.open ~ .menuBG {
+  opacity: 1;
+  pointer-events: auto;
+}
+
 
 @keyframes fadeIn {
   0% {
