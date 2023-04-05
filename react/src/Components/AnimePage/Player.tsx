@@ -119,17 +119,18 @@ const Player: FC<PlayerProps> = memo(({ animejoyData, animeRecord }) => {
 
     //sets player select options max-height to iframe height
     useEffect(() => {
-        document.querySelector(`.${styles.player}`)?.setAttribute("style",
-            "--max-options-height: " + (iframeRef.current?.getBoundingClientRect().height! + 2) + "px");
-        const onResize = () => {
+        const setMaxHeight = () => {
             document.querySelector(`.${styles.player}`)?.setAttribute("style",
                 "--max-options-height: " + (iframeRef.current?.getBoundingClientRect().height! + 2) + "px");
         };
-        window.addEventListener('resize', onResize);
+        setMaxHeight();
+        console.log("IFRAME HEIGHT IS " + iframeRef.current?.getBoundingClientRect().height)
+        
+        window.addEventListener('resize', setMaxHeight);
         return () => {
-            window.removeEventListener('resize', onResize);
+            window.removeEventListener('resize', setMaxHeight);
         };
-    }, []);
+    }, [iframeRef]);
 
     const episodeLabel = () => {
         if (isSinglePagePlayer(currentPlayer.name) || isSinglePagePlayer(currentPlayer.files[0].label)) {
