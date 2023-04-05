@@ -23,9 +23,7 @@ const AnimeHeader: FC<AnimeHeaderProps> = ({
             <div className={styles.titlesSection}>
                 <h1 className={styles.titleRU}>
                     <LoadableText placeholderLength={placeholderLength} children={ruTitle} />
-                    {episodesAvailable &&
-                        <><DotSplitter /><span className={"nowrap"}>{episodesAvailable}</span></>
-                    }
+                    {episodesAvailable && <span className={"nowrap"}> {episodesAvailable}</span>}
                 </h1>
                 <p className={styles.titleRomanji}
                     children={<LoadableText placeholderLength={placeholderLength} children={titles?.romanji} />}
