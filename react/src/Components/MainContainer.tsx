@@ -9,15 +9,13 @@ type MainContainerProps = {
 const MainContainer:FC<MainContainerProps> = ({ children}) => {
 
     const location = useLocation()
-    
-    const ref = useRef<HTMLDivElement>(null);
 
     useLayoutEffect(() => {
-        ref.current?.scroll({top: 0})
+        scrollTo({top: 0})
     }, [location]);
     
     return (
-        <main ref={ref} className={styles.mainContainer} children={children} />
+        <main className={styles.mainContainer} children={children} />
     );
 };
 
