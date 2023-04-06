@@ -7,6 +7,7 @@ import LoadingPage from "../../Pages/LoadingPage";
 import { parseShikimoriDescription } from "../../Utils/misc";
 import { Link } from "react-router-dom";
 import PopupWithTrigger from "../PopupWithTrigger";
+import { ErrorBoundary } from "react-error-boundary";
 
 type CharacterLargeCardProps = {
     id: number | undefined
@@ -47,7 +48,9 @@ const CharacterPopupCard: FC<CharacterLargeCardProps> = ({ id, bindNode }) => {
 
     return (
         <PopupWithTrigger triggerRef={bindNode} containerClassName={styles.container}>
-            {data ? <Card data={data} /> : <LoadingPage fullscreen={false} />}
+            <ErrorBoundary fallback={<div className={styles.error}>Произошла непредвиденная ошибка!</div>}>
+                {data ? <Card data={data} /> : <LoadingPage fullscreen={false} />}
+            </ErrorBoundary>
         </PopupWithTrigger>
     );
 };
