@@ -26,13 +26,13 @@
     border-radius: var(--roundness);
   }
   
-  .charDesc {
+  .charTitleAndDesc {
     .name {
       font-size: 1.25rem;
       margin-bottom: 0.25rem;
     }
     
-    p {
+    .desc {
       overflow: hidden;
       display: -webkit-box;
       -webkit-box-orient: vertical;

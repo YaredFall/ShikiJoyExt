@@ -10,7 +10,7 @@ type PortalProps = {
 const PopupPortal:FC<PortalProps> = ({ isOpen, children }) => {
     return (
         <>
-            {isOpen && <Portal children={children} node={document.querySelector("main")} />}
+            {isOpen && <Portal children={children} />}
         </>
     );
 };

@@ -1,70 +1,54 @@
-import { Dispatch, FC, RefObject, SetStateAction, useEffect, useState } from 'react';
+import { FC, Fragment, RefObject, useEffect, useRef, useState } from 'react';
 import { useQuery } from "react-query";
 import ky from "ky";
 import { ApiLinks, defautlQueryConfig } from "../../Api/_config";
 import styles from "./CharacterPopupCard.module.scss";
 import LoadingPage from "../../Pages/LoadingPage";
-import PopupPortal from "../PopupPortal";
+import { parseShikimoriDescription } from "../../Utils/misc";
+import { Link } from "react-router-dom";
+import PopupWithTrigger from "../PopupWithTrigger";
 
 type CharacterLargeCardProps = {
-    isOpen: boolean
-    setIsInside?: Dispatch<SetStateAction<boolean>>
     id: number | undefined
-    bindNode?: RefObject<any>
+    bindNode: RefObject<HTMLElement>
 }
 
-const CharacterPopupCard: FC<CharacterLargeCardProps> = ({ isOpen, id, bindNode, setIsInside }) => {
+const CharacterPopupCard: FC<CharacterLargeCardProps> = ({ id, bindNode }) => {
+    
+    const [isQueryEnabled, setIsQueryEnabled] = useState(false);
 
     const { data } = useQuery(
         ["shikimori", "character", id],
         () => {
             return ky((import.meta.env.DEV ? ApiLinks.get("dev/shikijoy") : ApiLinks.get("shikijoy")) + `api/shikimori/characters/${id}`)
-                .json();
+                .json<any>();
         },
         {
             ...defautlQueryConfig,
-            enabled: isOpen
+            enabled: isQueryEnabled
         }
     );
 
-    const [position, setPosition] = useState({
-        top: bindNode?.current?.getBoundingClientRect().top + document.documentElement.scrollTop,
-        left: bindNode?.current?.getBoundingClientRect().right
-    });
+    let timeout: number | undefined = undefined;
+    const onMouseEnter = () => {
+        timeout = setTimeout(() => {
+            setIsQueryEnabled(true);
+        }, 500);
+    };
+    const onMouseLeave = () => {
+        clearTimeout(timeout);
+    };
 
     useEffect(() => {
-        const handler = () => {
-            bindNode && setPosition(prev => ({
-                top: bindNode.current.getBoundingClientRect().top + document.documentElement.scrollTop,
-                left: bindNode.current.getBoundingClientRect().right
-            }));
-        };
-        handler();
-        window.addEventListener("resize", handler, true);
-        return () => {
-            window.removeEventListener("resize", handler, true);
-        };
-    }, []);
-
-    let timeout: number | undefined = undefined;
+        bindNode.current?.addEventListener("mouseenter", onMouseEnter)
+        bindNode.current?.addEventListener("mouseleave", onMouseLeave)
+    }, [bindNode]);
+    
 
     return (
-        <PopupPortal isOpen={isOpen}>
-            <div className={styles.container}
-                 style={{ top: position.top + "px", left: position.left + "px" }}
-                 onMouseOver={() => {
-                     clearTimeout(timeout);
-                     setIsInside && setIsInside(true);
-                 }}
-                 onMouseLeave={() => {
-                     timeout = setTimeout(() => {
-                         setIsInside && setIsInside(false);
-                     }, 500);
-                 }}
-            >
-                {data ? <Card data={data} /> : <LoadingPage fullscreen={false} />}
-            </div>
-        </PopupPortal>
+        <PopupWithTrigger triggerRef={bindNode} containerClassName={styles.container}>
+            {data ? <Card data={data} /> : <LoadingPage fullscreen={false} />}
+        </PopupWithTrigger>
     );
 };
 
@@ -74,9 +58,9 @@ function Card({ data }: { data: any }) {
     return (
         <>
             {/*<img src={"https://shikimori.one" + data.image.original} alt={""} />*/}
-            <div className={styles.charDesc}>
+            <div className={styles.charTitleAndDesc}>
                 <h4 className={styles.name} children={data.russian || data.name} />
-                <p children={data.description || "Описание отсутствует"} />
+                <Desc desc={data?.description} />
             </div>
             <div className={styles.animeAndSeyu}>
                 <div>
@@ -96,4 +80,38 @@ function Card({ data }: { data: any }) {
             </div>
         </>
     );
+}
+
+function Desc({ desc }: { desc: string | undefined }) {
+    return (
+        <div className={styles.desc} children={desc ? parseShikimoriDescription(desc)?.map((e, i) =>
+                                                        e.type === "spoiler" ? <p key={i} className={"spoiler"} children={(<DescParagraphs parsedNode={e.children} />)} />
+                                                                             : <p key={i} children={(<DescParagraphs parsedNode={e.children} />)} />
+                                                    )
+                                                    : "Описание отсутствует"}
+        />
+    );
+}
+
+function DescParagraphs({ parsedNode }: { parsedNode: { type: string, id: string | undefined, content: string }[] }) {
+    return (
+        <>
+            {parsedNode.map((n, i) => <DescParagraphItem node={n} key={i} />)}
+        </>
+    );
+}
+
+function DescParagraphItem({ node }: { node: { type: string, id: string | undefined, content: string } }) {
+
+    let url = undefined;
+    if (node.type === "character") {
+        url = "https://shikimori.one/characters/" + node.id;
+    }
+    const linkRef = useRef(null);
+
+    return (url ? <Fragment>
+                    <Link ref={linkRef} to={url} children={node.content} />
+                    <CharacterPopupCard id={+node.id!} bindNode={linkRef} />
+                </Fragment>
+                : <span children={node.content} />);
 }
