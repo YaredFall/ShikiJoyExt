@@ -8,6 +8,7 @@ import { parseShikimoriDescription } from "../../Utils/misc";
 import { Link } from "react-router-dom";
 import PopupWithTrigger from "../PopupWithTrigger";
 import { ErrorBoundary } from "react-error-boundary";
+import Spoiler from "../Spoiler";
 
 type CharacterLargeCardProps = {
     id: number | undefined
@@ -15,7 +16,7 @@ type CharacterLargeCardProps = {
 }
 
 const CharacterPopupCard: FC<CharacterLargeCardProps> = ({ id, bindNode }) => {
-    
+
     const [isQueryEnabled, setIsQueryEnabled] = useState(false);
 
     const { data } = useQuery(
@@ -41,10 +42,10 @@ const CharacterPopupCard: FC<CharacterLargeCardProps> = ({ id, bindNode }) => {
     };
 
     useEffect(() => {
-        bindNode.current?.addEventListener("mouseenter", onMouseEnter)
-        bindNode.current?.addEventListener("mouseleave", onMouseLeave)
+        bindNode.current?.addEventListener("mouseenter", onMouseEnter);
+        bindNode.current?.addEventListener("mouseleave", onMouseLeave);
     }, [bindNode]);
-    
+
 
     return (
         <PopupWithTrigger triggerRef={bindNode} containerClassName={styles.container}>
@@ -86,20 +87,29 @@ function Card({ data }: { data: any }) {
 }
 
 function Desc({ desc }: { desc: string | undefined }) {
+
+    const parsedDesc = parseShikimoriDescription(desc);
+
     return (
-        <div className={styles.desc} children={desc ? parseShikimoriDescription(desc)?.map((e, i) =>
-                                                        e.type === "spoiler" ? <p key={i} className={"spoiler"} children={(<DescParagraphs parsedNode={e.children} />)} />
-                                                                             : <p key={i} children={(<DescParagraphs parsedNode={e.children} />)} />
-                                                    )
-                                                    : "Описание отсутствует"}
+        <div className={styles.desc}
+             children={parsedDesc ? parsedDesc.map((e, i) => <DescParagraph key={i} parsedDescItem={e} />)
+                                  : "Описание отсутствует"
+             }
         />
     );
 }
 
-function DescParagraphs({ parsedNode }: { parsedNode: { type: string, id: string | undefined, content: string }[] }) {
+function DescParagraph({ parsedDescItem }: { parsedDescItem: { type: string, label: string | undefined, children: { type: string, id: string | undefined, content: string }[] } }) {
     return (
         <>
-            {parsedNode.map((n, i) => <DescParagraphItem node={n} key={i} />)}
+            {parsedDescItem.type === "spoiler"
+             ?
+             <Spoiler label={parsedDescItem.label || "Спойлер"}
+                      children={parsedDescItem.children.map((n, i) => <DescParagraphItem node={n} key={i} />)}
+             />
+             :
+             <p children={parsedDescItem.children.map((n, i) => <DescParagraphItem node={n} key={i} />)} />
+            }
         </>
     );
 }
