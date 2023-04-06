@@ -120,8 +120,6 @@ img.avatar {
   width: 15rem;
   top: 0;
   bottom: 0;
-  transition: translate 250ms ease-in-out;
-  animation: translateIn 250ms ease-in-out;
   left: 100%;
   border-right: 2px solid var(--primary-a12p5);
   background-color: var(--secondary);
@@ -129,6 +127,10 @@ img.avatar {
   flex-direction: column;
   padding: 4.5rem 2rem;
   font-size: 1.125rem;
+  transition: translate 250ms ease-in-out;
+  :global {
+    animation: translateInX 250ms ease-in-out;
+  }
 
   &.closed {
     translate: -100%;
@@ -152,8 +154,10 @@ img.avatar {
     padding: 1rem;
     opacity: 0;
     --delay: calc(375ms + 50ms * var(--i, 1));
-    animation: fadeIn 250ms var(--delay) ease-in-out forwards,
-    translateIn 250ms var(--delay) ease-in-out forwards;
+    :global {
+      animation: fadeIn 250ms var(--delay) ease-in-out forwards,
+                 translateInX 250ms var(--delay) ease-in-out forwards;
+    }
   }
 }
 
@@ -215,29 +219,13 @@ img.avatar {
   opacity: 0;
   transition: opacity 125ms ease-in-out;
   pointer-events: none;
-  animation: fadeIn 125ms ease-in-out;
+
+  :global {
+    animation: fadeIn 125ms ease-in-out;
+  }
 }
 
 .menu.open ~ .menuBG {
   opacity: 1;
   pointer-events: auto;
-}
-
-
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
-@keyframes translateIn {
-  0% {
-    translate: -100%;
-  }
-  100% {
-    translate: 0;
-  }
 }
