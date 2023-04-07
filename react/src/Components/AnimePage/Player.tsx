@@ -130,7 +130,7 @@ const Player: FC<PlayerProps> = memo(({ animejoyData, animeRecord }) => {
         return () => {
             window.removeEventListener('resize', setMaxHeight);
         };
-    }, [iframeRef]);
+    }, [animejoyData]);
 
     const episodeLabel = () => {
         if (isSinglePagePlayer(currentPlayer.name) || isSinglePagePlayer(currentPlayer.files[0].label)) {
