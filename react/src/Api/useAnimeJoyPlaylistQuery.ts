@@ -24,6 +24,9 @@ export const useAnimeJoyPlaylistQuery = (animejoyID: string) => {
                     return getStudiosPlayersAndFiles(doc.body);
                 })
         ,
-        defautlQueryConfig
+        { 
+            ...defautlQueryConfig,
+            enabled: !!animejoyID
+        }
     );
 };

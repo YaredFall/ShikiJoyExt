@@ -1,4 +1,4 @@
-import { FC, memo, useEffect } from 'react';
+import { FC, memo, useEffect, useMemo } from 'react';
 import Player from './Player';
 import styles from "./AnimePage.module.scss";
 import AnimeHeader from "./AnimeHeader";
@@ -22,18 +22,19 @@ const MainElement: FC = memo(({}) => {
     const queryClient = useQueryClient();
 
     const { id: fullID } = useParams();
-    const animeID = fullID!.split('-')[0];
+    const animeID = useMemo(() => fullID!.split('-')[0], [fullID]);
 
     const { isLoading: isLoadingStudios, isFetching: isFetchingStudios, data: studioData } = useAnimeJoyPlaylistQuery(animeID);
-    const { isLoading: isLoadingPage, isFetching: isFetchingPage, data: pageDocument } = useAnimeJoyAnimePageQuery(
-        window.location.pathname);
+    const { isLoading: isLoadingPage, isFetching: isFetchingPage, data: pageDocument } = useAnimeJoyAnimePageQuery(location.pathname);
 
-    const animejoyData: AnimeJoyData | undefined = (animeID && studioData && pageDocument) ? {
-        id: animeID,
-        titles: getShowTitle(pageDocument)!,
-        franchise: getFranchise(pageDocument),
-        studios: studioData
-    } : undefined;
+    const animejoyData: AnimeJoyData | undefined = useMemo(() => {
+        return (animeID && studioData && pageDocument) ? {
+            id: animeID,
+            titles: getShowTitle(pageDocument)!,
+            franchise: getFranchise(pageDocument),
+            studios: studioData
+        } : undefined
+    }, [animeID && studioData && pageDocument]);;
 
     useEffect(() => {
         if (animejoyData) {
@@ -41,7 +42,7 @@ const MainElement: FC = memo(({}) => {
                 await queryClient.refetchQueries(["animeRecord", animeID]);
             });
         }
-    }, [animeID, pageDocument, studioData]);
+    }, [animejoyData]);
 
     const { data: animeRecord } = useAnimeRecord(animeID);
     console.log({ animeRecord, animejoyData });
