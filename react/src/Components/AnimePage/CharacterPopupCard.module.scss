@@ -1,39 +1,45 @@
 .container {
+  //--margin: 20px;
+  //--height: 290px;
+  //--width: 480px;
+  
+  left: var(--left);
+  top: var(--top);
+  height: var(--height);
+  width: var(--width);
+
   z-index: 900;
   position: absolute;
   isolation: isolate;
-  height: 290px;
-  width: 480px;
   border-radius: var(--roundness);
   overflow: hidden;
   background-color: var(--secondary);
   border: 2px solid var(--primary-a12p5);
-  margin-left: 1.25rem;
   padding: 1rem;
   display: grid;
   grid-template-columns: auto 4rem;
   gap: 1rem;
-  
+
   a {
     cursor: alias;
   }
-  
+
   > :global(.loader) {
     background-color: inherit;
   }
-  
+
   img {
     border-radius: var(--roundness);
   }
-  
+
   .charTitleAndDesc {
     max-height: calc(290px - 2rem - 4px);
-    
+
     .name {
       font-size: 1.25rem;
       margin-bottom: 0.125rem;
     }
-    
+
     .desc {
       overflow: hidden;
       display: -webkit-box;
@@ -42,17 +48,17 @@
       text-overflow: ellipsis;
     }
   }
-  
+
   .animeAndSeyu {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     max-height: 100%;
-    
+
     img {
       margin-top: 1px;
     }
-    
+
     a {
       display: flex;
     }
