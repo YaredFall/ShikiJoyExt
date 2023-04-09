@@ -1,7 +1,7 @@
 import { CSSProperties, Dispatch, FC, SetStateAction, useCallback, useLayoutEffect, useState } from 'react';
 import { NavLink, useLocation } from "react-router-dom";
 import styles from "./SideNav.module.scss";
-import { appRoutes, Categories } from "../Utils/appRoutes";
+import { appRoutes, Categories } from "../../Utils/appRoutes";
 
 type NavMenuProps = {
     className?: string

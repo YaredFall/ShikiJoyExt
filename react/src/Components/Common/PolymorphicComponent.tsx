@@ -1,5 +1,5 @@
 import React, { ElementType, memo } from "react";
-import { childrenCompareMemo, nestedChildrenCompareMemo } from "../Utils/childrenCompareMemo";
+import { childrenCompareMemo, nestedChildrenCompareMemo } from "../../Utils/childrenCompareMemo";
 
 
 type AsProp<C extends React.ElementType> = {

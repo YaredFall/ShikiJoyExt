@@ -1,10 +1,10 @@
 import { CSSProperties, FC, useLayoutEffect, useRef, useState } from 'react';
 import { StoryData } from "../../types";
-import Picture from "../Picture";
+import Picture from "../Common/Picture";
 import styles from "./CategoryStorycard.module.scss";
 import { Link } from "react-router-dom";
-import LoadableText from "../LoadableText";
-import DotSplitter from "../DotSplitter";
+import LoadableText from "../Common/LoadableText";
+import DotSplitter from "../Common/DotSplitter";
 import { Categories } from "../../Utils/appRoutes";
 import { IoMdArrowDropright, MdOutlineModeComment } from "react-icons/all";
 

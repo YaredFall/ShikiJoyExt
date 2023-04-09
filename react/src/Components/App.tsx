@@ -3,7 +3,7 @@ import { createBrowserRouter, createRoutesFromElements, Outlet, redirect, Route,
 import { QueryClient, QueryClientProvider } from 'react-query';
 import AnimePage from './AnimePage/AnimePage';
 import "../index.scss";
-import SideNav from "./SideNav";
+import SideNav from "./SideNav/SideNav";
 import { appRoutes, Categories } from "../Utils/appRoutes";
 import AuthCallbackPage from "../Pages/AuthCallbackPage";
 import { useGlobalLoadingStore } from "../Store/globalLoadingStore";

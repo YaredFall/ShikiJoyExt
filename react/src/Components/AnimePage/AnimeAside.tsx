@@ -2,7 +2,7 @@ import { FC } from 'react';
 import AnimeDescription from "./AnimeDescription";
 import { useAnimeJoyAnimePageQuery } from "../../Api/useAnimeJoyAnimePageQuery";
 import { getShikimoriID } from "../../Utils/scraping";
-import Searchbar from "./Searchbar";
+import Searchbar from "../Common/Searchbar";
 import styles from "./AnimeAside.module.scss";
 import { useShikiJoyAnimeSearch } from "../../Api/useShikiJoyAnimeSearch";
 

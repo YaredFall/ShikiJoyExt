@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import MainContainer from "../Components/MainContainer";
+import MainContainer from "../Components/Layout/MainContainer";
 
 type NotFoundProps = {
     

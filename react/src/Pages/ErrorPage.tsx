@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { useRouteError } from "react-router-dom";
-import MainContainer from "../Components/MainContainer";
+import MainContainer from "../Components/Layout/MainContainer";
 import NotFound from "./NotFound";
 
 type RouteError = {"status": number,"statusText": string,"internal":boolean,"data": any}

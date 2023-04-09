@@ -6,9 +6,9 @@ import styles from "./CharacterPopupCard.module.scss";
 import LoadingPage from "../../Pages/LoadingPage";
 import { parseShikimoriDescription } from "../../Utils/misc";
 import { Link } from "react-router-dom";
-import PopupWithTrigger from "../PopupWithTrigger";
+import PopupWithTrigger from "../Common/PopupWithTrigger";
 import { ErrorBoundary } from "react-error-boundary";
-import Spoiler from "../Spoiler";
+import Spoiler from "../Common/Spoiler";
 
 type CharacterLargeCardProps = {
     id: number | undefined

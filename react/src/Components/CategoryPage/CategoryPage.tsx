@@ -3,12 +3,12 @@ import { useAnimeJoyAnimePageQuery } from "../../Api/useAnimeJoyAnimePageQuery";
 import { getNavigationPagesCount, getStoryList } from "../../Utils/scraping";
 import CategoryStorycard from "./CategoryStorycard";
 import styles from "./CategoryPage.module.scss";
-import MainAndAsideWrapper from "../MainAndAsideWrapper";
+import MainAndAsideWrapper from "../Layout/MainAndAsideWrapper";
 import CategoryAside from "./CategoryAside";
-import PagesNavigation from "../PagesNavigation";
+import PagesNavigation from "./PagesNavigation";
 import { useParams } from "react-router-dom";
 import { Categories } from "../../Utils/appRoutes";
-import LoadableText from "../LoadableText";
+import LoadableText from "../Common/LoadableText";
 
 type HomePageProps = {}
 

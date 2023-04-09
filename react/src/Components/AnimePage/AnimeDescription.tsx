@@ -1,11 +1,11 @@
 import { FC } from 'react';
 import { ShikimoriAnimeCoreData } from "../../types";
 import styles from "./AnimeDescription.module.scss";
-import Picture from "../Picture";
+import Picture from "../Common/Picture";
 import shikimoriLogo from '/images/shikimori_logo.png';
 import plural from 'plural-ru';
-import DotSplitter from "../DotSplitter";
-import LoadableText from "../LoadableText";
+import DotSplitter from "../Common/DotSplitter";
+import LoadableText from "../Common/LoadableText";
 
 //@ts-ignore
 const shikimoriLogoExt = chrome.runtime?.getURL("bundled/images/shikimori_logo.png");

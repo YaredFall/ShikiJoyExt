@@ -4,8 +4,8 @@ import { useShikiJoyAnimeSearch } from "../../Api/useShikiJoyAnimeSearch";
 import { getShikimoriID } from "../../Utils/scraping";
 import { ShikimoriRole } from "../../types";
 import styles from "./Characters.module.scss";
-import Picture from "../Picture";
-import LoadableText from "../LoadableText";
+import Picture from "../Common/Picture";
+import LoadableText from "../Common/LoadableText";
 import CharacterPopupCard from "./CharacterPopupCard";
 
 

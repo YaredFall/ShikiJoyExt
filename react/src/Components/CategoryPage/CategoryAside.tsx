@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import Searchbar from "../AnimePage/Searchbar";
+import Searchbar from "../Common/Searchbar";
 
 type HomeAsideProps = {
     

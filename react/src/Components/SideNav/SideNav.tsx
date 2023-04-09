@@ -1,13 +1,13 @@
 import { FC, memo, useState } from 'react';
 import { NavLink } from "react-router-dom";
-import { appRoutes } from "../Utils/appRoutes";
+import { appRoutes } from "../../Utils/appRoutes";
 import radishIcon from "/images/radish256x256.png";
 import { VscHistory, IoIosLogIn, IoSearchOutline, IoSettingsOutline, TbList } from "react-icons/all";
 import styles from "./SideNav.module.scss";
-import { openLogInPopup } from "../Utils/openLogInPopup";
-import { useGetShikimoriUser } from "../Api/useGetShikimoriUser";
+import { openLogInPopup } from "../../Utils/openLogInPopup";
+import { useGetShikimoriUser } from "../../Api/useGetShikimoriUser";
 import { useQueryClient } from "react-query";
-import { useGlobalLoadingStore } from "../Store/globalLoadingStore";
+import { useGlobalLoadingStore } from "../../Store/globalLoadingStore";
 import { TfiClose } from "react-icons/all";
 import MenuNav from "./MenuNav";
 

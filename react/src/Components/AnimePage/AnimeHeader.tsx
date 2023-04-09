@@ -2,9 +2,9 @@ import { FC, useRef } from 'react';
 import styles from "./AnimeHeader.module.scss";
 import { Titles } from "../../types";
 import { nestedChildrenCompareMemo } from "../../Utils/childrenCompareMemo";
-import LoadableText from "../LoadableText";
+import LoadableText from "../Common/LoadableText";
 import { splitTitleOrStudioAndEpisodeCount } from "../../Utils/scraping";
-import DotSplitter from "../DotSplitter";
+import DotSplitter from "../Common/DotSplitter";
 
 type AnimeHeaderProps = {
     titles: Titles | undefined

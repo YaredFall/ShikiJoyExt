@@ -1,12 +1,12 @@
 import { Listbox, Transition } from '@headlessui/react';
 import React, { FC, Fragment, memo, useRef } from 'react';
 import { SlArrowDown } from 'react-icons/sl';
-import { StudioData } from "../../types";
-import { fullStudioName, splitTitleOrStudioAndEpisodeCount } from "../../Utils/scraping";
+import { StudioData } from "../../../types";
+import { fullStudioName, splitTitleOrStudioAndEpisodeCount } from "../../../Utils/scraping";
 import styles from "./Player.module.scss";
 import { useParams } from "react-router-dom";
-import { updateAnimeRecord } from "../../Dexie";
-import DotSplitter from "../DotSplitter";
+import { updateAnimeRecord } from "../../../Dexie";
+import DotSplitter from "../../Common/DotSplitter";
 
 type PlayerSelectProps = {
     availableStudiosAndPlayers: StudioData[]

@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
 import styles from "./Player.module.scss";
-import { NestedChildrenMemoPolymorphicComponent as Section } from "../PolymorphicComponent";
+import { NestedChildrenMemoPolymorphicComponent as Section } from "../../Common/PolymorphicComponent";
 import PlayerSelect from "./PlayerSelect";
 import PlayerMiddleSection from "./PlayerMiddleSection";
-import LoadableText from "../LoadableText";
+import LoadableText from "../../Common/LoadableText";
 
 
 type PlayerSkeletonProps = {
