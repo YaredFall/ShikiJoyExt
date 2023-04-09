@@ -122,7 +122,7 @@ const Player: FC<PlayerProps> = memo(({ animejoyData, animeRecord }) => {
         return () => {
             window.removeEventListener('resize', setMaxHeight);
         };
-    }, [animejoyData]);
+    }, [animejoyData, iframeRef]);
 
 
     const source = useMemo(() => {
