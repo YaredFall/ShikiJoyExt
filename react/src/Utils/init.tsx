@@ -9,9 +9,9 @@ function removeDefaultStyles() {
         if (c.tagName === "STYLE" || (c.tagName === "LINK" && c.getAttribute("type") === "text/css")) {
             toDelete.push(c);
         }
-    })
+    });
 
-    toDelete.forEach(c => document.head.removeChild(c))
+    toDelete.forEach(c => document.head.removeChild(c));
 }
 
 function prepareDOM() {
@@ -22,9 +22,9 @@ function prepareDOM() {
         document.querySelector(".text_spoiler") || "",
         ...document.querySelectorAll(".block.story.shortstory"),
         document.querySelector(".block.navigation") || ""
-    )
+    );
 
-    const linksBlock = [...document.querySelectorAll("div.block")].find(e => e.querySelector("ul li .ansdb"))
+    const linksBlock = [...document.querySelectorAll("div.block")].find(e => e.querySelector("ul li .ansdb"));
     if (linksBlock) {
         usefulNodes.append(linksBlock);
     }
@@ -34,7 +34,7 @@ function prepareDOM() {
     const appEL = document.createElement("div");
     appEL.setAttribute("id", "app");
     document.body.appendChild(appEL);
-    document.body.appendChild(usefulNodes)
+    document.body.appendChild(usefulNodes);
 
     document.body.classList.add("show");
 }
@@ -42,20 +42,24 @@ function prepareDOM() {
 export function Render() {
     ReactDOM.createRoot(document.getElementById('app') as HTMLElement).render(
         <React.StrictMode>
-            <App/>
+            <App />
         </React.StrictMode>,
-    )
+    );
 }
 
 export function prepareAndRender() {
     window.addEventListener("DOMContentLoaded", () => {
-        if (document.title !== "Just a moment...") {
-            // window.stop();
-            removeDefaultStyles();
-            setTimeout(() => {
-                prepareDOM();
-                Render();
-            }, 0)
+
+        if (document.title === "Just a moment...") {
+            document.body.classList.add("show");
+            return;
         }
-    })
+        
+        removeDefaultStyles();
+        setTimeout(() => {
+            prepareDOM();
+            Render();
+        }, 0);
+        
+    });
 }
