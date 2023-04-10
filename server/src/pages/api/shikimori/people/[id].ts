@@ -12,7 +12,7 @@ async function handler(req: NextApiRequestWithCache, res: NextApiResponse) {
     try {
         let data = req.cachedData;
         if (!data) {
-            data = await fetchShikimoriAPI(`https://shikimori.one/api/characters/${id}`)
+            data = await fetchShikimoriAPI(`https://shikimori.one/api/people/${id}`)
             cacheData(req.url, data)
         }
         
