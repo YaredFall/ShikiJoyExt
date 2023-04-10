@@ -1,8 +1,8 @@
-import { FC, Fragment, RefObject, useEffect, useRef, useState } from 'react';
+import { FC, Fragment, RefObject, useRef } from 'react';
 import { useQuery } from "react-query";
 import ky from "ky";
 import { ApiLinks, defautlQueryConfig } from "../../Api/_config";
-import styles from "./CharacterPopupCard.module.scss";
+import styles from "./PopupCard.module.scss";
 import LoadingPage from "../../Pages/LoadingPage";
 import { parseShikimoriDescription } from "../../Utils/misc";
 import { Link } from "react-router-dom";
@@ -10,6 +10,7 @@ import PopupWithTrigger from "../Common/PopupWithTrigger";
 import { ErrorBoundary } from "react-error-boundary";
 import Spoiler from "../Common/Spoiler";
 import { useHoverTrigger } from "../../Hooks/useHoverTrigger";
+import SeyuPopupCard from "./SeyuPopupCard";
 
 type CharacterLargeCardProps = {
     id: number | undefined
@@ -17,9 +18,9 @@ type CharacterLargeCardProps = {
 }
 
 const CharacterPopupCard: FC<CharacterLargeCardProps> = ({ id, bindNode }) => {
-    
+
     const [isQueryEnabled] = useHoverTrigger(bindNode);
-    
+
     const { data } = useQuery(
         ["shikimori", "character", id],
         () => {
@@ -33,7 +34,7 @@ const CharacterPopupCard: FC<CharacterLargeCardProps> = ({ id, bindNode }) => {
     );
 
     return (
-        <PopupWithTrigger triggerRef={bindNode} containerClassName={styles.container}>
+        <PopupWithTrigger triggerRef={bindNode} containerClassName={`${styles.container} ${styles.character}`}>
             <ErrorBoundary fallback={<div className={styles.error}>Произошла непредвиденная ошибка!</div>}>
                 {data ? <Card data={data} /> : <LoadingPage fullscreen={false} />}
             </ErrorBoundary>
@@ -44,10 +45,15 @@ const CharacterPopupCard: FC<CharacterLargeCardProps> = ({ id, bindNode }) => {
 export default CharacterPopupCard;
 
 function Card({ data }: { data: any }) {
+
+    const seyuRef = useRef(null);
+
     return (
         <>
-            {/*<img src={"https://shikimori.one" + data.image.original} alt={""} />*/}
-            <div className={styles.charTitleAndDesc}>
+            <Link className={styles.imgLink} to={"https://shikimori.one" + data.url}>
+                <img className={styles.mainImage} src={"https://shikimori.one" + data.image.original} alt={""} />
+            </Link>
+            <div className={styles.titleAndDesc}>
                 <h4 className={styles.name} children={data.russian || data.name} />
                 <Desc desc={data?.description} />
             </div>
@@ -58,12 +64,13 @@ function Card({ data }: { data: any }) {
                         <img src={"https://shikimori.one" + data.animes[0].image.x96} alt={""} />
                     </a>
                 </div>
-                {data.seyu[0] &&
+                {data.seyu[0] && data.seyu[0].russian &&
                     <div>
                         <h5>Сейю</h5>
-                        <a href={"https://shikimori.one" + data.seyu[0].url} title={data.seyu[0].russian}>
+                        <a ref={seyuRef} href={"https://shikimori.one" + data.seyu[0].url} title={data.seyu[0].russian}>
                             <img src={"https://shikimori.one" + data.seyu[0].image.x96} alt={""} />
                         </a>
+                        <SeyuPopupCard id={data.seyu[0].id} bindNode={seyuRef} />
                     </div>
                 }
             </div>

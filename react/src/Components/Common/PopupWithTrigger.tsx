@@ -1,7 +1,7 @@
 import { CSSProperties, FC, ReactNode, RefObject, useEffect, useRef, useState } from 'react';
 import PopupPortal from "./PopupPortal";
 
-const POPUP_WIDTH = 480;
+const POPUP_WIDTH = 520;
 const POPUP_HEIGHT = 290;
 const POPUP_MARGIN = 20;
 
