@@ -14,7 +14,27 @@ import RightButton from "./RightButton";
 import PlayerTopSection from "./PlayerTopSection";
 
 
-export const PlayerContext = React.createContext<any>(undefined);
+type PlayerContextProps = {
+    animeRecord: Anime,
+    animejoyData: AnimeJoyData,
+    setEpisodeAsWatched: ReturnType<typeof useAnimeJoyLegacyStorage>["setEpisodeAsWatched"],
+    removeEpisodeFromWatched: ReturnType<typeof useAnimeJoyLegacyStorage>["removeEpisodeFromWatched"],
+    watchedEpisodes: Anime["watchedEpisodes"],
+    currentStudioId: number,
+    currentPlayerId: number,
+    currentStudio: AnimeJoyData["studios"][number],
+    currentPlayer: AnimeJoyData["studios"][number]["players"][number],
+    currentEpisodeId: number,
+    setCurrentEpisodeId: React.Dispatch<React.SetStateAction<number>>,
+    singlePageEpisodeID: number | undefined,
+    setSinglePageEpisodeID: React.Dispatch<React.SetStateAction<number | undefined>>,
+    singlePageEpisodesAvailable: number | undefined,
+    setSinglePageEpisodesAvailable: React.Dispatch<React.SetStateAction<number | undefined>>,
+    canChangeEpisodeId: (to: "next" | "prev" | number) => boolean,
+    changeEpisodeId: (to: "next" | "prev" | number) => void
+}
+export const PlayerContext = React.createContext<PlayerContextProps>({} as PlayerContextProps);
+
 
 type PlayerProps = {
     animejoyData: AnimeJoyData,

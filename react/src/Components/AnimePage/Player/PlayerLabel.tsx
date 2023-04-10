@@ -36,8 +36,6 @@ const PlayerLabel: FC<PlayerLabelProps> = () => {
         }
     };
 
-    console.log("~~~~ LABEL RENDER ~~~~", currentEpisodeId);
-
 
     return (
         <h2 className={styles.currentEpLabel}>

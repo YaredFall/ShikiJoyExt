@@ -1,42 +1,39 @@
 import { Listbox, Transition } from '@headlessui/react';
-import React, { FC, Fragment, memo, useRef } from 'react';
+import React, { FC, Fragment, memo, useContext, useRef } from 'react';
 import { SlArrowDown } from 'react-icons/sl';
-import { StudioData } from "../../../types";
 import { fullStudioName, splitTitleOrStudioAndEpisodeCount } from "../../../Utils/scraping";
 import styles from "./Player.module.scss";
 import { useParams } from "react-router-dom";
 import { updateAnimeRecord } from "../../../Dexie";
 import DotSplitter from "../../Common/DotSplitter";
-
-type PlayerSelectProps = {
-    availableStudiosAndPlayers: StudioData[]
-    currentStudioId: number
-    currentPlayerId: number
-    setCurrentStudioId: React.Dispatch<React.SetStateAction<number>>
-    setCurrentPlayerId: React.Dispatch<React.SetStateAction<number>>
-} | {
-    availableStudiosAndPlayers?: undefined
-    currentStudioId?: undefined
-    currentPlayerId?: undefined
-    setCurrentStudioId?: undefined
-    setCurrentPlayerId?: undefined
-}
+import { PlayerContext } from "./Player";
+import { useQueryClient } from "react-query";
 
 const MemoizedIcon = memo(SlArrowDown);
 
-const PlayerSelect: FC<PlayerSelectProps> = (({
-    availableStudiosAndPlayers,
-    currentStudioId,
-    currentPlayerId,
-    setCurrentStudioId,
-    setCurrentPlayerId
-}) => {
+type PlayerSelectProps = {}
+
+const PlayerSelect: FC<PlayerSelectProps> = (() => {
 
     const { id: fullID } = useParams();
     const id = fullID!.split('-')[0];
 
-    const shouldShowSkeleton = availableStudiosAndPlayers === undefined || currentStudioId === undefined
-        || currentPlayerId === undefined || setCurrentStudioId === undefined || setCurrentPlayerId === undefined;
+    const {
+        animejoyData,
+        currentStudioId,
+        currentPlayerId,
+    } = useContext(PlayerContext);
+
+    const queryClient = useQueryClient();
+
+    const setCurrentPlayerId = (newId: number) => updateAnimeRecord(animejoyData.id, { lastPlayer: +newId },
+        () => queryClient.refetchQueries(['animeRecord', animejoyData.id]));
+    const setCurrentStudioId = (newId: number) => updateAnimeRecord(animejoyData.id, { lastStudio: +newId },
+        () => queryClient.refetchQueries(['animeRecord', animejoyData.id]));
+
+    const availableStudiosAndPlayers = animejoyData?.studios;
+
+    const shouldShowSkeleton = availableStudiosAndPlayers === undefined || currentStudioId === undefined || currentPlayerId === undefined;
 
     if (shouldShowSkeleton) {
         return (

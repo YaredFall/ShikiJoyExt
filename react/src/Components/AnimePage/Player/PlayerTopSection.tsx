@@ -4,22 +4,17 @@ import PlayerLabel from "./PlayerLabel";
 import { fullStudioName, splitTitleOrStudioAndEpisodeCount } from "../../../Utils/scraping";
 import DotSplitter from "../../Common/DotSplitter";
 import PlayerSelect from "./PlayerSelect";
-import { updateAnimeRecord } from "../../../Dexie";
 import { NestedChildrenMemoPolymorphicComponent as Section } from "../../Common/PolymorphicComponent";
 import { PlayerContext } from "./Player";
-import { useQueryClient } from "react-query";
 
 type PlayerTopSectionProps = {}
 
 const PlayerTopSection: FC<PlayerTopSectionProps> = () => {
 
-    const queryClient = useQueryClient();
 
     const {
         animejoyData,
         currentStudio,
-        currentStudioId,
-        currentPlayerId,
         currentPlayer
     } = useContext(PlayerContext);
 
@@ -38,14 +33,7 @@ const PlayerTopSection: FC<PlayerTopSectionProps> = () => {
                 </div>
             }
             {currentStudio.players.length === 1 && currentPlayer.name === undefined ? null :
-             <PlayerSelect availableStudiosAndPlayers={animejoyData.studios}
-                           currentStudioId={currentStudioId}
-                           currentPlayerId={currentPlayerId}
-                           setCurrentPlayerId={(newId) => updateAnimeRecord(animejoyData.id, { lastPlayer: +newId },
-                               () => queryClient.refetchQueries(['animeRecord', animejoyData.id]))}
-                           setCurrentStudioId={(newId) => updateAnimeRecord(animejoyData.id, { lastStudio: +newId },
-                               () => queryClient.refetchQueries(['animeRecord', animejoyData.id]))}
-             />
+             <PlayerSelect />
             }
         </Section>
     );
