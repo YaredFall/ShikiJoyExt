@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import PopupWithTrigger from "../Common/PopupWithTrigger";
 import { ErrorBoundary } from "react-error-boundary";
 import Spoiler from "../Common/Spoiler";
+import { useHoverTrigger } from "../../Hooks/useHoverTrigger";
 
 type CharacterLargeCardProps = {
     id: number | undefined
@@ -16,9 +17,9 @@ type CharacterLargeCardProps = {
 }
 
 const CharacterPopupCard: FC<CharacterLargeCardProps> = ({ id, bindNode }) => {
-
-    const [isQueryEnabled, setIsQueryEnabled] = useState(false);
-
+    
+    const [isQueryEnabled] = useHoverTrigger(bindNode);
+    
     const { data } = useQuery(
         ["shikimori", "character", id],
         () => {
@@ -30,22 +31,6 @@ const CharacterPopupCard: FC<CharacterLargeCardProps> = ({ id, bindNode }) => {
             enabled: isQueryEnabled
         }
     );
-
-    let timeout: number | undefined = undefined;
-    const onMouseEnter = () => {
-        timeout = setTimeout(() => {
-            setIsQueryEnabled(true);
-        }, 500);
-    };
-    const onMouseLeave = () => {
-        clearTimeout(timeout);
-    };
-
-    useEffect(() => {
-        bindNode.current?.addEventListener("mouseenter", onMouseEnter);
-        bindNode.current?.addEventListener("mouseleave", onMouseLeave);
-    }, [bindNode]);
-
 
     return (
         <PopupWithTrigger triggerRef={bindNode} containerClassName={styles.container}>
