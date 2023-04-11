@@ -14,5 +14,5 @@ export function useOptionsHeightFix<T extends any = any>(iframeRef: RefObject<HT
         return () => {
             window.removeEventListener('resize', setMaxHeight);
         };
-    }, updateDeps);
+    }, [...updateDeps]);
 }

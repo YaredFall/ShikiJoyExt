@@ -372,7 +372,6 @@ function dealWithPlayerJS(
         const playBtn = a[playBtnId];
         const fsBtn = a[fsBtnId]
         const handler = (e) => {
-            console.log({e, mouseIn})
             if (e.code === "Space" && options.playFlags.every(f => f(mouseIn) === true)) {
                 playBtn?.click();
             }
@@ -382,8 +381,10 @@ function dealWithPlayerJS(
         }
 
         //prevents unwanted behavior after player being clicked
-        document.body.addEventListener("click", () => {
-            document.removeEventListener("keyup", handler);
+        document.body.addEventListener("click", (e) => {
+            if (e.isTrusted) {
+                document.removeEventListener("keyup", handler);
+            }
         }, true)
         return handler;
     } else
