@@ -20,8 +20,6 @@ const PlayerLabel: FC<PlayerLabelProps> = () => {
         animejoyData,
         removeEpisodeFromWatched,
         watchedEpisodes,
-        currentStudioId,
-        currentPlayerId,
         currentPlayer,
         currentEpisodeId,
         singlePageEpisodeID
@@ -32,7 +30,7 @@ const PlayerLabel: FC<PlayerLabelProps> = () => {
             const season = currentPlayer.files.length > 1 ? `${currentEpisodeId + 1} Сезон  ` : "";
             return singlePageEpisodeID !== undefined ? (season || `${currentEpisodeId + 1} Серия`) : `${animeRecord.lastEpisode + 1} Серия`;
         } else {
-            return animejoyData.studios[currentStudioId].players[currentPlayerId].files[currentEpisodeId]?.label;
+            return currentPlayer.files[currentEpisodeId]?.label;
         }
     };
 

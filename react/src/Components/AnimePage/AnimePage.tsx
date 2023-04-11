@@ -7,7 +7,7 @@ import { AnimeJoyData } from "../../types";
 import { useAnimeJoyAnimePageQuery } from "../../Api/useAnimeJoyAnimePageQuery";
 import { getFranchise, getShowTitle } from "../../Utils/scraping";
 import { useParams } from "react-router-dom";
-import { tryAddAnime } from "../../Dexie";
+import { tryAddAnime, updateAnimeRecord } from "../../Dexie";
 import PlayerSkeleton from "./Player/PlayerSkeleton";
 import { useAnimeRecord } from "../../Hooks/useAnimeRecord";
 import Characters from "./Characters";
@@ -33,8 +33,8 @@ const MainElement: FC = memo(({}) => {
             titles: getShowTitle(pageDocument)!,
             franchise: getFranchise(pageDocument),
             studios: studioData
-        } : undefined
-    }, [animeID && studioData && pageDocument]);;
+        } : undefined;
+    }, [animeID && studioData && pageDocument]);
 
     useEffect(() => {
         if (animejoyData) {
@@ -45,7 +45,24 @@ const MainElement: FC = memo(({}) => {
     }, [animejoyData]);
 
     const { data: animeRecord } = useAnimeRecord(animeID);
+
     console.log({ animeRecord, animejoyData });
+
+    if (animeRecord && animejoyData) {
+        let resetStudioId = false;
+        let resetPlayerId = false;
+        if (!animejoyData.studios[animeRecord.lastStudio]?.players[animeRecord.lastPlayer]) {
+            resetPlayerId = true;
+        }
+        if (!animejoyData.studios[animeRecord.lastStudio]) {
+            resetStudioId = true;
+        }
+
+        if (resetStudioId || resetPlayerId) {
+            updateAnimeRecord(animeID, { lastPlayer: 0, lastStudio: resetStudioId ? 0 : undefined });
+            return null;
+        }
+    }
 
     if ((!isLoadingStudios && !studioData) || (!isLoadingPage && !pageDocument)) {
         return (

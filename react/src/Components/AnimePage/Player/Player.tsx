@@ -50,8 +50,9 @@ const Player: FC<PlayerProps> = memo(({ animejoyData, animeRecord }) => {
 
     const currentStudioId = animeRecord.lastStudio;
     const currentPlayerId = animeRecord.lastPlayer;
-    const currentStudio = animejoyData.studios[currentStudioId];
-    const currentPlayer = currentStudio.players[currentPlayerId];
+
+    const currentStudio = animejoyData.studios[currentStudioId] || animejoyData.studios[0];
+    const currentPlayer = currentStudio.players[currentPlayerId] || currentStudio.players[0];
 
     const [currentEpisodeId, setCurrentEpisodeId] = useState(0);
     console.log({ currentStudioId, currentPlayerId, currentEpisodeId, animejoyData });
