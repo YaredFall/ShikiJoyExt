@@ -3,7 +3,7 @@ import { useAnimeJoyLegacyStorage } from "../../../Hooks/useAnimeJoyLegacyStorag
 import { isSinglePagePlayer } from '../../../Utils/misc';
 import { AnimeJoyData } from "../../../types";
 import styles from './Player.module.scss';
-import { usePlayersFixes } from "../../../Hooks/usePlayersFixes";
+import { usePlayersFixes } from "./hooks/usePlayersFixes";
 import { updateAnimeRecord } from "../../../Dexie";
 import PlayerMiddleSection from "./PlayerMiddleSection";
 import { Anime } from "../../../Dexie/db";
@@ -12,6 +12,7 @@ import { useQueryClient } from "react-query";
 import LeftButton from "./LeftButton";
 import RightButton from "./RightButton";
 import PlayerTopSection from "./PlayerTopSection";
+import { useOptionsHeightFix } from "./hooks/useOptionsHeightFix";
 
 
 type PlayerContextProps = {
@@ -105,7 +106,8 @@ const Player: FC<PlayerProps> = memo(({ animejoyData, animeRecord }) => {
         }
 
         setCurrentEpisodeId(_ => +newId);
-        updateAnimeRecord(animejoyData.id, { lastEpisode: +newId }, () => queryClient.refetchQueries(['animeRecord', animejoyData.id]));
+        updateAnimeRecord(animejoyData.id, { lastEpisode: +newId },
+            () => queryClient.refetchQueries(['animeRecord', animejoyData.id]));
     };
 
     const canChangeEpisodeId = (to: "next" | "prev" | number) => {
@@ -130,19 +132,7 @@ const Player: FC<PlayerProps> = memo(({ animejoyData, animeRecord }) => {
     usePlayersFixes(iframeRef);
 
     //sets player select options max-height to iframe height
-    useEffect(() => {
-        const setMaxHeight = () => {
-            document.querySelector(`.${styles.player}`)?.setAttribute("style",
-                "--max-options-height: " + (iframeRef.current?.getBoundingClientRect().height! + 2) + "px");
-        };
-        setMaxHeight();
-        console.log("IFRAME HEIGHT IS " + iframeRef.current?.getBoundingClientRect().height);
-
-        window.addEventListener('resize', setMaxHeight);
-        return () => {
-            window.removeEventListener('resize', setMaxHeight);
-        };
-    }, [animejoyData, iframeRef]);
+    useOptionsHeightFix(iframeRef, [animejoyData, iframeRef]);
 
 
     const source = useMemo(() => {
