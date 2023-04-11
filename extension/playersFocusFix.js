@@ -189,6 +189,8 @@ let observer = new MutationObserver(mutationRecords => {
             const video = document.querySelector("video")
             const fsBtn = document.querySelector(".b-video-controls__fullscreen-button")
             const playBtn = document.querySelector(".b-video-controls__play-button")
+            
+            
             if (video && fsBtn && playBtn) {
                 video.focus();
                 onKeyUp = (e) => {
@@ -196,9 +198,13 @@ let observer = new MutationObserver(mutationRecords => {
                         fsBtn.click();
                     }
                     if (e.code === "Space") {
-                        playBtn.click();
+                        if (document.activeElement !== document.querySelector("video")) {
+                            playBtn.click();
+                        }
                     }
                 }
+
+                
                 observer.disconnect()
             }
             break;
