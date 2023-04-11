@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { createBrowserRouter, createRoutesFromElements, Outlet, redirect, Route, RouterProvider } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from 'react-query';
 import AnimePage from './AnimePage/AnimePage';
@@ -11,6 +11,7 @@ import LoadingPage from "../Pages/LoadingPage";
 import CategoryPage from "./CategoryPage/CategoryPage";
 import NotFound from "../Pages/NotFound";
 import ErrorPage from "../Pages/ErrorPage";
+import { isAnyMetaKeyPressed } from "../Utils/misc";
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -69,6 +70,19 @@ const router = createBrowserRouter(createRoutesFromElements(
 
 const App: FC = () => {
     const isLoading = useGlobalLoadingStore((state) => state.count) > 0;
+
+    useEffect(() => {
+        const handler = (e: KeyboardEvent) => {
+            if (!isAnyMetaKeyPressed(e) && e.code === "Escape") {
+                (document.activeElement as HTMLElement)?.blur();
+            }
+        }
+        document.body.addEventListener("keydown", handler);
+        return () => {
+            document.body.removeEventListener("keydown", handler);
+        };
+    }, []);
+    
 
     return (
         <QueryClientProvider client={queryClient}>

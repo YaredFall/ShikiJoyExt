@@ -51,3 +51,7 @@ export function capitalize(s: string)
 {
     return s[0].toUpperCase() + s.slice(1);
 }
+
+export function isAnyMetaKeyPressed(e: KeyboardEvent) {
+    return e.altKey || e.ctrlKey || e.metaKey || e.shiftKey
+}
