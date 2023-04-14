@@ -1,0 +1,62 @@
+.tabList {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-radius: 101vw;
+  gap: 2px;
+  color: var(--primary-a75);
+  border: 2px solid var(--primary-a12p5);
+  overflow: hidden;
+
+
+  .tab {
+    font-size: 1.125rem;
+    padding-block: 0.5em;
+    outline: none;
+  }
+  
+  .tab:hover {
+    color: var(--primary);
+  }
+  
+  .tab.selected {
+    background-color: var(--secondary);
+    color: var(--primary);
+  }
+  
+    .tab + .tab {
+    box-shadow: -6px 0 0px -4px var(--primary-a12p5);
+  }
+}
+
+.panel > ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  
+  & > li > a {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    
+    &:not(:is(:hover, :focus-visible)) {
+      text-decoration: none;
+    }
+  }
+}
+
+.poster {
+  flex-shrink: 0;
+  aspect-ratio: 250 /354;
+  height: 160px ;
+}
+
+.titles {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  & > span + span {
+    color: var(--primary-a75)
+  }
+}

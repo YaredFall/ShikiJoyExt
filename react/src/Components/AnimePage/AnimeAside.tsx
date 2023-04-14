@@ -5,6 +5,7 @@ import { getShikimoriID } from "../../Utils/scraping";
 import Searchbar from "../Common/Searchbar";
 import styles from "./AnimeAside.module.scss";
 import { useShikiJoyAnimeSearch } from "../../Api/useShikiJoyAnimeSearch";
+import SuggestionTabs from "./SuggestionTabs";
 
 
 type AnimeAsideProps = {}
@@ -35,6 +36,7 @@ const AnimeAside: FC<AnimeAsideProps> = () => {
         <div className={styles.animeAside}>
             <Searchbar className={styles.searchbar} />
             <AnimeDescription data={data?.coreData} />
+            <SuggestionTabs />
         </div>
     );
 };
