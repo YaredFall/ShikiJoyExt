@@ -46,8 +46,8 @@ function Card({ data }: { data: any }) {
 
     return (
         <>
-            <a className={styles.imgLink} href={"https://shikimori.one" + data.url}>
-                <img className={styles.mainImage} src={"https://shikimori.one" + data.image.original} alt={""} />
+            <a className={styles.imgLink} href={ApiLinks.get("shikimori") + data.url}>
+                <img className={styles.mainImage} src={ApiLinks.get("shikimori") + data.image.original} alt={""} />
             </a>
             <div className={styles.content}>
                 <div className={styles.titleAndDesc}>
@@ -74,8 +74,8 @@ function Role({ roleData }: { roleData: any }) {
 
     return (
         <>
-            <a href={"https://shikimori.one" + roleData.characters[0].url}>
-                <img ref={triggerRef} src={"https://shikimori.one" + roleData.characters[0].image.original} />
+            <a href={ApiLinks.get("shikimori") + roleData.characters[0].url}>
+                <img ref={triggerRef} src={ApiLinks.get("shikimori") + roleData.characters[0].image.original} />
             </a>
             <CharacterPopupCard id={roleData.characters[0].id} bindNode={triggerRef} />
         </>

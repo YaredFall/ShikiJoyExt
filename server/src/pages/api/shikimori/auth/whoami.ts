@@ -12,7 +12,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     } else {
         try {
             if (!accessToken) {
-                const authResponse = await fetchShikimoriAPI<AuthResponse>("https://shikimori.one/oauth/token",
+                const authResponse = await fetchShikimoriAPI<AuthResponse>("https://shikimori.me/oauth/token",
                     {
                         method: 'POST',
                         form: {
@@ -31,7 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 accessToken = authResponse.access_token;
             }
 
-            const data = await fetchShikimoriAPI("https://shikimori.one/api/users/whoami",
+            const data = await fetchShikimoriAPI("/users/whoami",
                 {
                     headers: {
                         Authorization: accessToken as string

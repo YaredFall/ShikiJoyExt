@@ -50,8 +50,8 @@ function Card({ data }: { data: any }) {
 
     return (
         <>
-            <Link className={styles.imgLink} to={"https://shikimori.one" + data.url}>
-                <img className={styles.mainImage} src={"https://shikimori.one" + data.image.original} alt={""} />
+            <Link className={styles.imgLink} to={ApiLinks.get("shikimori") + data.url}>
+                <img className={styles.mainImage} src={ApiLinks.get("shikimori") + data.image.original} alt={""} />
             </Link>
             <div className={styles.titleAndDesc}>
                 <h4 className={styles.name} children={data.russian || data.name} />
@@ -60,15 +60,15 @@ function Card({ data }: { data: any }) {
             <div className={styles.animeAndSeyu}>
                 <div>
                     <h5>Аниме</h5>
-                    <a href={"https://shikimori.one" + data.animes[0].url} title={data.animes[0].russian}>
-                        <img src={"https://shikimori.one" + data.animes[0].image.x96} alt={""} />
+                    <a href={ApiLinks.get("shikimori") + data.animes[0].url} title={data.animes[0].russian}>
+                        <img src={ApiLinks.get("shikimori") + data.animes[0].image.x96} alt={""} />
                     </a>
                 </div>
                 {data.seyu[0] && data.seyu[0].russian &&
                     <div>
                         <h5>Сейю</h5>
-                        <a ref={seyuRef} href={"https://shikimori.one" + data.seyu[0].url} title={data.seyu[0].russian}>
-                            <img src={"https://shikimori.one" + data.seyu[0].image.x96} alt={""} />
+                        <a ref={seyuRef} href={ApiLinks.get("shikimori") + data.seyu[0].url} title={data.seyu[0].russian}>
+                            <img src={ApiLinks.get("shikimori") + data.seyu[0].image.x96} alt={""} />
                         </a>
                         <SeyuPopupCard id={data.seyu[0].id} bindNode={seyuRef} />
                     </div>
@@ -110,7 +110,7 @@ function DescParagraphItem({ node }: { node: { type: string, id: string | undefi
 
     let url = undefined;
     if (node.type === "character") {
-        url = "https://shikimori.one/characters/" + node.id;
+        url = ApiLinks.get("shikimori") + "/characters/" + node.id;
     }
     const linkRef = useRef(null);
 

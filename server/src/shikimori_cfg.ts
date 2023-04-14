@@ -9,7 +9,7 @@ export type AuthResponse = {
     created_at: number
 }
 
-const baseURL = "https://shikimori.one";
+const baseURL = "https://shikimori.me";
 const baseApiURL = baseURL + "/api"
 const defaultHeaders = {
     "User-Agent": "ShikiJoy"

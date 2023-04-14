@@ -7,6 +7,7 @@ import styles from "./Characters.module.scss";
 import Picture from "../Common/Picture";
 import LoadableText from "../Common/LoadableText";
 import CharacterPopupCard from "./CharacterPopupCard";
+import { ApiLinks } from "../../Api/_config";
 
 
 const CharacterCard = ({ charData }: { charData: ShikimoriRole }) => {
@@ -15,8 +16,8 @@ const CharacterCard = ({ charData }: { charData: ShikimoriRole }) => {
 
     return (
         <article className={styles.charCard}>
-            <a ref={boxRef} href={"https://shikimori.one" + charData.character?.url}>
-                <Picture src={"https://shikimori.one" + charData.character!.image.preview} />
+            <a ref={boxRef} href={ApiLinks.get("shikimori")! + charData.character?.url}>
+                <Picture src={ApiLinks.get("shikimori") + charData.character!.image.preview} />
                 <p>{charData.character?.russian || charData.character?.name}</p>
             </a>
             <CharacterPopupCard id={charData.character?.id} bindNode={boxRef} />

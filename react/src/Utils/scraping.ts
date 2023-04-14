@@ -149,7 +149,7 @@ export function getShikimoriLink(page: Document | undefined) {
 
 export function getShikimoriID(page: Document | undefined) {
     const link = getShikimoriLink(page);
-    return link?.match(/https:\/\/shikimori\.one\/animes\/\D?(?<id>\d*)-.*/mi)?.groups?.id;
+    return link?.match(/https:\/\/shikimori\.me\/animes\/\D?(?<id>\d*)-.*/mi)?.groups?.id;
 }
 
 export function getFranchise(page: Document | undefined) {

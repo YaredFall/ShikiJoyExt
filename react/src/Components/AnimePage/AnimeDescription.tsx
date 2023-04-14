@@ -6,6 +6,7 @@ import shikimoriLogo from '/images/shikimori_logo.png';
 import plural from 'plural-ru';
 import DotSplitter from "../Common/DotSplitter";
 import LoadableText from "../Common/LoadableText";
+import { ApiLinks } from "../../Api/_config";
 
 //@ts-ignore
 const shikimoriLogoExt = chrome.runtime?.getURL("bundled/images/shikimori_logo.png");
@@ -48,13 +49,13 @@ const AnimeDescription: FC<AnimeDescriptionProps> = ({ data }) => {
         <section className={styles.description}>
             <header className={styles.header}>
                 <h4>Информация</h4>
-                <a className={styles.shikimoriLink} href={data ? "https://shikimori.one" + data.url : undefined} target={"_blank"}>
+                <a className={styles.shikimoriLink} href={data ? ApiLinks.get("shikimori") + data.url : undefined} target={"_blank"}>
                     <img className={styles.shikimoriLogo} src={shikimoriLogoExt || shikimoriLogo} alt={"Shikimori"} />
                 </a>
             </header>
             <div className={styles.posterAndDetails}>
                 <div className={styles.poster}>
-                    <Picture className={styles.picture} src={data ? "https://shikimori.one" + data.image.original : undefined} />
+                    <Picture className={styles.picture} src={data ? ApiLinks.get("shikimori") + data.image.original : undefined} />
                     {data && <div className={styles.score} children={"★ " + data.score } />}
                 </div>
                 {data ?

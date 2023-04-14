@@ -17,7 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     };
     
     try {
-        const data = await fetchShikimoriAPI<AuthResponse>("https://shikimori.one/oauth/token", { method: "POST", form: formData });
+        const data = await fetchShikimoriAPI<AuthResponse>("https://shikimori.me/oauth/token", { method: "POST", form: formData });
         setCookie("shikimori_at", `${data.token_type} ${data.access_token}`,
             { req, res, path: "/", maxAge: data.expires_in, sameSite: "none", secure: true, httpOnly: true });
         setCookie("shikimori_rt", data.refresh_token,
