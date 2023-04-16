@@ -133,7 +133,7 @@ const Player: FC<PlayerProps> = memo(({ animejoyData, animeRecord }) => {
     usePlayersFixes(iframeRef);
 
     //sets player select options max-height to iframe height
-    useOptionsHeightFix(iframeRef, [animejoyData, iframeRef]);
+    useOptionsHeightFix(iframeRef, [animejoyData?.studios, iframeRef]);
 
 
     const source = useMemo(() => {
