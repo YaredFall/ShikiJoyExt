@@ -31,8 +31,8 @@ export function parseShikimoriDescription(description: string | undefined) {
     });
 }
 
-const referenceSplitRE = /(\[(?:[^\/=]*?=\d{1,7}(?: \S*?)?|url=\S*?)\](?:[ \S]*?\[\/.*?\])?)/m;
-const referenceMatchRE = /\[(?<type>[^\/=]*?)=(?:(?<id>\d{1,7}) ?(?<name>[^\]]*?)|(?<link>http\S*?))\](?:(?<content>[\S ]*?)\[\/\1\])?/m;
+const referenceSplitRE = /(\[(?:(?!spoiler)[^\/=]*?=\d{1,7}(?: \S*?)?|url=\S*?)\](?:[^\[]*?\[\/.*?\])?)/m;
+const referenceMatchRE = /\[(?!spoiler)(?<type>[^\/=]*?)=(?:(?<id>\d{1,7}) ?(?<name>[^\]]*?)|(?<link>http\S*?))\](?:(?<content>[^\[]*?)\[\/\1\])?/m;
 
 function parseReferences(text: string) {
     const split = text.split(referenceSplitRE).filter(e => e !== "");
