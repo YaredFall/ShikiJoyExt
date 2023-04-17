@@ -31,8 +31,8 @@ export function parseShikimoriDescription(description: string | undefined) {
     });
 }
 
-const referenceSplitRE = /(\[[^=]*?=\d{1,7}(?: \S*?)?\](?:[ \S]*?\[\/.*?\])?)/m;
-const referenceMatchRE = /\[(?<type>[^=]*?)=(?<id>\d{1,7}) ?(?<name>[^\]]*?)\](?:(?<content>[\S ]*?)\[\/\1\])?/m;
+const referenceSplitRE = /(\[(?:[^\/=]*?=\d{1,7}(?: \S*?)?|url=\S*?)\](?:[ \S]*?\[\/.*?\])?)/m;
+const referenceMatchRE = /\[(?<type>[^\/=]*?)=(?:(?<id>\d{1,7}) ?(?<name>[^\]]*?)|(?<link>http\S*?))\](?:(?<content>[\S ]*?)\[\/\1\])?/m;
 
 function parseReferences(text: string) {
     const split = text.split(referenceSplitRE).filter(e => e !== "");
@@ -43,6 +43,7 @@ function parseReferences(text: string) {
             type: match ? match.groups!.type : "text",
             id: match ? match.groups!.id : undefined,
             content: match ? (match.groups!.content || capitalize(match.groups!.name)) : e,
+            link: match ? match.groups!.link : undefined
         });
     });
 }

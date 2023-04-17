@@ -53,7 +53,7 @@
   }
 
   .titleAndDesc {
-    height: calc(var(--height) - 2rem);
+    height: calc(var(--height) - 2rem - 4px);
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 13;
@@ -115,4 +115,8 @@
 
 .imgLink {
   display: contents;
+}
+
+a.alias {
+  cursor: alias;
 }

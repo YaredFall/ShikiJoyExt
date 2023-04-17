@@ -91,7 +91,7 @@ function Desc({ desc }: { desc: string | undefined }) {
     );
 }
 
-function DescParagraph({ parsedDescItem }: { parsedDescItem: { type: string, label: string | undefined, children: { type: string, id: string | undefined, content: string }[] } }) {
+function DescParagraph({ parsedDescItem }: { parsedDescItem: Exclude<ReturnType<typeof parseShikimoriDescription>, undefined>[number] }) {
     return (
         <>
             {parsedDescItem.type === "spoiler"
@@ -106,17 +106,22 @@ function DescParagraph({ parsedDescItem }: { parsedDescItem: { type: string, lab
     );
 }
 
-function DescParagraphItem({ node }: { node: { type: string, id: string | undefined, content: string } }) {
-
-    let url = undefined;
-    if (node.type === "character") {
-        url = ApiLinks.get("shikimori") + "/characters/" + node.id;
-    }
+function DescParagraphItem({ node }: { node: Exclude<ReturnType<typeof parseShikimoriDescription>, undefined>[number]["children"][number] }) {
     const linkRef = useRef(null);
 
-    return (url ? <Fragment>
-                    <Link ref={linkRef} to={url} children={node.content} />
-                    <CharacterPopupCard id={+node.id!} bindNode={linkRef} />
-                </Fragment>
-                : <span children={node.content} />);
+    if (node.type === "character") {
+        const url = ApiLinks.get("shikimori") + "/characters/" + node.id;
+        return (
+            <Fragment>
+                <Link ref={linkRef} to={url} children={node.content} />
+                <CharacterPopupCard id={+node.id!} bindNode={linkRef} />
+            </Fragment>
+        );
+    }
+    
+    if (node.type === "url") {
+        return <a className={styles.alias} target={"_blank"} href={node.link} children={node.content} />
+    }
+
+    return <span children={node.content} />;
 }
