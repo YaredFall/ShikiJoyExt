@@ -1,4 +1,4 @@
-import got from '@yaredfall/cloudflare-scraper';
+import got from 'got';
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 

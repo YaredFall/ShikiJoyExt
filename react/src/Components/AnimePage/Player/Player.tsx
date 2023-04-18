@@ -88,10 +88,10 @@ const Player: FC<PlayerProps> = memo(({ animejoyData, animeRecord }) => {
         if ((isSinglePagePlayer(currentPlayer.name) || isSinglePagePlayer(currentPlayer.files[0].label))
             && singlePageEpisodesAvailable && currentPlayer.files.length === 1) {
             availableEps = singlePageEpisodesAvailable;
-        } else if (!isSinglePagePlayer(currentPlayer.name) || currentPlayer.files.length > 1) {
+        } else if (!isSinglePagePlayer(currentPlayer.name) || currentPlayer.files.length > 1 || !singlePageEpisodesAvailable) {
             availableEps = currentPlayer.files.length;
         }
-        console.log({ availableEps, currentEpisodeId });
+        console.log({ availableEps, currentEpisodeId, singlePageEpisodesAvailable });
         if (availableEps) {
             setCurrentEpisodeId(animeRecord.lastEpisode >= availableEps ? availableEps - 1 : animeRecord.lastEpisode);
         }

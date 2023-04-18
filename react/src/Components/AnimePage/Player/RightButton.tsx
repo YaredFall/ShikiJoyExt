@@ -31,9 +31,7 @@ const RightButton: FC<RightButtonProps> = () => {
     return (
         <Section as={"button"}
                  className={`${styles.rightSection}${(!canChangeEpisodeId("next") &&
-                     watchedEpisodes.has(currentEpisodeId))
-                                                     ? " hide-immediate"
-                                                     : " show"}`}
+                     watchedEpisodes.has(currentEpisodeId)) ? " hide-immediate" : " show"}`}
                  onClick={() => {
                      if (!watchedEpisodes.has(currentEpisodeId)) {
                          const newWE = new Set<number>(watchedEpisodes);
