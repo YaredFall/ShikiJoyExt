@@ -94,6 +94,7 @@
     
     a {
       line-height: 0;
+      display: flex;
     }
   }
   
@@ -114,7 +115,7 @@
 }
 
 .imgLink {
-  display: contents;
+  flex-shrink: 0;
 }
 
 a.alias {

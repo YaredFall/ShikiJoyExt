@@ -11,6 +11,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import Spoiler from "../Common/Spoiler";
 import { useHoverTrigger } from "../../Hooks/useHoverTrigger";
 import SeyuPopupCard from "./SeyuPopupCard";
+import Picture from "../Common/Picture";
 
 type CharacterLargeCardProps = {
     id: number | undefined
@@ -51,7 +52,7 @@ function Card({ data }: { data: any }) {
     return (
         <>
             <Link className={styles.imgLink} to={ApiLinks.get("shikimori") + data.url}>
-                <img className={styles.mainImage} src={ApiLinks.get("shikimori") + data.image.original} alt={""} />
+                <Picture className={styles.mainImage} src={ApiLinks.get("shikimori") + data.image.original} alt={""} />
             </Link>
             <div className={styles.titleAndDesc}>
                 <h4 className={styles.name} children={data.russian || data.name} />
@@ -61,14 +62,14 @@ function Card({ data }: { data: any }) {
                 <div>
                     <h5>Аниме</h5>
                     <a href={ApiLinks.get("shikimori") + data.animes[0].url} title={data.animes[0].russian}>
-                        <img src={ApiLinks.get("shikimori") + data.animes[0].image.x96} alt={""} />
+                        <Picture src={ApiLinks.get("shikimori") + data.animes[0].image.x96} alt={""} />
                     </a>
                 </div>
                 {data.seyu[0] && data.seyu[0].russian &&
                     <div>
                         <h5>Сейю</h5>
                         <a ref={seyuRef} href={ApiLinks.get("shikimori") + data.seyu[0].url} title={data.seyu[0].russian}>
-                            <img src={ApiLinks.get("shikimori") + data.seyu[0].image.x96} alt={""} />
+                            <Picture src={ApiLinks.get("shikimori") + data.seyu[0].image.x96} alt={""} />
                         </a>
                         <SeyuPopupCard id={data.seyu[0].id} bindNode={seyuRef} />
                     </div>

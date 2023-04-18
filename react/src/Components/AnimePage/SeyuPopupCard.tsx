@@ -8,6 +8,7 @@ import styles from "./PopupCard.module.scss";
 import { ErrorBoundary } from "react-error-boundary";
 import LoadingPage from "../../Pages/LoadingPage";
 import CharacterPopupCard from "./CharacterPopupCard";
+import Picture from "../Common/Picture";
 
 type SeyuPopupCardProps = {
     id: number | undefined
@@ -47,7 +48,7 @@ function Card({ data }: { data: any }) {
     return (
         <>
             <a className={styles.imgLink} href={ApiLinks.get("shikimori") + data.url}>
-                <img className={styles.mainImage} src={ApiLinks.get("shikimori") + data.image.original} alt={""} />
+                <Picture className={styles.mainImage} src={ApiLinks.get("shikimori") + data.image.original} alt={""} />
             </a>
             <div className={styles.content}>
                 <div className={styles.titleAndDesc}>
@@ -75,7 +76,7 @@ function Role({ roleData }: { roleData: any }) {
     return (
         <>
             <a href={ApiLinks.get("shikimori") + roleData.characters[0].url}>
-                <img ref={triggerRef} src={ApiLinks.get("shikimori") + roleData.characters[0].image.original} />
+                <Picture ref={triggerRef} src={ApiLinks.get("shikimori") + roleData.characters[0].image.original} />
             </a>
             <CharacterPopupCard id={roleData.characters[0].id} bindNode={triggerRef} />
         </>
