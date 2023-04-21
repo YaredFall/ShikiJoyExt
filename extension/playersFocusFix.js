@@ -203,7 +203,10 @@ let observer = new MutationObserver(mutationRecords => {
 
 
             if (video && fsBtn && playBtn) {
-                video.focus();
+                document.querySelectorAll(':is([tabindex="0"], [tabindex="1"], a)').forEach(e => {
+                    e.setAttribute("tabindex", "-1")
+                });
+
                 onKeyUp = (e) => {
                     if (e.code === "KeyF") {
                         fsBtn.click();
@@ -214,8 +217,7 @@ let observer = new MutationObserver(mutationRecords => {
                         }
                     }
                 }
-
-
+                
                 observer.disconnect()
             }
             break;
