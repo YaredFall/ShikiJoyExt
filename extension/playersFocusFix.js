@@ -1,7 +1,6 @@
-
 let tabId = undefined;
 const port = chrome.runtime.connect({name: "fixes"});
-port.onMessage.addListener(function(msg) {
+port.onMessage.addListener(function (msg) {
     // console.log("Fixes got message: ", msg);
     if (msg.tabId) {
         tabId ||= msg.tabId
@@ -58,7 +57,19 @@ let observer = new MutationObserver(mutationRecords => {
             break;
         }
         case 'vk.com': {
-            document.querySelector("div.videoplayer")?.focus();
+            const div = document.querySelector("div.videoplayer");
+            if (div) {
+                observer.disconnect();
+
+                document.querySelectorAll(':is([tabindex="0"], a)').forEach(e => {
+                    e.setAttribute("tabindex", "-1")
+                });
+
+                window.addEventListener("focus", () => {
+                    div.focus();
+                    console.log("focus")
+                })
+            }
             break;
         }
         case 'dzen.ru': {
@@ -71,7 +82,7 @@ let observer = new MutationObserver(mutationRecords => {
                 let muted = true;
                 window.onfocus = (e) => {
                     if (document.activeElement !== document.querySelector("._1gZJUfw"))
-                    active = false;
+                        active = false;
                 }
                 document.onclick = (e) => {
                     if (!active && e.isTrusted) {
@@ -152,7 +163,7 @@ let observer = new MutationObserver(mutationRecords => {
                 img.parentElement.addEventListener("click", () => {
                     active = true;
                     console.log("IMAGE WAS CLICKED")
-                }, { once: true })
+                }, {once: true})
 
                 onKeyUp = (e) => {
                     if (e.code === "Space" && document.head.querySelector('script[src*="//ad.mail.ru"]')) {
@@ -189,8 +200,8 @@ let observer = new MutationObserver(mutationRecords => {
             const video = document.querySelector("video")
             const fsBtn = document.querySelector(".b-video-controls__fullscreen-button")
             const playBtn = document.querySelector(".b-video-controls__play-button")
-            
-            
+
+
             if (video && fsBtn && playBtn) {
                 video.focus();
                 onKeyUp = (e) => {
@@ -204,7 +215,7 @@ let observer = new MutationObserver(mutationRecords => {
                     }
                 }
 
-                
+
                 observer.disconnect()
             }
             break;
@@ -218,10 +229,10 @@ let observer = new MutationObserver(mutationRecords => {
                 observer.disconnect();
 
                 port.postMessage({
-                    currentEpisodeID: episodeSelect.value-1,
+                    currentEpisodeID: episodeSelect.value - 1,
                     episodesAvailable: episodeSelect.children.length
                 })
-                
+
                 dropdownContent.childNodes.forEach(div => {
                     div.addEventListener("click", () => {
                         port.postMessage({
@@ -229,13 +240,13 @@ let observer = new MutationObserver(mutationRecords => {
                         })
                     })
                 });
-                
+
                 document.querySelector(".serial-next-button").addEventListener("click", () => {
                     port.postMessage({
-                        currentEpisodeID: episodeSelect.value-1
+                        currentEpisodeID: episodeSelect.value - 1
                     })
                 })
-                
+
                 onKeyUp = (e) => {
                     if (e.code === "Space") {
                         document.querySelector(".fp-x-play")?.click() || document.querySelector(".play_button")?.click();
@@ -253,11 +264,11 @@ let observer = new MutationObserver(mutationRecords => {
                     episodesAvailable: 0
                 })
             }
-            
+
             const episodesSelect = document.querySelector(".list[data-episodes]");
             if (episodesSelect && !sentInitialMessage) {
                 sentInitialMessage = true;
-                
+
                 const selectItems = episodesSelect.querySelectorAll(".list__drop button")
                 port.postMessage({
                     currentEpisodeID: episodesSelect.getAttribute("data-episodes") - 1,
