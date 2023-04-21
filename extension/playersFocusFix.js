@@ -158,17 +158,29 @@ let observer = new MutationObserver(mutationRecords => {
             const img = document.querySelector("img");
             if (img) {
                 observer.disconnect();
+                document.addEventListener("click", (e) => {console.log(e)})
+                
                 let active = false;
 
                 img.parentElement.addEventListener("click", () => {
                     active = true;
-                    console.log("IMAGE WAS CLICKED")
+                    setTimeout(() => {
+                        document.querySelectorAll(':is([tabindex="999"], a)').forEach(e => {
+                            e.setAttribute("tabindex", "-1")
+                        });
+                    }, 800);
                 }, {once: true})
 
                 onKeyUp = (e) => {
                     if (e.code === "Space" && document.head.querySelector('script[src*="//ad.mail.ru"]')) {
                         if (!active) {
                             img?.click();
+                            
+                            setTimeout(() => {
+                                document.querySelectorAll(':is([tabindex="999"], a)').forEach(e => {
+                                    e.setAttribute("tabindex", "-1")
+                                });
+                            }, 800);
                         }
                         if (document.activeElement !== document.querySelector("#embedVideoE"))
                             document.querySelector(".html5-vpl_panel_btn.html5-vpl_play")?.click();
@@ -180,11 +192,17 @@ let observer = new MutationObserver(mutationRecords => {
                                 const video = document.querySelector("video");
                                 if (video) {
                                     document.querySelector(".html5-vpl_panel_btn.html5-vpl_fullscreen")?.click();
-                                    //* fix video plays on f key
-                                    // setTimeout(() => {
-                                    //     document.querySelector(".html5-vpl_panel_btn.html5-vpl_play")?.click();
-                                    // }, 200)
-                                    clearInterval(interval)
+                                    
+                                    const btn = document.querySelector(".html5-vpl_panel_btn.html5-vpl_play");
+                                    if (btn) {
+                                        setTimeout(() => { 
+                                            btn.click();
+                                            document.querySelectorAll(':is([tabindex="999"], a)').forEach(e => {
+                                                e.setAttribute("tabindex", "-1")
+                                            });
+                                        }, 800);
+                                        clearInterval(interval);
+                                    }
                                 }
                             }, 50)
                         } else {
