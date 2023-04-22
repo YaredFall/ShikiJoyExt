@@ -28,7 +28,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 setCookie("shikimori_rt", authResponse.refresh_token,
                     { req, res, path: "/", sameSite: "none", secure: true, httpOnly: true });
                 
-                accessToken = authResponse.access_token;
+                accessToken = `${authResponse.token_type} ${authResponse.access_token}`;
             }
 
             const data = await fetchShikimoriAPI("/users/whoami",
