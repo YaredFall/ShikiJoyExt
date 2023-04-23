@@ -154,8 +154,8 @@ export type ShikimoriCharacterOrPerson = {
 }
 
 export type ShikimoriRole = {
-    roles: string[],
-    roles_russian: string[],
+    roles: Array<"Main" | "Supporting">,
+    roles_russian: Array<"Main" | "Supporting">,
     character: ShikimoriCharacterOrPerson | null,
     person: ShikimoriCharacterOrPerson | null
 }

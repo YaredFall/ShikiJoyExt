@@ -1,4 +1,4 @@
-import { FC, useMemo, useRef, useState } from 'react';
+import { FC, Fragment, useMemo, useRef } from 'react';
 import { useAnimeJoyAnimePageQuery } from "../../Api/useAnimeJoyAnimePageQuery";
 import { useShikiJoyAnimeSearch } from "../../Api/useShikiJoyAnimeSearch";
 import { getShikimoriID } from "../../Utils/scraping";
@@ -8,6 +8,7 @@ import Picture from "../Common/Picture";
 import LoadableText from "../Common/LoadableText";
 import CharacterPopupCard from "./CharacterPopupCard";
 import { ApiLinks } from "../../Api/_config";
+import { Disclosure } from '@headlessui/react';
 
 
 const CharacterCard = ({ charData }: { charData: ShikimoriRole }) => {
@@ -53,16 +54,35 @@ const Characters: FC<CharactersProps> = () => {
     }, [data]);
 
     return (
-        <section>
-            <h3 className={styles.header}>Персонажи</h3>
-            <div className={styles.characters}>
-                {sortedChars ?
-                 sortedChars.map(e => <CharacterCard key={e.character?.id} charData={e} />)
-                             : [...Array(10)].map((_, i) => <CharacterCardSkeleton key={i} />)
-                }
-            </div>
-        </section>
+        <Disclosure as={"section"} className={styles.container}>
+            {({ open }) => (
+                <>
+                    <div className={styles.headerRow}>
+                        <h3 className={styles.header}>Персонажи</h3>
+                        <Disclosure.Button className={styles.toggle}>
+                            {open ? "Скрыть второстепенных" : "Показать всех"}
+                        </Disclosure.Button>
+                    </div>
+                    <CharactersList charsData={sortedChars} role={"Main"} />
+                    <Disclosure.Panel as={Fragment}>
+                        <CharactersList charsData={sortedChars} role={"Supporting"} />
+                    </Disclosure.Panel>
+                </>
+            )}
+        </Disclosure>
     );
 };
 
 export default Characters;
+
+function CharactersList({ charsData, role }: { charsData: ShikimoriRole[] | undefined, role?: ShikimoriRole["roles"][number] }) {
+    return (
+        <div className={styles.characters}>
+            {charsData ?
+             (role ? charsData.filter(c => c.roles[0] === role) : charsData).map(e => <CharacterCard key={e.character?.id} charData={e} />)
+                       : [...Array(4)].map((_, i) => <CharacterCardSkeleton key={i} />)
+            }
+            {charsData && role && <div className={styles.label} children={role === "Main" ? "Основные" : "Второстепенные"} />}
+        </div>
+    );
+}
