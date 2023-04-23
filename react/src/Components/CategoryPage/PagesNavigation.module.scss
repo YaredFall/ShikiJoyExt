@@ -17,9 +17,8 @@
     justify-content: center;
   }
 
-  :first-child, :last-child {
+  &>:first-child, &>:last-child {
     padding-inline: 1rem;
-    max-width: 5rem;
     flex: 1 0 auto;
   }
 

@@ -48,7 +48,7 @@ function MainElement() {
     }, [page, isLoading]);
 
     return (
-        <>
+        <div className={styles.categoryPage}>
             <div className={styles.pagesNav}>
                 <h1>
                     <LoadableText placeholderLength={10}
@@ -66,6 +66,6 @@ function MainElement() {
             <div className={styles.pagesNav}>
                 <PagesNavigation pagesCount={pagesCount} currentPage={id ? +id : 1} category={category ? "/" + category : undefined} />
             </div>
-        </>
+        </div>
     );
 }

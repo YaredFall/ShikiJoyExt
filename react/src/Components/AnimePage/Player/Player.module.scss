@@ -3,7 +3,7 @@
 
   grid-column: 1/4;
   display: grid;
-  grid-template-columns: var(--player-grid-template-cols);
+  grid-template-columns: var(--main3cols-grid-template-cols);
   grid-template-rows: min-content minmax(180px, auto);
   grid-template-areas:
         ". t ."
