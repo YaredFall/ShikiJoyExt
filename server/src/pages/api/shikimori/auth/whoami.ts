@@ -26,7 +26,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 setCookie("shikimori_at", `${authResponse.token_type} ${authResponse.access_token}`,
                     { req, res, path: "/", maxAge: authResponse.expires_in, sameSite: "none", secure: true, httpOnly: true });
                 setCookie("shikimori_rt", authResponse.refresh_token,
-                    { req, res, path: "/", sameSite: "none", secure: true, httpOnly: true });
+                    { req, res, path: "/", maxAge: 31536000, sameSite: "none", secure: true, httpOnly: true });
                 
                 accessToken = `${authResponse.token_type} ${authResponse.access_token}`;
             }
