@@ -117,7 +117,8 @@ const studioNames: { short: string, full: string }[] = [
     { short: "UO", full: "Ушастая Озвучка" },
     { short: "YSS", full: "YakuSub Studio" },
     { short: "PV", full: "Трейлеры" },
-    { short: "NF", full: "Netflix" }
+    { short: "NF", full: "Netflix" },
+    { short: "CR", full: "Crunchyroll"}
 ];
 
 export function fullStudioName(name: string | undefined) {
