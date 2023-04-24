@@ -9,6 +9,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import LoadingPage from "../../Pages/LoadingPage";
 import CharacterPopupCard from "./CharacterPopupCard";
 import Picture from "../Common/Picture";
+import { ShikimoriPerson } from "../../types";
 
 type SeyuPopupCardProps = {
     id: number | undefined
@@ -20,10 +21,10 @@ const SeyuPopupCard: FC<SeyuPopupCardProps> = ({ id, bindNode }) => {
     const [isQueryEnabled] = useHoverTrigger(bindNode);
 
     const { data } = useQuery(
-        ["shikimori", "character", id],
+        ["shikimori", "person", id],
         () => {
             return ky((import.meta.env.DEV ? ApiLinks.get("dev/shikijoy") : ApiLinks.get("shikijoy")) + `api/shikimori/people/${id}`)
-                .json<any>();
+                .json<ShikimoriPerson>();
         },
         {
             ...defautlQueryConfig,
@@ -43,7 +44,7 @@ const SeyuPopupCard: FC<SeyuPopupCardProps> = ({ id, bindNode }) => {
 export default SeyuPopupCard;
 
 
-function Card({ data }: { data: any }) {
+function Card({ data }: { data: ShikimoriPerson }) {
 
     return (
         <>
@@ -56,29 +57,29 @@ function Card({ data }: { data: any }) {
                     {/*<Desc desc={data?.description} />*/}
                 </div>
                 <div className={styles.bestRoles}>
-                    <h5>Лучшие роли:</h5>
-                    <div className={styles.rolesList}>
+                    {/*<h5>Лучшие роли:</h5>*/}
+                    <ul className={styles.rolesList}>
                         {
-                            data.roles.filter((r: any) => r.animes[0].status !== "ongoing").slice(0, 4).map((r: any, i: number) =>
+                            data.roles.slice(0, 8).map((r, i) =>
                                 <Role roleData={r} key={i} />
                             )
                         }
-                    </div>
+                    </ul>
                 </div>
             </div>
         </>
     );
 }
 
-function Role({ roleData }: { roleData: any }) {
+function Role({ roleData }: { roleData: ShikimoriPerson["roles"][number] }) {
     const triggerRef = useRef(null);
 
     return (
-        <>
-            <a href={ApiLinks.get("shikimori") + roleData.characters[0].url}>
-                <Picture ref={triggerRef} src={ApiLinks.get("shikimori") + roleData.characters[0].image.original} />
+        <li>
+            <a ref={triggerRef} href={ApiLinks.get("shikimori") + roleData.characters[0].url}>
+                <Picture src={ApiLinks.get("shikimori") + roleData.characters[0].image.original} />
             </a>
             <CharacterPopupCard id={roleData.characters[0].id} bindNode={triggerRef} />
-        </>
+        </li>
     );
 }
