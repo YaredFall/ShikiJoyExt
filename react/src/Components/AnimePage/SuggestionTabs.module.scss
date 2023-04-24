@@ -51,7 +51,11 @@
 .poster {
   flex-shrink: 0;
   aspect-ratio: 250 /354;
-  height: 160px ;
+  height: 160px;
+  
+  img {
+    object-fit: cover;
+  }
 }
 
 .titles {

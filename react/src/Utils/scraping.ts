@@ -206,11 +206,12 @@ export function getDocumentTitle(page: Document | undefined) {
     return page?.title
 }
 
-export function getRelatedAndPopularShows(page: Document | undefined) {
+export function getNewsOrRelatedAndPopular(page: Document | undefined) {
     if (!page) return undefined;
 
     const related = page.querySelectorAll("#news_rel > .story_line > a");
     const popular = page.querySelectorAll("#news_top > .story_line > a");
+    const news = page.querySelectorAll("#news_coms > .story_line > a");
     
     return ({
         related: [...related].map(e => ({
@@ -219,6 +220,11 @@ export function getRelatedAndPopularShows(page: Document | undefined) {
             poster: e.querySelector("i")?.style.backgroundImage.replace(/url\("([^"]*)"\)/, "$1") || ""
         })),
         popular: [...popular].map(e => ({
+            titles: [...e.querySelector(".title")!.childNodes].filter(c => (c as HTMLElement).tagName !== 'BR').map(c => c.textContent),
+            url: e.getAttribute("href")!.replace("https://animejoy.ru", ""),
+            poster: e.querySelector("i")?.style.backgroundImage.replace(/url\("([^"]*)"\)/, "$1") || ""
+        })),
+        news: [...news].map(e => ({
             titles: [...e.querySelector(".title")!.childNodes].filter(c => (c as HTMLElement).tagName !== 'BR').map(c => c.textContent),
             url: e.getAttribute("href")!.replace("https://animejoy.ru", ""),
             poster: e.querySelector("i")?.style.backgroundImage.replace(/url\("([^"]*)"\)/, "$1") || ""
