@@ -1,6 +1,7 @@
 .categoryPage {
   display: grid;
   grid-template-columns: var(--main3cols-grid-template-cols);
+  width: 100%;
   
   & > * {
     grid-column: 2/2;

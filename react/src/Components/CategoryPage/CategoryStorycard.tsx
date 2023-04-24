@@ -1,4 +1,4 @@
-import { CSSProperties, FC, useLayoutEffect, useRef, useState } from 'react';
+import { CSSProperties, FC, Fragment, useLayoutEffect, useRef, useState } from 'react';
 import { StoryData } from "../../types";
 import Picture from "../Common/Picture";
 import styles from "./CategoryStorycard.module.scss";
@@ -77,13 +77,13 @@ const CategoryStorycard: FC<AnimeStorycardProps> = ({ data }) => {
                      <>
                          <IoMdArrowDropright />
                          {data.category.map((c, i) => (i === 0
-                                                       ? <Link to={"/" + Categories.get(c)} key={c} children={c} />
-                                                       : <><DotSplitter /><Link to={"/" + Categories.get(c) + "/"} key={c} children={c} /></>
+                                                       ? <Link to={"/" + Categories.get(c)} key={i} children={c} />
+                                                       : <Fragment key={i}><DotSplitter /><Link to={"/" + Categories.get(c) + "/"} children={c} /></Fragment>
                          ))}
                      </> : <LoadableText placeholderLength={16} />}
                 </div>
                 <div className={styles.comments} title={"Комментарии"}>
-                    {data?.comments ?
+                    {data?.comments !== undefined ?
                      <><MdOutlineModeComment /><span children={data.comments} /></>
                                     : <LoadableText placeholderLength={4} />
                     }
