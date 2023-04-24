@@ -93,8 +93,8 @@
     flex-direction: column;
     gap: 0.25rem;
 
-    li, a {
-      display: contents;
+    li,a {
+      display: flex;
     }
     
     img {
