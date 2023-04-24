@@ -103,8 +103,9 @@ button {
   padding: var(--padding);
   font-weight: 600;
   text-align: center;
-
+  white-space: nowrap;
+  
   &:not(:first-child) {
-    border-top: 2px dashed var(--primary-a50);
+    border-top: 2px dashed var(--primary-a12p5);
   }
 }

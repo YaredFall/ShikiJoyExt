@@ -91,7 +91,7 @@ const PlayerSelect: FC<PlayerSelectProps> = (() => {
                                     {studioName !== undefined &&
                                         <div key={studioName + sID} className={"select-options-header"}>
                                         <span title={fullStudioName(studioName)}
-                                              children={fullStudioName(studioName)!.length < 9 ? fullStudioName(studioName) : studioName}
+                                              children={fullStudioName(studioName)!.length <= (studioAvailableEpisodes ? 6 : 9) ? fullStudioName(studioName) : studioName}
                                         />
                                             {studioAvailableEpisodes &&
                                                 <><DotSplitter /><span title={`${studioAvailableEpisodes} серий`}
