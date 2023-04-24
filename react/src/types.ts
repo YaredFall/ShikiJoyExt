@@ -24,13 +24,13 @@ export type StoryData = {
     poster: string,
     status?: "FULL" | "ONGOING",
     description?: string,
-    info: Array<{label?: string, value: Array<{text: string, url?: string}>}>,
+    info: Array<{ label?: string, value: Array<{ text: string, url?: string }> }>,
     editDate?: string,
     category: string[],
     comments?: number
 }
 
-export type FranchiseData = Array<{label: string, url: string | null}>
+export type FranchiseData = Array<{ label: string, url: string | null }>
 
 export type AnimeJoyData = {
     id: string
@@ -41,23 +41,8 @@ export type AnimeJoyData = {
 
 export type ShikiJoyAnimeData = {
     coreData: ShikimoriAnimeCoreData,
-    charData: Array<ShikimoriRole>
+    charData: Array<ShikimoriAnimeRole>
 }
-
-export type ShikimoriAnimePreviewData = {
-    id: number,
-    name: string,
-    russian: string,
-    image: ShikimoriImage,
-    url: string,
-    kind: ShikimoriKind,
-    score: string,
-    status: ShikimoriStatus,
-    episodes: number,
-    episodes_aired: number,
-    aired_on: string | null,
-    released_on: string | null
-};
 
 export type ShikimoriImage = {
     "original": string,
@@ -109,6 +94,9 @@ export type ShikimoriAnimeCoreData = {
     user_rate: ShikimoriUserRate | null
 }
 
+export type ShikimoriAnimePreviewData = Pick<ShikimoriAnimeCoreData,
+    "aired_on" | "episodes" | "episodes_aired" | "id" | "image" | "kind" | "name" | "released_on" | "russian" | "score" | "status" | "url">
+
 //shikimori types
 export type ShikimoriStatus = "released" | "anons" | "ongoing"
 
@@ -153,9 +141,73 @@ export type ShikimoriCharacterOrPerson = {
     image: ShikimoriImage
 }
 
-export type ShikimoriRole = {
-    roles: Array<"Main" | "Supporting">,
-    roles_russian: Array<"Main" | "Supporting">,
+export type ShikimoriCharacter = {
+    id: number,
+    name: string,
+    russian: string,
+    url: string,
+    image: ShikimoriImage,
+    animes: Array<{
+        "id": number,
+        "name": string,
+        "russian": string,
+        "image": ShikimoriImage,
+        "url": string,
+        "kind": ShikimoriKind,
+        "score": string,
+        "status": ShikimoriStatus,
+        "episodes": number | null,
+        "episodes_aired": number | null,
+        "aired_on": string | null,
+        "released_on": string | null,
+        "roles": Array<ShikimoriAnimeRoleType>,
+        "role": ShikimoriAnimeRoleType
+    }>
+}
+
+export type ShikimoriCharacterPreview = Pick<ShikimoriCharacter, "id" | "name" | "russian" | "image" | "url">
+
+export type ShikimoriPerson = {
+    "id": number,
+    "name": string,
+    "russian": string,
+    "image": ShikimoriImage,
+    "url": string,
+    "japanese": string,
+    "job_title": "Сэйю" | string, // ! Incomplete
+    "birth_on": {
+        "day": number,
+        "month": number
+    },
+    "deceased_on": {}, // ? idk
+    "website": string,
+    "groupped_roles": Array<[
+        string,
+        number
+    ]>,
+    "roles": Array<{ characters: ShikimoriCharacterPreview[], animes: ShikimoriAnimePreviewData[] }>,
+    "works": any[], // ?
+    "topic_id": number,
+    "person_favoured": boolean,
+    "producer": boolean,
+    "producer_favoured": boolean,
+    "mangaka": boolean,
+    "mangaka_favoured": boolean,
+    "seyu": boolean,
+    "seyu_favoured": boolean,
+    "updated_at": string,
+    "thread_id": number,
+    "birthday": {
+        "day": number,
+        "month": number
+    }
+}
+
+export type ShikimoriAnimeRoleType = "Main" | "Supporting" // ! incomplete
+
+export type ShikimoriAnimeRole = {
+    roles: Array<ShikimoriAnimeRoleType>,
+    roles_russian: Array<ShikimoriAnimeRoleType>,
     character: ShikimoriCharacterOrPerson | null,
     person: ShikimoriCharacterOrPerson | null
 }

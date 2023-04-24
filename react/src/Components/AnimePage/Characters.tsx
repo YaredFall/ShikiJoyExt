@@ -2,7 +2,7 @@ import { FC, Fragment, useMemo, useRef } from 'react';
 import { useAnimeJoyAnimePageQuery } from "../../Api/useAnimeJoyAnimePageQuery";
 import { useShikiJoyAnimeSearch } from "../../Api/useShikiJoyAnimeSearch";
 import { getShikimoriID } from "../../Utils/scraping";
-import { ShikimoriRole } from "../../types";
+import { ShikimoriAnimeRole, ShikimoriAnimeRoleType } from "../../types";
 import styles from "./Characters.module.scss";
 import Picture from "../Common/Picture";
 import LoadableText from "../Common/LoadableText";
@@ -11,7 +11,7 @@ import { ApiLinks } from "../../Api/_config";
 import { Disclosure } from '@headlessui/react';
 
 
-const CharacterCard = ({ charData }: { charData: ShikimoriRole }) => {
+const CharacterCard = ({ charData }: { charData: ShikimoriAnimeRole }) => {
 
     const boxRef = useRef<HTMLAnchorElement>(null);
 
@@ -75,7 +75,7 @@ const Characters: FC<CharactersProps> = () => {
 
 export default Characters;
 
-function CharactersList({ charsData, role }: { charsData: ShikimoriRole[] | undefined, role?: ShikimoriRole["roles"][number] }) {
+function CharactersList({ charsData, role }: { charsData: ShikimoriAnimeRole[] | undefined, role?: ShikimoriAnimeRoleType }) {
     return (
         <div className={styles.characters}>
             {charsData ?
