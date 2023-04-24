@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import Searchbar from "../Common/Searchbar";
-import SuggestionTabs from "../AnimePage/SuggestionTabs";
+import SuggestionTabs from "../Common/SuggestionTabs";
 import styles from "../AnimePage/AnimeAside.module.scss"
 
 type HomeAsideProps = {

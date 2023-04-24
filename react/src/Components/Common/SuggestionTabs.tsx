@@ -3,8 +3,8 @@ import { getNewsOrRelatedAndPopular } from "../../Utils/scraping";
 import { useAnimeJoyAnimePageQuery } from "../../Api/useAnimeJoyAnimePageQuery";
 import { Tab } from '@headlessui/react';
 import { Link } from "react-router-dom";
-import LoadableText from "../Common/LoadableText";
-import Picture from "../Common/Picture";
+import LoadableText from "./LoadableText";
+import Picture from "./Picture";
 import styles from "./SuggestionTabs.module.scss"
 import { Categories } from "../../Utils/appRoutes";
 
