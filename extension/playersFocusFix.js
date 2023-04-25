@@ -9,7 +9,6 @@ port.onMessage.addListener(function (msg) {
     }
 });
 port.postMessage({request: "tabId"})
-let sentInitialMessage = false; //used only for Alloha
 
 
 let observer = new MutationObserver(mutationRecords => {
@@ -158,8 +157,7 @@ let observer = new MutationObserver(mutationRecords => {
             const img = document.querySelector("img");
             if (img) {
                 observer.disconnect();
-                document.addEventListener("click", (e) => {console.log(e)})
-                
+
                 let active = false;
 
                 img.parentElement.addEventListener("click", () => {
@@ -175,7 +173,7 @@ let observer = new MutationObserver(mutationRecords => {
                     if (e.code === "Space" && document.head.querySelector('script[src*="//ad.mail.ru"]')) {
                         if (!active) {
                             img?.click();
-                            
+
                             setTimeout(() => {
                                 document.querySelectorAll(':is([tabindex="999"], a)').forEach(e => {
                                     e.setAttribute("tabindex", "-1")
@@ -192,10 +190,10 @@ let observer = new MutationObserver(mutationRecords => {
                                 const video = document.querySelector("video");
                                 if (video) {
                                     document.querySelector(".html5-vpl_panel_btn.html5-vpl_fullscreen")?.click();
-                                    
+
                                     const btn = document.querySelector(".html5-vpl_panel_btn.html5-vpl_play");
                                     if (btn) {
-                                        setTimeout(() => { 
+                                        setTimeout(() => {
                                             btn.click();
                                             document.querySelectorAll(':is([tabindex="999"], a)').forEach(e => {
                                                 e.setAttribute("tabindex", "-1")
@@ -235,7 +233,7 @@ let observer = new MutationObserver(mutationRecords => {
                         }
                     }
                 }
-                
+
                 observer.disconnect()
             }
             break;
@@ -286,23 +284,25 @@ let observer = new MutationObserver(mutationRecords => {
             }
 
             const episodesSelect = document.querySelector(".list[data-episodes]");
-            if (episodesSelect && !sentInitialMessage) {
-                sentInitialMessage = true;
+
+            const a = document.querySelectorAll("pjsdiv");
+
+            if (episodesSelect && a.length > 0) {
+                observer.disconnect();
 
                 const selectItems = episodesSelect.querySelectorAll(".list__drop button")
                 port.postMessage({
                     currentEpisodeID: episodesSelect.getAttribute("data-episodes") - 1,
                     episodesAvailable: selectItems.length
                 })
-                selectItems.forEach(b => b.addEventListener("click", () => {
-                    port.postMessage({currentEpisodeID: b.getAttribute("data-episode") - 1})
-                }))
-            }
 
-            const a = document.querySelectorAll("pjsdiv");
-
-            if (a.length > 0) {
-                observer.disconnect();
+                const episodeObserver = new MutationObserver(mutationRecords => {
+                    const newId = document.querySelector(".list[data-episodes]").getAttribute("data-episodes") - 1;
+                    port.postMessage({currentEpisodeID: newId});
+                });
+                episodeObserver.observe(document.querySelector("[data-episodes]"), {
+                    attributeFilter: ["data-episodes"]
+                })
 
                 let mouseIn = false;
                 document.addEventListener("mouseenter", () => {

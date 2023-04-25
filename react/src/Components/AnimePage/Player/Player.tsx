@@ -146,7 +146,7 @@ const Player: FC<PlayerProps> = memo(({ animejoyData, animeRecord }) => {
         } else {
             return currentPlayer.files[currentEpisodeId] ? currentPlayer.files[currentEpisodeId].file : "";
         }
-    }, [currentStudioId, currentPlayerId, animejoyData, currentEpisodeId]);
+    }, [currentStudioId, currentPlayerId, animejoyData, currentEpisodeId, animeRecord?.lastEpisode]);
 
     return (
         <PlayerContext.Provider value={{
