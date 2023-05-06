@@ -14,11 +14,13 @@ export function updateDocumentTitle(newPage: Document | undefined) {
 }
 
 
-const spoilersSplitRE = /(\[spoiler(?:=[^\]]*?)?\][\s\S]*?\[\/spoiler\])/m;
-const spoilersMatchRE = /\[spoiler=?(?<label>[^\]]*?)?\](?<content>[\s\S]*?)\[\/spoiler\]/m;
+const spoilersSplitRE = /(\[spoiler(?:_block)?(?:=[^\]]*?)?\][\s\S]*?\[\/spoiler(?:_block)?\])/m;
+const spoilersMatchRE = /\[spoiler(?:_block)?=?(?<label>[^\]]*?)?\](?<content>[\s\S]*?)\[\/spoiler(?:_block)?\]/m;
 
 export function parseShikimoriDescription(description: string | undefined) {
     if (!description) return undefined;
+    
+    description = description.replaceAll("[br]", "\r\n");
 
     const spoilerSplit = description.split(spoilersSplitRE).filter(e => e !== "");
     return spoilerSplit.map(e => {
