@@ -64,11 +64,12 @@
     .name {
       font-size: 1.25rem;
       margin-bottom: 0.125rem;
-      line-height: 1.1;
+      line-height: 1;
     }
 
     .desc {
       display: contents;
+      line-height: 1.2;
     }
   }
 
