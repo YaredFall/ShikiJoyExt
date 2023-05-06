@@ -42,7 +42,7 @@ export function getStudiosPlayersAndFiles(playlistsHTML: Element) {
             }
         })();
 
-    const episodeSetPattern = /^(\d*)(?:\+|-\d*)/i;
+    const episodeSetPattern = /^(\d*)(?:\+|-\d+)/i;
     if (playlistCategoriesItemsHTML.length > 1 && categories) {
         categories = (function mergeEpisodeSets(categories: Category[]): Category[] {
             if (!Array.isArray(categories)) {
