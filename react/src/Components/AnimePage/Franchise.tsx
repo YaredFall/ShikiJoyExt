@@ -19,7 +19,11 @@ const Franchise: FC<FranchiseProps> = ({ franchise }) => {
                     <ol className={styles.list}>
                         {franchise?.map((e, i) =>
                             <li key={i} className={!e.url ? styles.current : undefined}>
-                                <Link to={e.url || ""} children={e.label} aria-disabled={!e.url} tabIndex={!e.url ? -1 : undefined}/>
+                                <Link to={!e.url || e.url === "BLOCKED" ? "" : e.url}
+                                      children={e.label}
+                                      aria-disabled={!e.url || e.url === "BLOCKED"}
+                                      tabIndex={!e.url || e.url === "BLOCKED" ? -1 : undefined}
+                                />
                             </li>)
                         }
                     </ol>

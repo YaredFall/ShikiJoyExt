@@ -19,6 +19,11 @@
       margin-left: 0.5rem;
       text-decoration: none;
     }
+
+    &:not(.current) > a[aria-disabled="true"] {
+      color: var(--accent-pink);
+      pointer-events: none;
+    }
     
     &:not(.current):hover a {
       text-decoration: underline;
