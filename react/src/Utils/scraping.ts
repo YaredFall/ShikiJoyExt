@@ -176,7 +176,7 @@ export function getStoryList(page: Document | undefined): StoryData[] | undefine
     return [...stories].map(story => ({
         title: getShowTitle(story)!,
         url: story.querySelector(".ntitle a")!.getAttribute("href")!.replace("https://animejoy.ru", ""),
-        poster: story.querySelector("img")!.getAttribute("src")!,
+        poster: story.querySelector("img")!.getAttribute("src")!.replace(/^/, (import.meta.env.DEV ? "https://animejoy.ru" : "")),
         status: story.querySelector(".full_tv") && "FULL" || story.querySelector(".ongoinmark") && "ONGOING" || undefined,
         description: story.querySelector(".pcdescr")?.children[0]?.childNodes[1]?.textContent || undefined,
         info: [...story.querySelectorAll(".blkdesc p")].map(e => ({
