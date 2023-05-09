@@ -27,7 +27,7 @@ const Results: FC<ResultsProps> = memo(({ data, isLoading, isError, isNothingFou
         return <article className={`${styles.resultItem} ${styles.message}`}>Загрузка...</article>;
     }
     if (!data) {
-        return <article className={`${styles.resultItem} ${styles.message}`}>Введите не меньше 3-х символов</article>;
+        return <article className={`${styles.resultItem} ${styles.message}`}>Введите не менее 3-х символов</article>;
     }
 
     return (
