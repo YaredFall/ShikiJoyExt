@@ -1,8 +1,9 @@
 // import got from '@yaredfall/cloudflare-scraper';
 import { got, Method } from 'got';
-import type { NextApiRequest, NextApiResponse } from 'next';
+import type { NextApiResponse, NextApiRequest } from 'next';
+import { cacheData, getCachedData } from '@/utils/caching';
 
-export default async function handler(
+async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
@@ -11,8 +12,9 @@ export default async function handler(
     const url = (Array.isArray(page) ? page!.join('/') : page!);
 
     try {
-        const matches = req.body 
-                        ? Array.from(JSON.stringify(req.body).matchAll(/------WebKitFormBoundary[\s\S]*?name=.*?"(?<name>.*?)\\"\\r\\n\\r\\n(?<value>.*?)\\r\\n/mg)) 
+        const matches = req.body
+                        ? Array.from(JSON.stringify(req.body).matchAll(
+                /------WebKitFormBoundary[\s\S]*?name=.*?"(?<name>.*?)\\"\\r\\n\\r\\n(?<value>.*?)\\r\\n/mg))
                         : [];
         const formFields = Object.fromEntries(matches.map(m => {
             return [m.groups?.name, m.groups?.value];
@@ -20,20 +22,28 @@ export default async function handler(
 
         const endSlash = !url.match(/(?:\/|\.[a-z]{1,4})$/);
 
-        const response = got(`https://api.scraperapi.com/?api_key=${process.env.SCRAPERAPI_KEY}&url=https://animejoy.ru/${encodeURIComponent(url + (endSlash ? "/" : ""))}${
-                encodeURIComponent(Object.entries(query).length ? "?" + Object.entries(query).map(e => e[0] + "=" + e[1]).join('&') : "")}`,
-            {
-                method: req.method as Method,
-                form: req.method === 'POST' ? formFields : undefined
-            }
-        );
+        let data = getCachedData(req.url + JSON.stringify(formFields));
 
-        if (url.endsWith(".jpg")) {
-            res.setHeader("Content-Type", "image/jpeg");
-            res.status(200).send(await response.buffer());
-        } else {
-            res.status(200).send(await response.text());
+        if (!data) {
+            const params = Object.entries(query).length ? "?" + Object.entries(query).map(e => e[0] + "=" + e[1]).join('&') : "";
+            
+            const response = got(`https://api.scraperapi.com/?api_key=${process.env.SCRAPERAPI_KEY}&url=https://animejoy.ru/${
+                    encodeURIComponent(url + (endSlash ? "/" : "") + params)}`,
+                {
+                    method: req.method as Method,
+                    form: req.method === 'POST' ? formFields : undefined
+                }
+            );
+
+            if (url.endsWith(".jpg")) {
+                data = await response.buffer();
+            } else {
+                data = await response.text();
+            }
+            cacheData(req.url + JSON.stringify(formFields), data);
         }
+        
+        res.status(200).send(data);
     } catch (err: any) {
         if (err.response?.statusCode === 403) {
             console.log("Error caused by Cloudflare security check");
@@ -45,8 +55,4 @@ export default async function handler(
     }
 }
 
-// export const config = {
-//     api: {
-//         bodyParser: false
-//     }
-// };
+export default handler;

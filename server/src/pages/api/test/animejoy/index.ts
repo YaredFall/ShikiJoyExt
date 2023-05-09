@@ -1,16 +1,23 @@
 import got from 'got';
-import type { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiResponse } from 'next'
+import { cacheData, NextApiRequestWithCache } from '@/utils/caching';
+import withCache from "@/middleware/withCache";
 
-
-export default async function handler(
-  req: NextApiRequest,
+async function handler(
+  req: NextApiRequestWithCache,
   res: NextApiResponse
 ) {
   try {
-    const response = await got(`https://api.scraperapi.com/?api_key=${process.env.SCRAPERAPI_KEY}&url=https://animejoy.ru/`).text()
+    let response = req.cachedData;
+    if (!response) {
+      response = await got(`https://api.scraperapi.com/?api_key=${process.env.SCRAPERAPI_KEY}&url=https://animejoy.ru/`).text()
+      cacheData(req.url, response)
+    }
     res.status(200).send(response)
   } catch (err: any) {
     // res.status(500).send(`<h1>${err}</h1>`)
     res.status(500).json(err.response)
   }
 }
+
+export default withCache(handler)
