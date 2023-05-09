@@ -37,6 +37,6 @@ export function useAnimeJoySearch(searchTerm: string) {
                 return undefined;
             }
         },
-        defautlQueryConfig
+        { ...defautlQueryConfig, retry: 2 }
     );
 }
