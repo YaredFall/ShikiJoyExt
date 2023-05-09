@@ -7,7 +7,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   try {
-    const response = await got('https://animejoy.ru/').text()
+    const response = await got(`https://api.scraperapi.com/?api_key=${process.env.SCRAPERAPI_KEY}&url=https://animejoy.ru/`).text()
     res.status(200).send(response)
   } catch (err: any) {
     // res.status(500).send(`<h1>${err}</h1>`)

@@ -1,5 +1,5 @@
-import got from '@yaredfall/cloudflare-scraper';
-import { Method } from 'got';
+// import got from '@yaredfall/cloudflare-scraper';
+import { got, Method } from 'got';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(
@@ -20,8 +20,8 @@ export default async function handler(
 
         const endSlash = !url.match(/(?:\/|\.[a-z]{1,4})$/);
 
-        const response = got(`https://animejoy.ru/${url + (endSlash ? "/" : "")}${
-                Object.entries(query).length ? "?" + Object.entries(query).map(e => e[0] + "=" + e[1]).join('&') : ""}`,
+        const response = got(`https://api.scraperapi.com/?api_key=${process.env.SCRAPERAPI_KEY}&url=https://animejoy.ru/${encodeURIComponent(url + (endSlash ? "/" : ""))}${
+                encodeURIComponent(Object.entries(query).length ? "?" + Object.entries(query).map(e => e[0] + "=" + e[1]).join('&') : "")}`,
             {
                 method: req.method as Method,
                 form: req.method === 'POST' ? formFields : undefined
