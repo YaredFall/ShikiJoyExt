@@ -2,13 +2,12 @@ import { FC, memo, useState } from 'react';
 import { NavLink } from "react-router-dom";
 import { appRoutes } from "../../Utils/appRoutes";
 import radishIcon from "/images/radish256x256.png";
-import { VscHistory, IoIosLogIn, IoSearchOutline, IoSettingsOutline, TbList } from "react-icons/all";
+import { IoIosLogIn, IoSearchOutline, IoSettingsOutline, TbList, TfiClose, VscHistory } from "react-icons/all";
 import styles from "./SideNav.module.scss";
 import { openLogInPopup } from "../../Utils/openLogInPopup";
 import { useGetShikimoriUser } from "../../Api/useGetShikimoriUser";
 import { useQueryClient } from "react-query";
 import { useGlobalLoadingStore } from "../../Store/globalLoadingStore";
-import { TfiClose } from "react-icons/all";
 import MenuNav from "./MenuNav";
 
 //@ts-ignore
@@ -29,6 +28,10 @@ const SideNav: FC<SideNavProps> = () => {
 
     const increaseLoadingCount = useGlobalLoadingStore(state => state.increase);
 
+    const onMenuToggleClick = () => {
+        setIsMenuOpen(prevState => !prevState);
+    };
+
     return (
         <header className={styles.headerContainer} id={"side-nav"}>
             <nav className={styles.navbar}>
@@ -40,7 +43,7 @@ const SideNav: FC<SideNavProps> = () => {
                 <div>
                     <button className={`${styles.navItem} ${styles.menuButton} ${isMenuOpen ? styles.open : ""}`}
                             data-label={isMenuOpen ? "Закрыть" : "Меню"}
-                            onClick={() => setIsMenuOpen(prevState => !prevState)}
+                            onClick={onMenuToggleClick}
                     >
                         <div className={`${styles.radish}`}>
                             <img className={styles.radish} src={radishIconExt || radishIcon} alt={"Лого"} />
@@ -50,7 +53,10 @@ const SideNav: FC<SideNavProps> = () => {
                              children={<MemoizedCrossIcon />}
                         />
                     </button>
-                    <MenuNav className={`${styles.menu} ${isMenuOpen ? styles.open : styles.closed}`} isOpen={isMenuOpen} setIsOpen={setIsMenuOpen}/>
+                    <MenuNav className={`${styles.menu} ${isMenuOpen ? styles.open : styles.closed}`}
+                             isOpen={isMenuOpen}
+                             setIsOpen={setIsMenuOpen}
+                    />
                 </div>
                 <NavLink className={({ isActive }) => `${styles.navItem} ${isActive ? styles.active : ""}`}
                          to={"tbd"}

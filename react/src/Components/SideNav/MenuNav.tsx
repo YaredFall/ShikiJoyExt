@@ -20,7 +20,7 @@ const MenuNav: FC<NavMenuProps> = ({ className, isOpen, setIsOpen }) => {
         setIsClosed(!isOpen);
     }, [isOpen]);
 
-    const onClick = useCallback(() => {
+    const onLinkClick = useCallback(() => {
         setIsOpen && setIsOpen(false);
     }, [setIsOpen]);
 
@@ -67,7 +67,7 @@ const MenuNav: FC<NavMenuProps> = ({ className, isOpen, setIsOpen }) => {
                         return (
                             <NavLink key={t[0]}
                                      style={{ "--i": i } as CSSProperties}
-                                     onClick={onClick}
+                                     onClick={onLinkClick}
                                      to={(t[0] === "Главная" ? t[1] : `/${t[1]}/`)}
                                      children={t[0]}
                                      className={isActive ? styles.active : undefined}
@@ -77,14 +77,14 @@ const MenuNav: FC<NavMenuProps> = ({ className, isOpen, setIsOpen }) => {
                     }
                 )}
                 <NavLink style={{ "--i": Categories.size } as CSSProperties}
-                         onClick={onClick}
+                         onClick={onLinkClick}
                          to={`/${appRoutes.news}/`}
                          children={"Новости"}
                          className={path === "/news/" ? styles.active : undefined}
                          tabIndex={path === "/news/" ? -1 : undefined}
                 />
             </nav>
-            <div className={styles.menuBG + (isClosed ? " remove" : "")} onClick={onClick} />
+            <div className={styles.menuBG + (isClosed ? " remove" : "")} onClick={onLinkClick} />
         </>
     );
 };
