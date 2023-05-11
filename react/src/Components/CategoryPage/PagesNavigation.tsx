@@ -15,10 +15,10 @@ type PagesNavigationProps = {
 
 
 const PagesNavigation: FC<PagesNavigationProps> = ({ pagesCount, currentPage, category = "" }) => {
-
+    
     let pagesNumbers = pagesCount ? [...Array(Math.min(10, pagesCount))].map((_, i) => ({
-        value: currentPage + i + (currentPage < 5 ? 1 - currentPage : -4)
-            + (pagesCount < 9 || (pagesCount - currentPage) > 4 ? 0 : -4 - currentPage + pagesCount),
+        value: currentPage + i + (pagesCount <= 9 || currentPage < 5 ? 1 - currentPage : -4)
+            + (pagesCount <= 9 || (pagesCount - currentPage) > 4 ? 0 : -4 - currentPage + pagesCount),
         key: i
     })) : undefined;
 
@@ -38,7 +38,7 @@ const PagesNavigation: FC<PagesNavigationProps> = ({ pagesCount, currentPage, ca
                           children={<MemoizedLeftIcon />}
                           tabIndex={currentPage - 1 > 0 ? undefined : -1}
                     />
-                    {currentPage > 5 &&
+                    {currentPage > 5 && pagesCount > 9 &&
                         <>
                             <Link to={`${category}/page/1/`} children={1} />
                             <span>...</span>
@@ -54,7 +54,7 @@ const PagesNavigation: FC<PagesNavigationProps> = ({ pagesCount, currentPage, ca
                         />)
                     }
 
-                    {pagesCount - currentPage >= 4 &&
+                    {pagesCount - currentPage >= 4 && pagesCount > 9 &&
                         <>
                             <span>...</span>
                             <Link to={`${category}/page/${pagesCount}/`} children={pagesCount} />
