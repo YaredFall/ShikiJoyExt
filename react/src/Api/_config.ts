@@ -1,5 +1,5 @@
 export const defautlQueryConfig = {
-    retry: false,
+    retry: 1,
     staleTime: 60 * 1000 * 60 * 12,
     cacheTime: 60 * 1000 * 60 * 12
 }
