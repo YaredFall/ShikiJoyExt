@@ -29,7 +29,9 @@ function MainElement() {
     
     const lastCategory = useRef(category);
 
-    const { data: page, isLoading } = useAnimeJoyAnimePageQuery(window.location.pathname === "/" ? "/page/1" : window.location.pathname);
+    const { data: page, isLoading } = useAnimeJoyAnimePageQuery(window.location.pathname.match(/\/page\/\d+\/?$/) 
+                                                                ? window.location.pathname 
+                                                                : (category ? `/${category}/page/1/` : "/page/1/"));
 
     const [pagesCount, setPagesCount] = useState<number | undefined>(undefined);
 
