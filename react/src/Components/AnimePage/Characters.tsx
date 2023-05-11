@@ -1,4 +1,4 @@
-import { FC, Fragment, useMemo, useRef } from 'react';
+import React, { FC, ForwardedRef, Fragment, useMemo, useRef } from 'react';
 import { useAnimeJoyAnimePageQuery } from "../../Api/useAnimeJoyAnimePageQuery";
 import { useShikiJoyAnimeSearch } from "../../Api/useShikiJoyAnimeSearch";
 import { getShikimoriID } from "../../Utils/scraping";
@@ -34,6 +34,23 @@ const CharacterCardSkeleton = () => {
         </article>
     );
 };
+
+
+const CharactersList = React.forwardRef(
+    (props: { charsData: ShikimoriAnimeRole[] | undefined, role?: ShikimoriAnimeRoleType }, ref: ForwardedRef<HTMLDivElement>) => {
+        const { charsData, role } = { ...props };
+
+        return (
+            <div className={styles.characters}>
+                {charsData ?
+                 (role ? charsData.filter(c => c.roles[0] === role) : charsData).map(
+                     e => <CharacterCard key={e.character?.id} charData={e} />)
+                           : [...Array(4)].map((_, i) => <CharacterCardSkeleton key={i} />)
+                }
+                {charsData && role && <div className={styles.label} children={role === "Main" ? "Основные" : "Второстепенные"} />}
+            </div>
+        );
+    });
 
 type CharactersProps = {}
 
@@ -74,15 +91,3 @@ const Characters: FC<CharactersProps> = () => {
 };
 
 export default Characters;
-
-function CharactersList({ charsData, role }: { charsData: ShikimoriAnimeRole[] | undefined, role?: ShikimoriAnimeRoleType }) {
-    return (
-        <div className={styles.characters}>
-            {charsData ?
-             (role ? charsData.filter(c => c.roles[0] === role) : charsData).map(e => <CharacterCard key={e.character?.id} charData={e} />)
-                       : [...Array(4)].map((_, i) => <CharacterCardSkeleton key={i} />)
-            }
-            {charsData && role && <div className={styles.label} children={role === "Main" ? "Основные" : "Второстепенные"} />}
-        </div>
-    );
-}
