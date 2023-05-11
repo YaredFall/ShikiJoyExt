@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import { FC } from "react";
 import { createBrowserRouter, createRoutesFromElements, Outlet, redirect, Route, RouterProvider } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from 'react-query';
 import AnimePage from './AnimePage/AnimePage';
@@ -11,7 +11,7 @@ import LoadingPage from "../Pages/LoadingPage";
 import CategoryPage from "./CategoryPage/CategoryPage";
 import NotFound from "../Pages/NotFound";
 import ErrorPage from "../Pages/ErrorPage";
-import { isAnyMetaKeyPressed } from "../Utils/misc";
+import { useBlurOnEscapeKey } from "../Hooks/useBlurOnEscapeKey";
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -37,18 +37,17 @@ const shouldHaveNaturalNumberID = (props: any) => {
     const id: string | undefined = props?.params?.id;
     if (id && id.match(/^(?:[1-9]\d?|[1-3]\d{2})$/)) {
         return null;
-    }
-    else {
-        console.error("Not Found. Wrong ID")
+    } else {
+        console.error("Not Found. Wrong ID");
         throw new Response("Not Found", { status: 404 });
     }
-}
+};
 
 const shouldEndWithSlashAndHaveNaturalID = (props: any) => {
     const l1 = shouldEndWithSlash(props);
     const l2 = shouldHaveNaturalNumberID(props);
     return l1 ?? l2;
-}
+};
 
 const router = createBrowserRouter(createRoutesFromElements(
     <>
@@ -71,18 +70,7 @@ const router = createBrowserRouter(createRoutesFromElements(
 const App: FC = () => {
     const isLoading = useGlobalLoadingStore((state) => state.count) > 0;
 
-    useEffect(() => {
-        const handler = (e: KeyboardEvent) => {
-            if (!isAnyMetaKeyPressed(e) && e.code === "Escape") {
-                (document.activeElement as HTMLElement)?.blur();
-            }
-        }
-        document.body.addEventListener("keydown", handler);
-        return () => {
-            document.body.removeEventListener("keydown", handler);
-        };
-    }, []);
-    
+    useBlurOnEscapeKey();
 
     return (
         <QueryClientProvider client={queryClient}>
