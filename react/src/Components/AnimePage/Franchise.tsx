@@ -17,15 +17,20 @@ const Franchise: FC<FranchiseProps> = ({ franchise }) => {
                 </Disclosure.Button>
                 <Disclosure.Panel className={styles.panel}>
                     <ol className={styles.list}>
-                        {franchise?.map((e, i) =>
-                            <li key={i} className={!e.url ? styles.current : undefined}>
-                                <Link to={!e.url || e.url === "BLOCKED" ? "" : e.url}
-                                      children={e.label}
-                                      aria-disabled={!e.url || e.url === "BLOCKED"}
-                                      tabIndex={!e.url || e.url === "BLOCKED" ? -1 : undefined}
-                                />
-                            </li>)
-                        }
+                        {franchise?.map((e, i) => {
+                            const isDisabled = !e.url || e.url === "BLOCKED" || e.url === "NOT_AVAILABLE";
+                            
+                            return (
+                                <li key={i} className={!e.url ? styles.current : undefined} data-disabled-reason={ isDisabled && e.url || undefined}>
+                                    <Link to={isDisabled ? "" : e.url!}
+                                          children={e.label}
+                                          aria-disabled={isDisabled}
+                                          tabIndex={isDisabled ? -1 : undefined}
+                                    />
+                                </li>
+
+                            );
+                        })}
                     </ol>
                 </Disclosure.Panel>
             </Disclosure>

@@ -21,8 +21,15 @@
     }
 
     &:not(.current) > a[aria-disabled="true"] {
+      pointer-events: none !important;
+      text-decoration: none !important;
+    }
+    
+    &[data-disabled-reason="BLOCKED"] {
       color: var(--accent-pink);
-      pointer-events: none;
+    }
+    &[data-disabled-reason="NOT_AVAILABLE"] {
+      color: var(--primary-a50);
     }
     
     &:not(.current):hover a {

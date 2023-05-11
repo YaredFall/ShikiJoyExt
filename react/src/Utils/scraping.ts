@@ -164,7 +164,10 @@ export function getFranchise(page: Document | undefined) {
     
     return [...lis].map(e => ({
         label: e.textContent!,
-        url: e.className === "rfa" ? null : (e.children[0].getAttribute("href")?.replace("https://animejoy.ru", "") || "BLOCKED")
+        url: e.className === "rfa" ? null : (e.children[0] 
+                                             ? e.children[0].getAttribute("href")?.replace("https://animejoy.ru", "") || "BLOCKED"
+                                             : "NOT_AVAILABLE"
+        )
     }))
 }
 
