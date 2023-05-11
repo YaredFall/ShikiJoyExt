@@ -30,7 +30,7 @@ const SideNav: FC<SideNavProps> = () => {
     const increaseLoadingCount = useGlobalLoadingStore(state => state.increase);
 
     return (
-        <header className={styles.headerContainer}>
+        <header className={styles.headerContainer} id={"side-nav"}>
             <nav className={styles.navbar}>
                 {/*<NavLink className={({ isActive }) => `${styles.navItem} ${isActive || window.location.pathname.startsWith("/page/") ? styles.active : ""}`}*/}
                 {/*         to={appRoutes.home}*/}
