@@ -58,3 +58,7 @@ export function capitalize(s: string)
 export function isAnyMetaKeyPressed(e: KeyboardEvent) {
     return e.altKey || e.ctrlKey || e.metaKey || e.shiftKey
 }
+
+export function getUrlOfBGImage(bgImageString: string | undefined) {
+    return bgImageString?.replace(/url\("([^"]*)"\)/, "$1") || ""
+}

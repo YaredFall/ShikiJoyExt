@@ -1,4 +1,5 @@
 import { StoryData, StudioData, Titles } from "../types";
+import { getUrlOfBGImage } from "./misc";
 
 export function getShowTitle(parentNode: ParentNode = document): Titles | undefined {
     return parentNode ? {
@@ -28,7 +29,7 @@ export function getStudiosPlayersAndFiles(playlistsHTML: Element) {
                     const id = c.getAttribute("data-id")!;
 
                     let files = filesHTML.filter(f => id === f.getAttribute("data-id")!).map(f => ({
-                        label: f.textContent! ,
+                        label: f.textContent!,
                         children: f.getAttribute("data-file")!
                     }));
 
@@ -48,22 +49,23 @@ export function getStudiosPlayersAndFiles(playlistsHTML: Element) {
             if (!Array.isArray(categories)) {
                 return categories;
             } else if (categories.some(c => c.label.match(episodeSetPattern))) {
-                const shouldInvert = +categories[0].label.match(episodeSetPattern)![1] < +categories.at(-1)!.label.match(episodeSetPattern)![1];
-                    return (shouldInvert ? categories : categories.reverse()).reduce((acc, c) => {
-                        if ((c.children as Category[]).some(sc => typeof sc.children === "string")) {
-                            acc.push(...(c.children as Category[]));
-                        } else {
-                            (c.children as Category[]).forEach(sc => {
-                                const match = acc.find(uc => uc.label === sc.label);
-                                if (match) {
-                                    (match.children as Category[]).push(...(sc.children as Category[]));
-                                } else {
-                                    acc.push(sc);
-                                }
-                            });
-                        }
-                        return acc;
-                    }, Array<Category>());
+                const shouldInvert = +categories[0].label.match(episodeSetPattern)![1] < +categories.at(-1)!.label.match(
+                    episodeSetPattern)![1];
+                return (shouldInvert ? categories : categories.reverse()).reduce((acc, c) => {
+                    if ((c.children as Category[]).some(sc => typeof sc.children === "string")) {
+                        acc.push(...(c.children as Category[]));
+                    } else {
+                        (c.children as Category[]).forEach(sc => {
+                            const match = acc.find(uc => uc.label === sc.label);
+                            if (match) {
+                                (match.children as Category[]).push(...(sc.children as Category[]));
+                            } else {
+                                acc.push(sc);
+                            }
+                        });
+                    }
+                    return acc;
+                }, Array<Category>());
 
             } else {
                 return categories.map(c => ({ label: c.label, children: mergeEpisodeSets((c.children as Category[])) }));
@@ -73,35 +75,39 @@ export function getStudiosPlayersAndFiles(playlistsHTML: Element) {
 
     console.log({ categories });
 
-    const studiosPlayersAndFiles: StudioData[] = categories ? ((categories[0].children as Category[])[0].children as Category[])[0]?.children ? categories!.map(c => ({
-        name: c.label,
-        players: (c.children as Category[]).map(sc => ({
-            name: sc.label,
-            files: (sc.children as Category[]).map(fc => ({
-                label: fc.label,
-                file: fc.children as string
+    const studiosPlayersAndFiles: StudioData[] = categories
+        ? ((categories[0].children as Category[])[0].children as Category[])[0]?.children
+            ? categories!.map(c => ({
+                name: c.label,
+                players: (c.children as Category[]).map(sc => ({
+                    name: sc.label,
+                    files: (sc.children as Category[]).map(fc => ({
+                        label: fc.label,
+                        file: fc.children as string
+                    }))
+                }))
             }))
-        }))
-    })) : [{
-        name: undefined,
-        players: categories!.map(c => ({
-            name: c.label,
-            files: (c.children as Category[]).map(fc => ({
-                label: fc.label,
-                file: fc.children as string
-            }))
-        }))
-    }] : [{
-        name: undefined,
-        players: [{
+            : [{
+                name: undefined,
+                players: categories!.map(c => ({
+                    name: c.label,
+                    files: (c.children as Category[]).map(fc => ({
+                        label: fc.label,
+                        file: fc.children as string
+                    }))
+                }))
+            }]
+        : [{
             name: undefined,
-            files: filesHTML.map(f => ({
-                label: f.textContent!,
-                file: f.getAttribute("data-file")!
-            }))
-        }]
-    }]
-    
+            players: [{
+                name: undefined,
+                files: filesHTML.map(f => ({
+                    label: f.textContent!,
+                    file: f.getAttribute("data-file")!
+                }))
+            }]
+        }];
+
 
     console.log({ studiosPlayersAndFiles });
 
@@ -118,7 +124,7 @@ const studioNames: { short: string, full: string }[] = [
     { short: "YSS", full: "YakuSub Studio" },
     { short: "PV", full: "Трейлеры" },
     { short: "NF", full: "Netflix" },
-    { short: "CR", full: "Crunchyroll"}
+    { short: "CR", full: "Crunchyroll" }
 ];
 
 export function fullStudioName(name: string | undefined) {
@@ -155,27 +161,27 @@ export function getShikimoriID(page: Document | undefined) {
 
 export function getFranchise(page: Document | undefined) {
     if (!page) return undefined;
-    
+
     const container = page.querySelector(".text_spoiler");
     if (!container) return undefined;
-    
+
     const lis = container.querySelectorAll("ol li");
     if (lis.length === 0) return undefined;
-    
+
     return [...lis].map(e => ({
         label: e.textContent!,
-        url: e.className === "rfa" ? null : (e.children[0] 
-                                             ? e.children[0].getAttribute("href")?.replace("https://animejoy.ru", "") || "BLOCKED"
-                                             : "NOT_AVAILABLE"
+        url: e.className === "rfa" ? null : (e.children[0]
+                ? e.children[0].getAttribute("href")?.replace("https://animejoy.ru", "") || "BLOCKED"
+                : "NOT_AVAILABLE"
         )
-    }))
+    }));
 }
 
 export function getStoryList(page: Document | undefined): StoryData[] | undefined {
     if (!page) return undefined;
 
     const stories = page.querySelectorAll(".block.story.shortstory");
-    
+
     return [...stories].map(story => ({
         title: getShowTitle(story)!,
         url: story.querySelector(".ntitle a")!.getAttribute("href")!.replace("https://animejoy.ru", ""),
@@ -192,21 +198,21 @@ export function getStoryList(page: Document | undefined): StoryData[] | undefine
         editDate: story.querySelector(".editdate")?.textContent || undefined,
         category: [...story.querySelector(".category")?.children || []].slice(1).map(
             e => e.textContent!.replace("Ongoing", "Онгоинги").replace("Ф", "ф").replace("Анонс", "Анонсы")
-                                                                       ),
+        ),
         comments: story.querySelector(".meta_coms")?.textContent ? +story.querySelector(".meta_coms")?.textContent! : undefined
-    }))
+    }));
 }
 
 export function getNavigationPagesCount(page: Document | undefined) {
     if (!page) return undefined;
-    
+
     const options = page.querySelector(".block.navigation .pages")?.children;
     const last = options ? [...options].at(-1)?.textContent : undefined;
     return last ? +last : undefined;
 }
 
 export function getDocumentTitle(page: Document | undefined) {
-    return page?.title
+    return page?.title;
 }
 
 export function getNewsOrRelatedAndPopular(page: Document | undefined) {
@@ -215,22 +221,38 @@ export function getNewsOrRelatedAndPopular(page: Document | undefined) {
     const related = page.querySelectorAll("#news_rel > .story_line > a");
     const popular = page.querySelectorAll("#news_top > .story_line > a");
     const news = page.querySelectorAll("#news_coms > .story_line > a");
-    
+
     return ({
         related: [...related].map(e => ({
             titles: [...e.querySelector(".title")!.childNodes].filter(c => (c as HTMLElement).tagName !== 'BR').map(c => c.textContent),
             url: e.getAttribute("href")!.replace("https://animejoy.ru", ""),
-            poster: e.querySelector("i")?.style.backgroundImage.replace(/url\("([^"]*)"\)/, "$1") || ""
+            poster: getUrlOfBGImage(e.querySelector("i")?.style.backgroundImage)
         })),
         popular: [...popular].map(e => ({
             titles: [...e.querySelector(".title")!.childNodes].filter(c => (c as HTMLElement).tagName !== 'BR').map(c => c.textContent),
             url: e.getAttribute("href")!.replace("https://animejoy.ru", ""),
-            poster: e.querySelector("i")?.style.backgroundImage.replace(/url\("([^"]*)"\)/, "$1") || ""
+            poster: getUrlOfBGImage(e.querySelector("i")?.style.backgroundImage)
         })),
         news: [...news].map(e => ({
             titles: [...e.querySelector(".title")!.childNodes].filter(c => (c as HTMLElement).tagName !== 'BR').map(c => c.textContent),
             url: e.getAttribute("href")!.replace("https://animejoy.ru", ""),
-            poster: e.querySelector("i")?.style.backgroundImage.replace(/url\("([^"]*)"\)/, "$1") || ""
+            poster: getUrlOfBGImage(e.querySelector("i")?.style.backgroundImage)
         }))
-    })
+    });
+}
+
+export function getAnimejoyUserFromHeader(page: Document | undefined) {
+    if (!page) return undefined;
+
+    const avatarEl = page.querySelector("#loginbtn .avatar");
+
+    if (!avatarEl) return null;
+    const coverEl = avatarEl.querySelector<HTMLElement>(".cover");
+
+    return ({
+        url: avatarEl.parentElement!.getAttribute("href") || "",
+        avatar: getUrlOfBGImage(coverEl?.style.backgroundImage),
+        nickname: coverEl?.textContent,
+        unreadMessages: avatarEl.querySelector(".num")?.textContent
+    });
 }
