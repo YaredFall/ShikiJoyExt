@@ -22,8 +22,8 @@ function prepareDOM() {
         document.querySelector(".text_spoiler") || "",
         ...document.querySelectorAll(".block.story.shortstory"),
         document.querySelector(".block.navigation") || "",
-        document.querySelector(".tab-content") || ""
-
+        document.querySelector(".tab-content") || "",
+        document.querySelector("#loginbtn") || ""
     );
 
     const linksBlock = [...document.querySelectorAll("div.block")].find(e => e.querySelector("ul li .ansdb"));
@@ -56,12 +56,12 @@ export function prepareAndRender() {
             document.body.classList.add("show");
             return;
         }
-        
+
         removeDefaultStyles();
         setTimeout(() => {
             prepareDOM();
             Render();
         }, 0);
-        
+
     });
 }

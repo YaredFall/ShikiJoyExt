@@ -2,13 +2,11 @@ import { FC, memo, useState } from 'react';
 import { NavLink } from "react-router-dom";
 import { appRoutes } from "../../Utils/appRoutes";
 import radishIcon from "/images/radish256x256.png";
-import { IoIosLogIn, IoSearchOutline, IoSettingsOutline, TbList, TfiClose, VscHistory } from "react-icons/all";
+import { IoSearchOutline, IoSettingsOutline, TbList, TfiClose, VscHistory } from "react-icons/all";
 import styles from "./SideNav.module.scss";
-import { openLogInPopup } from "../../Utils/openLogInPopup";
 import { useGetShikimoriUser } from "../../Api/useGetShikimoriUser";
-import { useQueryClient } from "react-query";
-import { useGlobalLoadingStore } from "../../Store/globalLoadingStore";
 import MenuNav from "./MenuNav";
+import ProfileButton from "./ProfileButton";
 
 //@ts-ignore
 const radishIconExt = chrome.runtime?.getURL("bundled/images/radish256x256.png");
@@ -22,11 +20,8 @@ const SideNav: FC<SideNavProps> = () => {
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-    const queryClient = useQueryClient();
 
-    const { data: user } = useGetShikimoriUser(true);
-
-    const increaseLoadingCount = useGlobalLoadingStore(state => state.increase);
+    const { data: shikimoriUser } = useGetShikimoriUser(true);
 
     const onMenuToggleClick = () => {
         setIsMenuOpen(prevState => !prevState);
@@ -35,11 +30,6 @@ const SideNav: FC<SideNavProps> = () => {
     return (
         <header className={styles.headerContainer} id={"side-nav"}>
             <nav className={styles.navbar}>
-                {/*<NavLink className={({ isActive }) => `${styles.navItem} ${isActive || window.location.pathname.startsWith("/page/") ? styles.active : ""}`}*/}
-                {/*         to={appRoutes.home}*/}
-                {/*         data-label={"Главная"}*/}
-                {/*         children={<img className={styles.radish} src={radishIconExt || radishIcon} alt={"Лого"} />}*/}
-                {/*/>*/}
                 <div>
                     <button className={`${styles.navItem} ${styles.menuButton} ${isMenuOpen ? styles.open : ""}`}
                             data-label={isMenuOpen ? "Закрыть" : "Меню"}
@@ -63,13 +53,13 @@ const SideNav: FC<SideNavProps> = () => {
                          data-label={"Поиск"}
                          children={<IoSearchOutline />}
                 />
-                {user ? <a className={`${styles.navItem} ${styles.external}`}
-                           target={"_blank"}
-                           href={user.url + "/list/anime"}
-                           data-label={"Мой список"}
-                           children={<TbList />}
-                      />
-                      : null
+                {shikimoriUser ? <a className={`${styles.navItem} ${styles.external}`}
+                                    target={"_blank"}
+                                    href={shikimoriUser.url + "/list/anime"}
+                                    data-label={"Мой список"}
+                                    children={<TbList />}
+                    />
+                    : null
                 }
                 <NavLink className={({ isActive }) => `${styles.navItem} ${styles.smaller} ${isActive ? styles.active : ""}`}
                          to={"tbd"}
@@ -84,21 +74,7 @@ const SideNav: FC<SideNavProps> = () => {
                          to={appRoutes.test2}
                          children={<div>Test 2</div>}
                 />
-                {user ? <a className={`${styles.navItem} ${styles.bottom} ${styles.external}`}
-                           target={"_blank"}
-                           href={user?.url}
-                           data-label={"Профиль"}
-                           children={<img className={styles.avatar} src={user.avatar} alt={""} />}
-                      />
-                      : <button className={`${styles.navItem} ${styles.bottom}`}
-                                onClick={() => openLogInPopup(
-                                    () => increaseLoadingCount(),
-                                    () => queryClient.invalidateQueries(["shikimori", "whoami"])
-                                )}
-                                data-label={"Вход"}
-                                children={<IoIosLogIn />}
-                 />
-                }
+                <ProfileButton shikimoriUser={shikimoriUser} />
                 <NavLink className={styles.navItem}
                          to={"tbd"}
                          data-label={"Настройки"}
