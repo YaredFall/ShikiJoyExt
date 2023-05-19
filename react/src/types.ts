@@ -211,3 +211,26 @@ export type ShikimoriAnimeRole = {
     character: ShikimoriCharacterOrPerson | null,
     person: ShikimoriCharacterOrPerson | null
 }
+
+export type ShikimoriUser = {
+    "id": number, 
+    "nickname": string, 
+    "avatar": string,
+    "image": { 
+        "x160": string, 
+        "x148": string, 
+        "x80": string, 
+        "x64": string, 
+        "x48": string, 
+        "x32": string, 
+        "x16": string 
+    }, 
+    "last_online_at": string, 
+    "url": string, 
+    "name": string | null, 
+    "sex": "male" | "female" | null, 
+    "website": string, 
+    "birth_on": string | null, 
+    "full_years": number | null, 
+    "locale": "ru" | string // ! incomplete
+}
