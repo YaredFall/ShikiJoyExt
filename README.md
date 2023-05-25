@@ -7,11 +7,21 @@ Chrome extension that replaces [animejoy.ru](https://animejoy.ru) website pages 
 - Absence of API and Cloudflare protection makes it very problematic to build a separate website that would consume animejoy data.
 
 ## Notes
-The project is under development. Pre-releases can be found in the **[releases](https://github.com/YaredFall/ShikiJoyExt/releases)** section.
+> The project is under development. 
+> Pre-releases can be found in the 
+> **[releases](https://github.com/YaredFall/ShikiJoyExt/releases)**
+> section.
 
-Run `npm run install` **([concurrently](https://github.com/open-cli-tools/concurrently) is required)** to install dependencies. Then you can run 
-* `npm run dev` **([concurrently](https://github.com/open-cli-tools/concurrently) is required)** to run demo on your machine.
+Run `npm run install` 
+**([concurrently](https://github.com/open-cli-tools/concurrently) is required)** 
+to install dependencies. 
+
+Then you can run 
+* `npm run dev` 
+ **([concurrently](https://github.com/open-cli-tools/concurrently) is required)** 
+ to run demo on your machine.
 * `npm run build` to generate bundled script and stylesheet.
+
 
 Repo divided onto 3 folders: 
 * react - frontend of the app
@@ -19,3 +29,14 @@ Repo divided onto 3 folders:
 * extension - actual extension
 
 **react app must be _bundled_ (use ```npm run build```) to be used in the extension**
+
+
+## Known issues
+* Some ad blockers (e.g. uBlock Origin) prevents xhr requests within animejoy.ru
+
+> Create filter 
+> `@@||shikijoy.fly.dev^$xhr,domain=animejoy.ru`
+> in your ad blocker settings  
+> or disable your conflicting ad blocker 
+> *(you still can use non-conflicting ad blockers like AdGuard)*
+
