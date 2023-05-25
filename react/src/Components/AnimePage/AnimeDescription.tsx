@@ -9,6 +9,7 @@ import { ApiLinks } from "../../Api/_config";
 import { useAnimeJoyAnimePageQuery } from "../../Api/useAnimeJoyAnimePageQuery";
 import { useShikiJoyAnimeSearch } from "../../Api/useShikiJoyAnimeSearch";
 import { getShikimoriID } from "../../Utils/scraping";
+import { humanizeShikimoriDate } from "../../Utils/misc";
 
 //@ts-ignore
 const shikimoriLogoExt = chrome.runtime?.getURL("bundled/images/shikimori_logo.png");
@@ -90,17 +91,9 @@ const AnimeDescription: FC<AnimeDescriptionProps> = () => {
                             </div>
                             {data.aired_on ? <div children={(data.status === "ongoing" || data.released_on
                                 ? "С "
-                                : "") + `${new Intl.DateTimeFormat('ru-RU', {
-                                year: "numeric",
-                                month: "long",
-                                day: "numeric"
-                            }).format(new Date(data.aired_on))}`}
+                                : "") + humanizeShikimoriDate(data.aired_on)}
                             /> : ""}
-                            {data.released_on ? <div children={`по ${new Intl.DateTimeFormat('ru-RU', {
-                                year: "numeric",
-                                month: "long",
-                                day: "numeric"
-                            }).format(new Date(data.released_on))}`}
+                            {data.released_on ? <div children={`по ${humanizeShikimoriDate(data.released_on)}`}
                             /> : ""}
                             <div className={styles.episodesAndDuration}>
                                 {`${plural(data.episodes || data.episodes_aired, '', '%d эпизода по', '%d эпизодов по')} ${

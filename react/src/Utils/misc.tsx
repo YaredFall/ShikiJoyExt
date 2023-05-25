@@ -62,3 +62,11 @@ export function isAnyMetaKeyPressed(e: KeyboardEvent) {
 export function getUrlOfBGImage(bgImageString: string | undefined) {
     return bgImageString?.replace(/url\("([^"]*)"\)/, "$1") || ""
 }
+
+export function humanizeShikimoriDate(date: string) {
+    return new Intl.DateTimeFormat('ru-RU', {
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+    }).format(new Date(date))
+}
