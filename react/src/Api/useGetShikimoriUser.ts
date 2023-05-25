@@ -25,10 +25,13 @@ export const useGetShikimoriUser = (enabled: boolean = true) => {
                     decrease();
                     return response.json<ShikimoriUser | null>();
                 } catch (err: any) {
-                    if (err.response.status === 401) {
+                    if (err.response?.status === 401) {
                         decrease();
                         return null;
                     } else {
+                        if (!err.response) {
+                            console.warn("Запрос был заблокирован браузером!");
+                        }
                         decrease();
                         throw err;
                     }

@@ -43,9 +43,9 @@ const CharactersList = React.forwardRef(
         return (
             <div className={styles.characters}>
                 {charsData ?
-                 (role ? charsData.filter(c => c.roles[0] === role) : charsData).map(
-                     e => <CharacterCard key={e.character?.id} charData={e} />)
-                           : [...Array(4)].map((_, i) => <CharacterCardSkeleton key={i} />)
+                    (role ? charsData.filter(c => c.roles[0] === role) : charsData).map(
+                        e => <CharacterCard key={e.character?.id} charData={e} />)
+                    : [...Array(4)].map((_, i) => <CharacterCardSkeleton key={i} />)
                 }
                 {charsData && role && <div className={styles.label} children={role === "Main" ? "Основные" : "Второстепенные"} />}
             </div>
@@ -58,7 +58,7 @@ const Characters: FC<CharactersProps> = () => {
 
     const { data: pageDocument } = useAnimeJoyAnimePageQuery(window.location.pathname);
 
-    const { data } = useShikiJoyAnimeSearch(getShikimoriID(pageDocument));
+    const { data, error } = useShikiJoyAnimeSearch(getShikimoriID(pageDocument));
 
     const sortedChars = useMemo(() => {
         if (data) {
@@ -69,6 +69,8 @@ const Characters: FC<CharactersProps> = () => {
             return undefined;
         }
     }, [data]);
+
+    if (error) return null;
 
     return (
         <Disclosure as={"section"} className={styles.container}>

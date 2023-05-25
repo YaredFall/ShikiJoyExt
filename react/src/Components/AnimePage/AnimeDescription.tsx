@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import { ShikimoriAnimeCoreData } from "../../types";
 import styles from "./AnimeDescription.module.scss";
 import Picture from "../Common/Picture";
 import shikimoriLogo from '/images/shikimori_logo.png';
@@ -7,6 +6,9 @@ import plural from 'plural-ru';
 import DotSplitter from "../Common/DotSplitter";
 import LoadableText from "../Common/LoadableText";
 import { ApiLinks } from "../../Api/_config";
+import { useAnimeJoyAnimePageQuery } from "../../Api/useAnimeJoyAnimePageQuery";
+import { useShikiJoyAnimeSearch } from "../../Api/useShikiJoyAnimeSearch";
+import { getShikimoriID } from "../../Utils/scraping";
 
 //@ts-ignore
 const shikimoriLogoExt = chrome.runtime?.getURL("bundled/images/shikimori_logo.png");
@@ -39,60 +41,79 @@ const shikimoriAgeRatingMap = new Map([
     ["none", { short: "N/A", explained: "Неизвестно" }],
 ]);
 
-type AnimeDescriptionProps = {
-    data: ShikimoriAnimeCoreData | undefined
-}
+type AnimeDescriptionProps = {}
 
-const AnimeDescription: FC<AnimeDescriptionProps> = ({ data }) => {
+const AnimeDescription: FC<AnimeDescriptionProps> = () => {
+
+    const { data: pageDocument } = useAnimeJoyAnimePageQuery(window.location.pathname);
+
+    const {
+        error,
+        data: searchResult
+    } = useShikiJoyAnimeSearch(getShikimoriID(pageDocument));
+
+    const data = searchResult?.coreData;
 
     return (
         <section className={styles.description}>
             <header className={styles.header}>
                 <h4>Информация</h4>
-                <a className={styles.shikimoriLink} href={data ? ApiLinks.get("shikimori") + data.url : undefined} target={"_blank"}>
+                <a className={styles.shikimoriLink}
+                   href={data ? ApiLinks.get("shikimori") + data.url : undefined}
+                   target={"_blank"}
+                >
                     <img className={styles.shikimoriLogo} src={shikimoriLogoExt || shikimoriLogo} alt={"Shikimori"} />
                 </a>
             </header>
-            <div className={styles.posterAndDetails}>
-                <div className={styles.poster}>
-                    <Picture className={styles.picture} src={data ? ApiLinks.get("shikimori") + data.image.original : undefined} />
-                    {data && <div className={styles.score} children={"★ " + data.score } />}
-                </div>
-                {data ?
-                 <div className={styles.details}>
-                     <div className={styles.kindStatusAndRating}>
-                         <div className={styles.kind} children={shikimoriKindMap.get(data.kind)} />
-                         <DotSplitter />
-                         <div className={styles.status} children={shikimoriStatusMap.get(data.status)} />
-                         <DotSplitter />
-                         <div className={styles.ageRating}
-                              title={shikimoriAgeRatingMap.get(data.rating)!.explained}
-                              children={shikimoriAgeRatingMap.get(data.rating)!.short}
-                         />
-                     </div>
-                     {data.aired_on ? <div children={(data.status === "ongoing" || data.released_on ? "С " : "") + `${new Intl.DateTimeFormat('ru-RU', {
-                         year: "numeric",
-                         month: "long",
-                         day: "numeric"
-                     }).format(new Date(data.aired_on))}`}
-                     /> : ""}
-                     {data.released_on ? <div children={`по ${new Intl.DateTimeFormat('ru-RU', {
-                         year: "numeric",
-                         month: "long",
-                         day: "numeric"
-                     }).format(new Date(data.released_on))}`}
-                     /> : ""}
-                     <div className={styles.episodesAndDuration}>
-                         {`${plural(data.episodes || data.episodes_aired, '', '%d эпизода по', '%d эпизодов по')} ${
-                             plural(data.duration, '%d минуте', '%d минуты', '%d мин.')}`}
-                     </div>
-                     <div className={styles.genres}>{data?.genres.map(
-                         (g, i) => (<div className={styles.genre} children={`${g.russian}`} key={i} />))}</div>
+            {error ?
+                <p className={styles.error}>{!(error as any).response
+                    ? "Запрос был заблокирован!\nПопробуйте отключить блокировщик рекламы."
+                    : "Возникла ошибка, попробуйте позже!"}
+                </p>
+                :
+                <div className={styles.posterAndDetails}>
+                    <div className={styles.poster}>
+                        <Picture className={styles.picture} src={data ? ApiLinks.get("shikimori") + data.image.original : undefined} />
+                        {data && <div className={styles.score} children={"★ " + data.score} />}
+                    </div>
+                    {data ?
+                        <div className={styles.details}>
+                            <div className={styles.kindStatusAndRating}>
+                                <div className={styles.kind} children={shikimoriKindMap.get(data.kind)} />
+                                <DotSplitter />
+                                <div className={styles.status} children={shikimoriStatusMap.get(data.status)} />
+                                <DotSplitter />
+                                <div className={styles.ageRating}
+                                     title={shikimoriAgeRatingMap.get(data.rating)!.explained}
+                                     children={shikimoriAgeRatingMap.get(data.rating)!.short}
+                                />
+                            </div>
+                            {data.aired_on ? <div children={(data.status === "ongoing" || data.released_on
+                                ? "С "
+                                : "") + `${new Intl.DateTimeFormat('ru-RU', {
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric"
+                            }).format(new Date(data.aired_on))}`}
+                            /> : ""}
+                            {data.released_on ? <div children={`по ${new Intl.DateTimeFormat('ru-RU', {
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric"
+                            }).format(new Date(data.released_on))}`}
+                            /> : ""}
+                            <div className={styles.episodesAndDuration}>
+                                {`${plural(data.episodes || data.episodes_aired, '', '%d эпизода по', '%d эпизодов по')} ${
+                                    plural(data.duration, '%d минуте', '%d минуты', '%d мин.')}`}
+                            </div>
+                            <div className={styles.genres}>{data?.genres.map(
+                                (g, i) => (<div className={styles.genre} children={`${g.russian}`} key={i} />))}</div>
 
-                 </div>
-                      : <DescriptionSkeleton />
-                }
-            </div>
+                        </div>
+                        : <DescriptionSkeleton />
+                    }
+                </div>
+            }
         </section>
     );
 };
@@ -110,5 +131,5 @@ const DescriptionSkeleton: FC = () => {
             <LoadableText placeholderLength={10} />
             <LoadableText placeholderLength={15} />
         </div>
-    )
-}
+    );
+};
