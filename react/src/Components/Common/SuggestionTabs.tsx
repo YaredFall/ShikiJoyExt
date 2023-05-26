@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { getNewsOrRelatedAndPopular } from "../../Utils/scraping";
 import { useAnimeJoyAnimePageQuery } from "../../Api/useAnimeJoyAnimePageQuery";
 import { Tab } from '@headlessui/react';
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import LoadableText from "./LoadableText";
 import Picture from "./Picture";
 import styles from "./SuggestionTabs.module.scss";
@@ -11,6 +11,8 @@ import { Categories } from "../../Utils/appRoutes";
 type SuggestionTabsProps = {}
 
 const SuggestionTabs: FC<SuggestionTabsProps> = () => {
+    
+    const location = useLocation();
 
     const { data: pageDocument } = useAnimeJoyAnimePageQuery(location.pathname);
 
