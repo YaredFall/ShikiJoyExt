@@ -13,7 +13,7 @@
 }
 
 .logo {
-  width: 6rem;
+  width: max(6rem, 8vmax);
   animation: pulse 5s ease-in-out infinite;
 }
 

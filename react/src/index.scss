@@ -68,7 +68,7 @@ body {
     
     &:has(> :nth-child(3):last-child) {
         display: grid;
-        grid-template-columns: minmax(800px, 12fr) 29rem;
+        grid-template-columns: minmax(var(--main3cols-main-min-width), 12fr) 29rem;
     }
 
     &:has(> .loader) {

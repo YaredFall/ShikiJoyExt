@@ -5,7 +5,8 @@
   position: fixed;
   left: 0;
   top: 0;
-  bottom: 0;
+  height: 100vh;
+  height: 100svh;
 }
 
 .navbar {
@@ -128,6 +129,7 @@ img.radish {
   padding: 4.5rem 2rem;
   font-size: 1.125rem;
   transition: translate 250ms ease-in-out;
+
   :global {
     animation: translateInX 250ms ease-in-out;
   }
@@ -154,6 +156,7 @@ img.radish {
     padding: 1rem;
     opacity: 0;
     --delay: calc(375ms + 50ms * var(--i, 1));
+
     :global {
       animation: fadeIn 250ms var(--delay) ease-in-out forwards,
                  translateInX 250ms var(--delay) ease-in-out forwards;
@@ -243,9 +246,12 @@ img.radish {
   z-index: 100000;
   padding-inline: 8px;
 }
-@media (max-width: calc(800px + 84px + 29rem)) {
+
+$breakpoint: calc(50rem + 84px + 29rem);
+@media (max-width: $breakpoint) {
   .profileModal {
-    right: calc(100% - 800px - 82px);;
+    //right: calc(100% - 50rem - 82px);
+    right: 0;
   }
 }
 
@@ -254,7 +260,8 @@ img.radish {
   display: flex;
   position: relative;
   border-radius: var(--roundness);
-  padding-block: 2.5rem;
+  flex-direction: column;
+  padding: 0 2.5rem;
 
   :is(a, button):is(:hover, :focus-visible) {
     color: var(--primary-a75);
@@ -289,11 +296,11 @@ img.radish {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  padding: 0.5rem 6rem;
   text-align: center;
+  padding: 3rem 3.5rem;
   
-  &+& {
-    border-left: 2px dashed var(--primary-a12p5);
+  & + & {
+    border-top: 2px dashed var(--primary-a12p5);
   }
   
   h3 {
@@ -357,7 +364,7 @@ img.radish {
       margin: 0;
     }
     
-    input { 
+    input {
       padding: 0.25rem 0.5rem;
     }
   }
