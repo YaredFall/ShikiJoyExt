@@ -17,25 +17,25 @@ export const useAnimeJoyAnimePageQuery = (path: string) => {
         () => {
             if (firstFetch) {
                 firstFetch = false;
-                return document;
+                return document.cloneNode(true) as Document;
             }
-            const endSlash = !path.match(/(?:\/|\.[a-z]{1,4})$/)
+            const endSlash = !path.match(/(?:\/|\.[a-z]{1,4})$/);
 
-            const url = import.meta.env.DEV ? ApiLinks.get("dev/animejoy") + path.replace(/\/$/, '') 
-                                            : path + (endSlash ? "/" : "")
-            
-            return ky(url).text().then(page => parser.parseFromString(page, "text/html"))
+            const url = import.meta.env.DEV ? ApiLinks.get("dev/animejoy") + path.replace(/\/$/, '')
+                : path + (endSlash ? "/" : "");
+
+            return ky(url).text().then(page => parser.parseFromString(page, "text/html"));
         },
-        { 
-            ...defautlQueryConfig, 
+        {
+            ...defautlQueryConfig,
             useErrorBoundary: true,
             retry: import.meta.env.DEV ? 2 : false
         }
-    )
+    );
 
     useEffect(() => {
-        updateDocumentTitle(query.data)
+        updateDocumentTitle(query.data);
     }, [query.data]);
-    
+
     return query;
-}
+};
