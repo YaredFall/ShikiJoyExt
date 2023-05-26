@@ -5,7 +5,7 @@ import { Tab } from '@headlessui/react';
 import { Link } from "react-router-dom";
 import LoadableText from "./LoadableText";
 import Picture from "./Picture";
-import styles from "./SuggestionTabs.module.scss"
+import styles from "./SuggestionTabs.module.scss";
 import { Categories } from "../../Utils/appRoutes";
 
 type SuggestionTabsProps = {}
@@ -15,14 +15,26 @@ const SuggestionTabs: FC<SuggestionTabsProps> = () => {
     const { data: pageDocument } = useAnimeJoyAnimePageQuery(location.pathname);
 
     const relatedAndPopularShows = getNewsOrRelatedAndPopular(pageDocument);
-    
-    const shouldShowNews = location.pathname === "/" || [...Categories.values()].some(c => location.pathname === `/${c}/`) || location.pathname.match(/\/page\/\d{1,3}\/$/)
-    
+
+    const shouldShowNews = location.pathname === "/" || [...Categories.values()].some(
+        c => location.pathname === `/${c}/`) || location.pathname.match(/\/page\/\d{1,3}\/$/);
+
+    const tabList = [shouldShowNews ? "Новости" : "Похожее", "Популярное"];
+
     return (
-        <Tab.Group defaultIndex={shouldShowNews ? 1 : 0}>
+        <Tab.Group as={"section"} className={styles.container} defaultIndex={shouldShowNews ? 1 : 0}>
             <Tab.List className={styles.tabList}>
-                <Tab className={({ selected }) => `${styles.tab} ${selected ? styles.selected : ""}`}>{shouldShowNews ? "Новости" : "Похожее"}</Tab>
-                <Tab className={({ selected }) => `${styles.tab} ${selected ? styles.selected : ""}`}>Популярное</Tab>
+                {tabList.map(t => (
+                    <Tab key={t}
+                         className={({ selected }) => `${styles.tab} ${selected ? styles.selected : ""}`}
+                         onClick={() => {
+                             setTimeout(() => {
+                                 (document.activeElement as HTMLElement).blur();
+                             }, 0);
+                         }}
+                         children={t}
+                    />
+                ))}
             </Tab.List>
             <Tab.Panels>
                 <SuggestionTab data={shouldShowNews ? relatedAndPopularShows?.news : relatedAndPopularShows?.related} />
