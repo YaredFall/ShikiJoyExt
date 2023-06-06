@@ -4,7 +4,7 @@
   grid-column: 1/4;
   display: grid;
   grid-template-columns: var(--main3cols-grid-template-cols);
-  grid-template-rows: min-content minmax(180px, auto);
+  grid-template-rows: min-content auto;
   grid-template-areas:
         ". t ."
         "l m r";
@@ -59,6 +59,7 @@
   font-size: 1.125rem;
   font-weight: normal;
   background-color: var(--secondary);
+  width: 10rem;
 }
 
 .playerIframe {
