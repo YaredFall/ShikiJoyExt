@@ -73,3 +73,7 @@
     color: var(--primary-a75)
   }
 }
+
+[aria-disabled="true"] {
+  pointer-events: none;
+}

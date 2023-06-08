@@ -54,10 +54,10 @@ function SuggestionTab({ data }: { data?: Exclude<ReturnType<typeof getNewsOrRel
             <ul>
                 {((data && data.length > 0) ? data : [...Array(5)]).map((e, i) =>
                     <li key={i}>
-                        <Link to={e?.url}>
+                        <Link to={e?.url} aria-disabled={!e}>
                             <Picture className={styles.poster} src={e?.poster} />
                             <div className={styles.titles}>
-                                {e?.titles.map((t: string) => <LoadableText key={t} placeholderLength={20} children={t} />)}
+                                {(e?.titles || [""]).map((t: string) => <LoadableText key={t} placeholderLength={20} children={t} />)}
                             </div>
                         </Link>
                     </li>
