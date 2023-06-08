@@ -122,6 +122,7 @@ const studioNames: { short: string, full: string }[] = [
     { short: "TPDB", full: "TheProverbialDustBiter" },
     { short: "UO", full: "Ушастая Озвучка" },
     { short: "YSS", full: "YakuSub Studio" },
+    { short: "YS", full: "YakuSub" },
     { short: "PV", full: "Трейлеры" },
     { short: "NF", full: "Netflix" },
     { short: "CR", full: "Crunchyroll" }
