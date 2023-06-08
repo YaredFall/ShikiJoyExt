@@ -10,6 +10,7 @@ import { useAnimeJoyAnimePageQuery } from "../../Api/useAnimeJoyAnimePageQuery";
 import { useShikiJoyAnimeSearch } from "../../Api/useShikiJoyAnimeSearch";
 import { getShikimoriID } from "../../Utils/scraping";
 import { humanizeShikimoriDate } from "../../Utils/misc";
+import AnimeUserRate from "./AnimeUserRate";
 
 //@ts-ignore
 const shikimoriLogoExt = chrome.runtime?.getURL("bundled/images/shikimori_logo.png");
@@ -72,40 +73,50 @@ const AnimeDescription: FC<AnimeDescriptionProps> = () => {
                     : "Возникла ошибка, попробуйте позже!"}
                 </p>
                 :
-                <div className={styles.posterAndDetails}>
-                    <div className={styles.poster}>
-                        <Picture className={styles.picture} src={data ? ApiLinks.get("shikimori") + data.image.original : undefined} />
-                        {data && <div className={styles.score} children={"★ " + data.score} />}
-                    </div>
-                    {data ?
-                        <div className={styles.details}>
-                            <div className={styles.kindStatusAndRating}>
-                                <div className={styles.kind} children={shikimoriKindMap.get(data.kind)} />
-                                <DotSplitter />
-                                <div className={styles.status} children={shikimoriStatusMap.get(data.status)} />
-                                <DotSplitter />
-                                <div className={styles.ageRating}
-                                     title={shikimoriAgeRatingMap.get(data.rating)!.explained}
-                                     children={shikimoriAgeRatingMap.get(data.rating)!.short}
-                                />
-                            </div>
-                            {data.aired_on ? <div children={(data.status === "ongoing" || data.released_on
-                                ? "С "
-                                : "") + humanizeShikimoriDate(data.aired_on)}
-                            /> : ""}
-                            {data.released_on ? <div children={`по ${humanizeShikimoriDate(data.released_on)}`}
-                            /> : ""}
-                            <div className={styles.episodesAndDuration}>
-                                {`${plural(data.episodes || data.episodes_aired, '', '%d эпизода по', '%d эпизодов по')} ${
-                                    plural(data.duration, '%d минуте', '%d минуты', '%d мин.')}`}
-                            </div>
-                            <div className={styles.genres}>{data?.genres.map(
-                                (g, i) => (<div className={styles.genre} children={`${g.russian}`} key={i} />))}</div>
-
+                <>
+                    <div className={styles.posterAndDetails}>
+                        <div className={styles.poster}>
+                            <Picture className={styles.picture} src={data ? ApiLinks.get("shikimori") + data.image.original : undefined} />
+                            {data && <div className={styles.score} children={"★ " + data.score} />}
                         </div>
-                        : <DescriptionSkeleton />
-                    }
-                </div>
+                        {data ?
+                            <>
+                                <div className={styles.details}>
+                                    <div className={styles.kindStatusAndRating}>
+                                        <div className={styles.kind} children={shikimoriKindMap.get(data.kind)} />
+                                        <DotSplitter />
+                                        <div className={styles.status} children={shikimoriStatusMap.get(data.status)} />
+                                        <DotSplitter />
+                                        <div className={styles.ageRating}
+                                             title={shikimoriAgeRatingMap.get(data.rating)!.explained}
+                                             children={shikimoriAgeRatingMap.get(data.rating)!.short}
+                                        />
+                                    </div>
+                                    {data.aired_on ? <div children={(data.status === "ongoing" || data.released_on
+                                        ? "С "
+                                        : "") + humanizeShikimoriDate(data.aired_on)}
+                                    /> : ""}
+                                    {data.released_on ? <div children={`по ${humanizeShikimoriDate(data.released_on)}`}
+                                    /> : ""}
+                                    <div className={styles.episodesAndDuration}>
+                                        {`${plural(data.episodes || data.episodes_aired, '', '%d эпизода по', '%d эпизодов по')} ${
+                                            plural(data.duration, '%d минуте', '%d минуты', '%d мин.')}`}
+                                    </div>
+                                    <div className={styles.studios}>
+                                        <span>{data.studios.length > 1 ? "Студии: " : "Студия - "}</span>
+                                            {data.studios.map((s, i) => 
+                                                (<span key={i} children={s.name + (data.studios.at(i)?.name !== data.studios.at(-1)?.name ? ", " : "")} />))}
+                                    </div>
+                                    <div className={styles.genres}>
+                                        {data.genres.map((g, i) => (<div className={styles.genre} children={`${g.russian}`} key={i} />))}
+                                    </div>
+                                </div>
+                            </>
+                            : <DescriptionSkeleton />
+                        }
+                    </div>
+                    <AnimeUserRate />
+                </>
             }
         </section>
     );
