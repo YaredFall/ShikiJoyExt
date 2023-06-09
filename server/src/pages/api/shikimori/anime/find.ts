@@ -2,6 +2,7 @@ import { cacheData, getCachedData, NextApiRequestWithCache } from '@/utils/cachi
 import type { NextApiResponse } from 'next'
 import { fetchShikimoriAPI } from '@/shikimori_cfg'
 import withCache from '@/middleware/withCache';
+import { getCookie } from "cookies-next";
 
 const animeDataCacheKeyBase = '/api/shikimori/anime/'; //prepend to keys
 const charactersKey = '/characters'; //append to keys
@@ -14,6 +15,8 @@ async function handler(
     if ((!name && !id )|| Array.isArray(name) || Array.isArray(id)) {
         return res.status(400).send("<h1>Bad request! Enter 'name' or 'id' param!</h1>")
     }
+
+    const accessToken = getCookie('shikimori_at', { req, res }) as string | undefined | null;
 
     try {
         let shikiID = id;
@@ -30,10 +33,14 @@ async function handler(
         }
 
         const getCoreData = async () => {
-            let coreData = getCachedData(animeDataCacheKeyBase + shikiID);
+            let coreData = getCachedData(animeDataCacheKeyBase + shikiID + accessToken);
             if (!coreData) {
-                coreData = await fetchShikimoriAPI('/animes/' + shikiID);
-                cacheData(animeDataCacheKeyBase + shikiID, coreData);
+                coreData = await fetchShikimoriAPI('/animes/' + shikiID, {
+                    headers: {
+                        Authorization: accessToken || undefined
+                    }
+                });
+                cacheData(animeDataCacheKeyBase + shikiID + accessToken, coreData);
             }
             return coreData;
         }
