@@ -10,6 +10,9 @@
     "build": "npm run build --prefix react",
     "deploy": "npm run deploy --prefix server",
     "preview": "npm run preview --prefix react",
-    "install": "conc --names \"SERVER,CLIENT\" -c \"blue,yellow\" \"cd server && npm i\" \"cd react && npm i\""
+    "install": "npm install && cd react && npm install && cd ../server && npm install"
+  },
+  "devDependencies": {
+    "run-script-os": "^1.1.6"
   }
 }

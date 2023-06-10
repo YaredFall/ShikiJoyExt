@@ -12,8 +12,7 @@ Chrome extension that replaces [animejoy.ru](https://animejoy.ru) website pages 
 > **[releases](https://github.com/YaredFall/ShikiJoyExt/releases)**
 > section.
 
-Run `npm run install` 
-**([concurrently](https://github.com/open-cli-tools/concurrently) is required)** 
+Run `npm run install`
 to install dependencies. 
 
 Then you can run 
