@@ -5,7 +5,7 @@ import { extractLocalStorageData } from "../Utils/legacyLocalStorageParse";
 export const useAnimeJoyLegacyStorage = (animeData: AnimeJoyData) => {
 
     const setEpisodeAsWatched = useCallback((studioId: number, playerId: number, episodeId: number): boolean => {
-        const file: string = animeData.studios[studioId].players[playerId].files[episodeId].file;
+        const file = animeData.studios ? animeData.studios[studioId].players[playerId].files[episodeId].file : undefined;
         if (file) {
             localStorage.setItem(`playlists-${animeData.id}-playlist-${file}`, "1");
             watchedEpisodes.add(episodeId);
@@ -20,7 +20,7 @@ export const useAnimeJoyLegacyStorage = (animeData: AnimeJoyData) => {
      * @description NOTE: removes ALL localStorage records of given episode
      */
     const removeEpisodeFromWatched = useCallback((episodeID: number) => {
-        animeData.studios.forEach(s => {
+        animeData.studios?.forEach(s => {
             s.players.forEach(p => {
                 const file: string = p.files[episodeID].file;
                 if (file) {

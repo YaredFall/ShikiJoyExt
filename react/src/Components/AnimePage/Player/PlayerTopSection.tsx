@@ -18,13 +18,13 @@ const PlayerTopSection: FC<PlayerTopSectionProps> = () => {
         currentPlayer
     } = useContext(PlayerContext);
 
-    const [studioName, studioEpisodesCount] = splitTitleOrStudioAndEpisodeCount(currentStudio.name);
+    const [studioName, studioEpisodesCount] = splitTitleOrStudioAndEpisodeCount(currentStudio?.name);
 
     return (
         <Section className={styles.topSection}>
             <PlayerLabel />
             {
-                animejoyData.studios.length > 1 &&
+                animejoyData.studios?.length! > 1 &&
                 <div className={styles.currentStudioLabel}>
                     <span title={fullStudioName(studioName)}>{fullStudioName(studioName)}</span>
                     {studioEpisodesCount &&
@@ -32,7 +32,7 @@ const PlayerTopSection: FC<PlayerTopSectionProps> = () => {
                     }
                 </div>
             }
-            {currentStudio.players.length === 1 && currentPlayer.name === undefined ? null :
+            {currentStudio?.players.length === 1 && currentPlayer?.name === undefined ? null :
              <PlayerSelect />
             }
         </Section>

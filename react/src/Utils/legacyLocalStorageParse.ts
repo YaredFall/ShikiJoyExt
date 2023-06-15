@@ -12,7 +12,7 @@ export function extractLocalStorageData(animeData: AnimeJoyData) {
         }>
     }>()
 
-    animeData.studios.forEach((s, sID) => {
+    animeData.studios?.forEach((s, sID) => {
         s.players.forEach((p, pID) => {
             p.files.forEach((f, i) => {
                 if (localStorage.getItem(`playlists-${animeData.id}-playlist-${f.file}`) === "1") {

@@ -3,6 +3,8 @@ import { extractLocalStorageData } from "../Utils/legacyLocalStorageParse";
 import { AnimeJoyData } from "../types";
 
 export const tryAddAnime = async (animejoyData: AnimeJoyData) => {
+    if (!animejoyData.studios) return;
+    
     let anime = await db.anime.where({ animejoyID: animejoyData.id }).first();
     if (!anime) {
         const { watchedEpisodes, watchedEpisodesDetails } = extractLocalStorageData(animejoyData)

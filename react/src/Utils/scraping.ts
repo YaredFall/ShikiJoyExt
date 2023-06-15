@@ -16,6 +16,8 @@ export function getStudiosPlayersAndFiles(playlistsHTML: Element) {
     let playlistCategoriesItemsHTML = playlistCategoriesHTML.map(c => c.querySelectorAll("ul li"));
 
     const filesHTML = Array.from(playlistsHTML.querySelectorAll(".playlists-player .playlists-videos .playlists-items ul li"));
+    
+    if (filesHTML.length === 0) return undefined;
 
     type Category = {
         label: string,
@@ -110,7 +112,7 @@ export function getStudiosPlayersAndFiles(playlistsHTML: Element) {
 
 
     console.log({ studiosPlayersAndFiles });
-
+    
     return studiosPlayersAndFiles;
 }
 

@@ -1,8 +1,5 @@
 import React, { FC, RefObject, useEffect, useState } from 'react';
 import styles from "./Player.module.scss";
-import { isSinglePagePlayer } from "../../../Utils/misc";
-import { PlayerData } from "../../../types";
-import Player from "./Player";
 
 type PlayerMiddleSectionProps = {
     iframeRef: RefObject<HTMLIFrameElement>

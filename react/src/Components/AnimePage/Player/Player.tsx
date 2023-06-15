@@ -23,8 +23,8 @@ type PlayerContextProps = {
     watchedEpisodes: Anime["watchedEpisodes"],
     currentStudioId: number,
     currentPlayerId: number,
-    currentStudio: AnimeJoyData["studios"][number],
-    currentPlayer: AnimeJoyData["studios"][number]["players"][number],
+    currentStudio: Exclude<AnimeJoyData["studios"], undefined>[number] | undefined,
+    currentPlayer: Exclude<AnimeJoyData["studios"], undefined>[number]["players"][number] | undefined,
     currentEpisodeId: number,
     setCurrentEpisodeId: React.Dispatch<React.SetStateAction<number>>,
     singlePageEpisodeID: number | undefined,
@@ -51,8 +51,8 @@ const Player: FC<PlayerProps> = memo(({ animejoyData, animeRecord }) => {
     const currentStudioId = animeRecord.lastStudio;
     const currentPlayerId = animeRecord.lastPlayer;
 
-    const currentStudio = animejoyData.studios[currentStudioId] || animejoyData.studios[0];
-    const currentPlayer = currentStudio.players[currentPlayerId] || currentStudio.players[0];
+    const currentStudio = animejoyData.studios ? animejoyData.studios[currentStudioId] || animejoyData.studios[0] : undefined;
+    const currentPlayer = currentStudio ? currentStudio.players[currentPlayerId] || currentStudio.players[0] : undefined;
 
     const [currentEpisodeId, setCurrentEpisodeId] = useState(0);
     console.log({ currentStudioId, currentPlayerId, currentEpisodeId, animejoyData });
@@ -66,7 +66,7 @@ const Player: FC<PlayerProps> = memo(({ animejoyData, animeRecord }) => {
             }
             if (msg.currentEpisodeID !== undefined) {
                 setSinglePageEpisodeID(msg.currentEpisodeID);
-                if (currentPlayer.files.length === 1) {
+                if (currentPlayer?.files.length === 1) {
                     changeEpisodeId(msg.currentEpisodeID);
                 }
             }
@@ -85,11 +85,11 @@ const Player: FC<PlayerProps> = memo(({ animejoyData, animeRecord }) => {
 
     useEffect(() => {
         let availableEps;
-        if ((isSinglePagePlayer(currentPlayer.name) || isSinglePagePlayer(currentPlayer.files[0].label))
-            && singlePageEpisodesAvailable && currentPlayer.files.length === 1) {
+        if ((isSinglePagePlayer(currentPlayer?.name) || isSinglePagePlayer(currentPlayer?.files[0].label))
+            && singlePageEpisodesAvailable && currentPlayer?.files.length === 1) {
             availableEps = singlePageEpisodesAvailable;
-        } else if (!isSinglePagePlayer(currentPlayer.name) || currentPlayer.files.length > 1 || !singlePageEpisodesAvailable) {
-            availableEps = currentPlayer.files.length;
+        } else if (!isSinglePagePlayer(currentPlayer?.name) || currentPlayer?.files?.length! > 1 || !singlePageEpisodesAvailable) {
+            availableEps = currentPlayer?.files.length;
         }
         console.log({ availableEps, currentEpisodeId, singlePageEpisodesAvailable });
         if (availableEps) {
@@ -119,12 +119,12 @@ const Player: FC<PlayerProps> = memo(({ animejoyData, animeRecord }) => {
             newId = currentEpisodeId - 1;
         }
 
-        if ((isSinglePagePlayer(currentPlayer.name) || isSinglePagePlayer(currentPlayer.files[0].label))
-            && currentPlayer.files.length === 1 && singlePageEpisodesAvailable && singlePageEpisodeID !== undefined) {
+        if ((isSinglePagePlayer(currentPlayer?.name) || isSinglePagePlayer(currentPlayer?.files[0].label))
+            && currentPlayer?.files.length === 1 && singlePageEpisodesAvailable && singlePageEpisodeID !== undefined) {
             return newId >= 0 && newId < singlePageEpisodesAvailable;
         }
 
-        return (currentPlayer.files[+newId] !== undefined);
+        return (currentPlayer?.files[+newId] !== undefined);
     };
 
 
@@ -137,17 +137,19 @@ const Player: FC<PlayerProps> = memo(({ animejoyData, animeRecord }) => {
 
 
     const source = useMemo(() => {
-        if (isSinglePagePlayer(currentPlayer.name) || isSinglePagePlayer(currentPlayer.files[0].label)) {
-            if (currentPlayer.files.length === 1) {
+        if (isSinglePagePlayer(currentPlayer?.name) || isSinglePagePlayer(currentPlayer?.files[0].label)) {
+            if (currentPlayer?.files.length === 1) {
                 const file = currentPlayer.files[0].file;
                 return file + (file.includes('?') ? "&" : "?") + `episode=${animeRecord.lastEpisode + 1}`;
             }
-            return currentPlayer.files[currentEpisodeId] ? currentPlayer.files[currentEpisodeId].file : currentPlayer.files.at(-1)!.file;
+            return currentPlayer?.files[currentEpisodeId] ? currentPlayer.files[currentEpisodeId].file : (currentPlayer?.files.at(-1)!.file || "");
         } else {
-            return currentPlayer.files[currentEpisodeId] ? currentPlayer.files[currentEpisodeId].file : "";
+            return currentPlayer?.files[currentEpisodeId] ? currentPlayer.files[currentEpisodeId].file : "";
         }
     }, [currentStudioId, currentPlayerId, animejoyData, currentEpisodeId, animeRecord?.lastEpisode]);
 
+    if (!animejoyData.studios) return <section className={styles.player}><div className={styles.middleSection}>Видеоисточник отсутсвует</div></section>;
+    
     return (
         <PlayerContext.Provider value={{
             animeRecord,

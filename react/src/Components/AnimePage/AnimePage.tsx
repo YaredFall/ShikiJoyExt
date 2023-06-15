@@ -28,13 +28,13 @@ const MainElement: FC = memo(({}) => {
     const { isLoading: isLoadingPage, isFetching: isFetchingPage, data: pageDocument } = useAnimeJoyAnimePageQuery(location.pathname);
 
     const animejoyData: AnimeJoyData | undefined = useMemo(() => {
-        return (animeID && studioData && pageDocument) ? {
+        return (animeID && pageDocument) ? {
             id: animeID,
             titles: getShowTitle(pageDocument)!,
             franchise: getFranchise(pageDocument),
             studios: studioData
         } : undefined;
-    }, [animeID && studioData && pageDocument]);
+    }, [animeID && pageDocument]);
 
     useEffect(() => {
         if (animejoyData) {
@@ -48,7 +48,7 @@ const MainElement: FC = memo(({}) => {
 
     console.log({ animeRecord, animejoyData });
 
-    if (animeRecord && animejoyData) {
+    if (animeRecord && animejoyData && animejoyData.studios) {
         let resetStudioId = false;
         let resetPlayerId = false;
         if (!animejoyData.studios[animeRecord.lastStudio]?.players[animeRecord.lastPlayer]) {
@@ -64,26 +64,24 @@ const MainElement: FC = memo(({}) => {
         }
     }
 
-    if ((!isLoadingStudios && !studioData) || (!isLoadingPage && !pageDocument)) {
+    if ((!isLoadingPage && !pageDocument)) {
         return (
             <div><h1>Data was not found or some error occurred!</h1></div>
         );
     }
-    if (isLoadingPage || isLoadingStudios || isFetchingPage || isFetchingStudios || !animeRecord || !animejoyData) {
-        return (
-            <div className={styles.animePage}>
-                <AnimeHeader titles={undefined} />
-                <PlayerSkeleton />
-                <Characters />
-            </div>
-        );
-    }
+    
+    const isLoading = isLoadingPage || isLoadingStudios || isFetchingPage || isFetchingStudios || !animeRecord || !animejoyData;
+    console.log({ isLoading })
 
     return (
         <div className={styles.animePage}>
-            <AnimeHeader titles={animejoyData.titles} />
-            <Franchise franchise={animejoyData.franchise} />
-            <Player animejoyData={animejoyData} animeRecord={animeRecord} />
+            <AnimeHeader titles={animejoyData?.titles} />
+            {isLoading || 
+                <>
+                    <Franchise franchise={animejoyData.franchise} />
+                    <Player animejoyData={animejoyData} animeRecord={animeRecord} />
+                </>
+            }
             <Characters />
         </div>
     );

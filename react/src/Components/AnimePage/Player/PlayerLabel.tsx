@@ -26,11 +26,11 @@ const PlayerLabel: FC<PlayerLabelProps> = () => {
     } = useContext(PlayerContext);
 
     const episodeLabel = () => {
-        if (isSinglePagePlayer(currentPlayer.name) || isSinglePagePlayer(currentPlayer.files[0].label)) {
-            const season = currentPlayer.files.length > 1 ? `${currentEpisodeId + 1} Сезон  ` : "";
+        if (isSinglePagePlayer(currentPlayer?.name) || isSinglePagePlayer(currentPlayer?.files[0].label)) {
+            const season = currentPlayer?.files?.length! > 1 ? `${currentEpisodeId + 1} Сезон  ` : "";
             return singlePageEpisodeID !== undefined ? (season || `${currentEpisodeId + 1} Серия`) : `${animeRecord.lastEpisode + 1} Серия`;
         } else {
-            return currentPlayer.files[currentEpisodeId]?.label;
+            return currentPlayer?.files[currentEpisodeId]?.label;
         }
     };
 

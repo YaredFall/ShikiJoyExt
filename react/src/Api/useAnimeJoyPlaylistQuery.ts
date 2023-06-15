@@ -11,7 +11,7 @@ type AnimeJoyPlaylistResponse = {
 
 export const useAnimeJoyPlaylistQuery = (animejoyID: string) => {
 
-    return useQuery<StudioData[]>(
+    return useQuery<StudioData[] | undefined>(
         ['animejoy', 'playlist', animejoyID],
         () =>
             ky((import.meta.env.DEV ? ApiLinks.get("dev/animejoy") : "")

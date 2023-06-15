@@ -36,7 +36,7 @@ export type AnimeJoyData = {
     id: string
     titles: Titles
     franchise?: FranchiseData
-    studios: StudioData[]
+    studios: StudioData[] | undefined
 }
 
 export type ShikiJoyAnimeData = {
