@@ -69,14 +69,15 @@ const MainElement: FC = memo(({}) => {
             <div><h1>Data was not found or some error occurred!</h1></div>
         );
     }
-    
+
     const isLoading = isLoadingPage || isLoadingStudios || isFetchingPage || isFetchingStudios || !animeRecord || !animejoyData;
-    console.log({ isLoading })
 
     return (
         <div className={styles.animePage}>
             <AnimeHeader titles={animejoyData?.titles} />
-            {isLoading || 
+            {isLoading ?
+                <PlayerSkeleton />
+                :
                 <>
                     <Franchise franchise={animejoyData.franchise} />
                     <Player animejoyData={animejoyData} animeRecord={animeRecord} />
