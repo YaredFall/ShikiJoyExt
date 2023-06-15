@@ -34,7 +34,7 @@ const MainElement: FC = memo(({}) => {
             franchise: getFranchise(pageDocument),
             studios: studioData
         } : undefined;
-    }, [animeID && pageDocument]);
+    }, [animeID && pageDocument && isLoadingStudios]);
 
     useEffect(() => {
         if (animejoyData) {
