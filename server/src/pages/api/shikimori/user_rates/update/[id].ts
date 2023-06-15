@@ -1,20 +1,21 @@
-import type { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse } from 'next';
 import { getCookie } from "cookies-next";
 import { fetchShikimoriAPI } from "@/shikimori_cfg";
 import cache from "memory-cache";
+import { getCachedData } from "@/utils/caching";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
     const { id } = req.query;
     if (!id || Array.isArray(id)) {
-        return res.status(400).send("<h1>Bad request! Enter 'id' param!</h1>")
+        return res.status(400).send("<h1>Bad request! Enter 'id' param!</h1>");
     }
 
     if (req.method === 'OPTIONS') {
-        res.status(200).end()
-        return
+        res.status(200).end();
+        return;
     } else if (req.method !== 'PATCH') {
-        res.status(403).end()
+        res.status(403).end();
     }
 
     const accessToken = getCookie('shikimori_at', { req, res }) as string | undefined | null;
@@ -24,7 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     try {
-        const response = await fetchShikimoriAPI<{target_id: number}>(`/v2/user_rates/${id}`, {
+        const response = await fetchShikimoriAPI<{ target_id: number }>(`/v2/user_rates/${id}`, {
             method: "PATCH",
             headers: {
                 Authorization: accessToken as string
@@ -35,12 +36,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     target_type: "Anime"
                 }
             }
-        })
+        });
         const cacheKey = '/api/shikimori/anime/' + response.target_id + accessToken;
-        cache.put(cacheKey, { ...cache.get(cacheKey), user_rate: response});
-        res.status(201).send(response)
+        const cachedData = getCachedData(cacheKey);
+        cache.put(cacheKey, cachedData ? { ...cachedData, user_rate: response } : null);
+        res.status(201).send(response);
     } catch (err) {
         console.error(err);
-        return res.status(500).send("Unhandled error")
+        return res.status(500).send("Unhandled error");
     }
 }

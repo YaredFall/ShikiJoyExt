@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { getCookie } from "cookies-next";
 import { fetchShikimoriAPI } from "@/shikimori_cfg";
 import cache from "memory-cache";
+import { getCachedData } from "../../../../utils/caching";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
@@ -32,7 +33,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
         })
         const cacheKey = '/api/shikimori/anime/' + response.target_id + accessToken;
-        cache.put(cacheKey, { ...cache.get(cacheKey), user_rate: response});
+        const cachedData = getCachedData(cacheKey);
+        cache.put(cacheKey, cachedData ? { ...cachedData, user_rate: response } : null);
         res.status(200).send(response)
     } catch (err) {
         console.error(err);
