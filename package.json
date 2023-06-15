@@ -10,7 +10,7 @@
     "build": "npm run build --prefix react",
     "deploy": "npm run deploy --prefix server",
     "preview": "npm run preview --prefix react",
-    "install": "npm install && cd react && npm install && cd ../server && npm install"
+    "install": "cd react && npm install && cd ../server && npm install"
   },
   "devDependencies": {
     "run-script-os": "^1.1.6"
