@@ -12,6 +12,7 @@ import CategoryPage from "./CategoryPage/CategoryPage";
 import NotFound from "../Pages/NotFound";
 import ErrorPage from "../Pages/ErrorPage";
 import { useBlurOnEscapeKey } from "../Hooks/useBlurOnEscapeKey";
+import SearchPage from "./SearchPage/SearchPage";
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -54,6 +55,7 @@ const router = createBrowserRouter(createRoutesFromElements(
         <Route path={appRoutes.authCallback} element={<AuthCallbackPage />} />
         <Route path={"/"} element={<><SideNav /><Outlet /></>}>
             <Route index element={<CategoryPage />} errorElement={<ErrorPage />} />
+            <Route path="search/" element={<SearchPage />} errorElement={<ErrorPage />} />
             <Route path={"page/:id/"} loader={shouldEndWithSlashAndHaveNaturalID} errorElement={<ErrorPage />} element={<CategoryPage />} />
             {[...Categories.values()].filter(c => c !== "").map(c =>
                 <Route key={c} path={c + '/'} errorElement={<ErrorPage />}>

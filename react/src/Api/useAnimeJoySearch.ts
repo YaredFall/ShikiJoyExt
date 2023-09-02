@@ -5,7 +5,7 @@ import { getStoryList } from "../Utils/scraping";
 
 const parser = new DOMParser();
 
-export function useAnimeJoySearch(searchTerm: string) {
+export function useAnimeJoySearch(searchTerm: string | undefined) {
     return useQuery(
         ["quickSearch", searchTerm],
         () => {

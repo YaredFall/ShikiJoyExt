@@ -13,7 +13,7 @@ type UserAvatarProps = {
 
 const ProfileButton: FC<UserAvatarProps> = ({ shikimoriUser }) => {
 
-    const { data: page } = useAnimeJoyAnimePageQuery(window.location.pathname);
+    const { data: page } = useAnimeJoyAnimePageQuery("/");
     const animejoyUser = getAnimejoyUserFromHeader(page);
 
     const [isDialogOpen, setIsDialogOpen] = useState(false);
