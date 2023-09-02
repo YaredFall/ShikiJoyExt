@@ -7,9 +7,10 @@ import { splitTitleOrStudioAndEpisodeCount } from "../../Utils/scraping";
 import { SlArrowDown } from "react-icons/sl";
 import { Menu, Transition } from '@headlessui/react';
 import { Link } from "react-router-dom";
+import { StoryData } from "../../types";
 
 type ResultsProps = {
-    data: Array<{ link: string | undefined, ru: string | undefined, romanji: string | undefined, posterSrc: string | undefined }> | undefined
+    data: StoryData[] | undefined
     isLoading: boolean
     isError: boolean
     isNothingFound: boolean
@@ -33,14 +34,14 @@ const Results: FC<ResultsProps> = memo(({ data, isLoading, isError, isNothingFou
     return (
         <>
             {data.map(e => {
-                const [ruTitle, episodes] = splitTitleOrStudioAndEpisodeCount(e.ru);
+                const [ruTitle, episodes] = splitTitleOrStudioAndEpisodeCount(e.title.ru);
                 return (
                     <Menu.Item as={"article"} key={ruTitle} className={styles.resultItem}>
-                        <Link to={e.link || ""} onClick={onLinkClick}><img className={styles.poster} src={e.posterSrc} alt={""} /></Link>
+                        <Link to={e.url || ""} onClick={onLinkClick}><img className={styles.poster} src={e.poster} alt={""} /></Link>
                         <h4 className={styles.titles}>
-                            <Link to={e.link || ""} onClick={onLinkClick}><p className={styles.ruTitle}>{ruTitle}</p></Link>
+                            <Link to={e.url || ""} onClick={onLinkClick}><p className={styles.ruTitle}>{ruTitle}</p></Link>
                             {episodes && <p className={"nowrap"}>{episodes}</p>}
-                            <p className={styles.romanjiTitle}>{e.romanji}</p>
+                            <p className={styles.romanjiTitle}>{e.title.romanji}</p>
                         </h4>
                     </Menu.Item>
                 );
