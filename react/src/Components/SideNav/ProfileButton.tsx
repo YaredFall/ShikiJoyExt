@@ -1,11 +1,11 @@
-import React, { FC, useState } from 'react';
-import styles from "./SideNav.module.scss";
+import { FC, useState } from 'react';
 import { IoIosLogIn } from "react-icons/all";
+import { useAnimeJoyAnimePageQuery } from "../../Api/useAnimeJoyAnimePageQuery";
 import { useGetShikimoriUser } from "../../Api/useGetShikimoriUser";
 import { getAnimejoyUserFromHeader } from "../../Utils/scraping";
-import { useAnimeJoyAnimePageQuery } from "../../Api/useAnimeJoyAnimePageQuery";
 import Picture from "../Common/Picture";
 import ProfileMenu from "./ProfileMenu";
+import styles from "./SideNav.module.scss";
 
 type UserAvatarProps = {
     shikimoriUser: ReturnType<typeof useGetShikimoriUser>["data"]
@@ -28,7 +28,7 @@ const ProfileButton: FC<UserAvatarProps> = ({ shikimoriUser }) => {
 
     return (
         <>
-            <button className={`${styles.navItem} ${styles.bottom}`}
+            <button className={styles.navItem}
                     onClick={openModal}
                     data-label={shikimoriUser || animejoyUser ? "Профиль" : "Вход"}
             >
