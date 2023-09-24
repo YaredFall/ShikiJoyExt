@@ -185,6 +185,10 @@ export function getStoryList(page: Document | undefined): StoryData[] | undefine
 
     const stories = page.querySelectorAll(".block.story.shortstory");
 
+    if (!stories || stories.length === 0) {
+        return undefined;
+    }
+
     return [...stories].map(story => ({
         title: getShowTitle(story)!,
         url: story.querySelector(".ntitle a")!.getAttribute("href")!.replace("https://animejoy.ru", ""),
