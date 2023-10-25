@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build && npm run copy-builded",
-    "copy-builded": "run-script-os",
+    "copy-builded": "RUN_OS_WINBASH_IS_LINUX=true run-script-os",
     "copy-builded:win32": "xcopy dist\\content.* ..\\extension\\bundled /i /Y & xcopy dist\\images ..\\extension\\bundled\\images /i /Y",
     "copy-builded:nix": "mkdir -p ../extension/bundled && cp -R dist/content.* ../extension/bundled & mkdir -p ../extension/bundled/images && cp -R dist/images/. ../extension/bundled/images/",
     "preview": "vite preview"
