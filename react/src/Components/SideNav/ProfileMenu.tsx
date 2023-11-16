@@ -1,7 +1,8 @@
 import React, { FC } from 'react';
 import styles from "./SideNav.module.scss";
 import { Dialog } from "@headlessui/react";
-import { IoIosLogIn, TfiClose } from "react-icons/all";
+import { IoIosLogIn } from "react-icons/io";
+import { TfiClose } from "react-icons/tfi";
 import { Form, Link } from "react-router-dom";
 import { ShikimoriUser } from "../../types";
 import { getAnimejoyUserFromHeader } from "../../Utils/scraping";

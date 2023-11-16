@@ -1,6 +1,6 @@
 import { FC, Fragment, memo, useRef, useState } from 'react';
 import styles from "./Searchbar.module.scss";
-import { IoSearchOutline } from "react-icons/all";
+import { IoSearchOutline } from "react-icons/io5";
 import { useAnimeJoySearch } from "../../Api/useAnimeJoySearch";
 import { useDebouncedValue } from "../../Hooks/useDebouncedValue";
 import { splitTitleOrStudioAndEpisodeCount } from "../../Utils/scraping";

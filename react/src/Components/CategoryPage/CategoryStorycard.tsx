@@ -6,7 +6,8 @@ import { Link } from "react-router-dom";
 import LoadableText from "../Common/LoadableText";
 import DotSplitter from "../Common/DotSplitter";
 import { Categories } from "../../Utils/appRoutes";
-import { IoMdArrowDropright, MdOutlineModeComment } from "react-icons/all";
+import { IoMdArrowDropright } from "react-icons/io";
+import { MdOutlineModeComment} from "react-icons/md"
 
 const LINES_TOTAL = 17;
 

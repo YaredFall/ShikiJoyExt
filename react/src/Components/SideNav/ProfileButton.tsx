@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import { IoIosLogIn } from "react-icons/all";
+import { IoIosLogIn } from "react-icons/io";
 import { useAnimeJoyAnimePageQuery } from "../../Api/useAnimeJoyAnimePageQuery";
 import { useGetShikimoriUser } from "../../Api/useGetShikimoriUser";
 import { getAnimejoyUserFromHeader } from "../../Utils/scraping";
