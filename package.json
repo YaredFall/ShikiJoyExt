@@ -13,6 +13,7 @@
     "install": "cd react && npm install && cd ../server && npm install"
   },
   "devDependencies": {
+    "concurrently": "^8.2.2",
     "run-script-os": "^1.1.6"
   }
 }
