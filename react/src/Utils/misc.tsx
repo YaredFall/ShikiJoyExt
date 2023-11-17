@@ -1,4 +1,5 @@
 import { getDocumentTitle } from "./scraping";
+import { ShikimoriUserRate } from "../types";
 
 const singlePagePlayers = ["Alloha", "Kodik"];
 
@@ -69,4 +70,15 @@ export function humanizeShikimoriDate(date: string) {
         month: "long",
         day: "numeric"
     }).format(new Date(date))
+}
+
+export function shikimoriUserRateTranslate(status: ShikimoriUserRate["status"]) {
+    switch (status) {
+        case "completed": return "Посмотрено";
+        case "planned": return "Запланировано";
+        case "dropped": return "Брошено";
+        case "on_hold": return "Отложено";
+        case "rewatching": return "Пересматриваю";
+        case "watching": return "Смотрю";
+    }
 }

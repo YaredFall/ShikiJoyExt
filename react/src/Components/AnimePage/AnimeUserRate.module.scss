@@ -1,0 +1,176 @@
+.userRate {
+  display: grid;
+  grid-template-columns: 12rem auto;
+  grid-auto-rows: 35px;
+  white-space: nowrap;
+  gap: 0.25rem 0.75rem;
+  margin-right: 1rem;
+}
+
+.toggle {
+  padding: 0.5rem 0.75rem 0.5rem 1rem;
+  background-color: var(--secondary);
+  border-radius: var(--roundness);
+  width: 12rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  
+  &:hover {
+    color: var(--primary-a50);
+  }
+  
+  svg {
+    font-size: 16px;
+    transition: rotate 125ms ease-in-out;
+  }
+  
+  &[aria-expanded="true"] {
+    svg {
+      rotate: 45deg;
+    }
+  }
+  
+  .score {
+    padding-right: 0.25rem;
+  }
+}
+
+.watchedEps {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.watchedEpsAndRewatches {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.rewatches {
+  font-size: 0.75em;
+  text-align: center;
+  color: var(--primary-a75)
+}
+
+.popover {
+  position: relative;
+}
+
+.panel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  bottom: 100%;
+  height: 17rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: end;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.825), rgba(0, 0, 0, 0.825) calc(6 * 35px), transparent);
+  padding-block: 0.25rem;
+  border-radius: calc(var(--roundness) - 1px);
+  
+  button {
+    padding: 0.5rem 1rem;
+    align-self: stretch;
+    text-align: start;
+    
+    &:is(:hover, :focus-visible) {
+      color: var(--primary-a50)
+    }
+    
+    &.deleteBtn {
+      color: var(--accent-pink);
+      
+      &:is(:hover, :focus-visible) {
+        color: var(--accent-pink);
+        opacity: 0.5;
+      }
+    }
+  }
+
+  .spinner {
+    height: calc(6 * 35px);
+  }
+}
+
+.scoreStars {
+  display: flex;
+  position: relative;
+  --star-size: 2rem;
+  --gap: 0.25rem;
+  gap: var(--gap);
+  justify-content: center;
+}
+
+.star {
+  clip-path: polygon(50% 2.45%, 61.8% 38.77%, 100% 38.77%, 69.1% 61.23%, 80.9% 97.55%, 50% 75.1%, 19.1% 97.55%, 30.9% 61.23%, 0% 38.77%, 38.2% 38.77%);
+  background-color: var(--primary-a12p5);
+  width: var(--star-size);
+  height: var(--star-size);
+  overflow: hidden;
+  position: relative;
+  
+  &::before, &::after {
+    content: '';
+    width: 50%;
+    height: 100%;
+    position: absolute;
+    background-color: var(--primary-a12p5);
+    transition: background-color 125ms ease-in-out;
+  }
+  &:is(.full, .half)::before, &.full::after{
+    background-color: var(--accent-blue);
+  }
+  
+  &::after {
+    left: 50%;
+  }
+  
+}
+
+.starHoverBoxes {
+  position: absolute;
+  display: flex;
+  left: calc(var(--gap) / -2);
+  right: calc(var(--gap) / -2);
+  justify-content: center;
+  
+  .box {
+    width: calc((var(--star-size) + var(--gap)) / 2);
+    height: var(--star-size);
+  }
+}
+
+.scoreDescription {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes spin {
+  0% {
+    rotate: 0deg;
+  }
+  50% {
+    rotate: 180deg;
+  }
+  100% {
+    rotate: 360deg;
+  }
+}
