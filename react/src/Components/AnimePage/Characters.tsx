@@ -58,7 +58,8 @@ const Characters: FC<CharactersProps> = () => {
 
     const { data: pageDocument } = useAnimeJoyAnimePageQuery(window.location.pathname);
 
-    const { data, error } = useShikiJoyAnimeSearch(getShikimoriID(pageDocument));
+    const shikimoriID = useMemo(() => getShikimoriID(pageDocument), [pageDocument]);
+    const { data, error } = useShikiJoyAnimeSearch(shikimoriID);
 
     const sortedChars = useMemo(() => {
         if (data) {
@@ -70,7 +71,10 @@ const Characters: FC<CharactersProps> = () => {
         }
     }, [data]);
 
-    if (error) return null;
+    if (error) {
+        console.error(error);
+        return null;
+    };
 
     return (
         <Disclosure as={"section"} className={styles.container}>

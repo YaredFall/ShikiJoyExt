@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 import styles from "./AnimeDescription.module.scss";
 import Picture from "../Common/Picture";
 import shikimoriLogo from '/images/shikimori_logo.png';
@@ -49,10 +49,12 @@ const AnimeDescription: FC<AnimeDescriptionProps> = () => {
 
     const { data: pageDocument } = useAnimeJoyAnimePageQuery(window.location.pathname);
 
+    const shikimoriID = useMemo(() => getShikimoriID(pageDocument), [pageDocument])
+
     const {
         error,
         data: searchResult
-    } = useShikiJoyAnimeSearch(getShikimoriID(pageDocument));
+    } = useShikiJoyAnimeSearch(shikimoriID);
 
     const data = searchResult?.coreData;
 

@@ -159,7 +159,7 @@ export function getShikimoriLink(page: Document | undefined) {
 
 export function getShikimoriID(page: Document | undefined) {
     const link = getShikimoriLink(page);
-    console.error("Shikimori link was not found!")
+    if (page && !link) console.error("Shikimori link was not found!");
     return link?.match(/https:\/\/shikimori\.\w+?\/animes\/\D?(?<id>\d*)-.*/mi)?.groups?.id;
 }
 
