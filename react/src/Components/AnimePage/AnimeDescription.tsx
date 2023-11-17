@@ -43,13 +43,17 @@ const shikimoriAgeRatingMap = new Map([
     ["none", { short: "N/A", explained: "Неизвестно" }],
 ]);
 
-type AnimeDescriptionProps = {}
+type AnimeDescriptionProps = {};
 
 const AnimeDescription: FC<AnimeDescriptionProps> = () => {
 
     const { data: pageDocument } = useAnimeJoyAnimePageQuery(window.location.pathname);
 
-    const shikimoriID = useMemo(() => getShikimoriID(pageDocument), [pageDocument])
+    const shikimoriID = useMemo(() => getShikimoriID(pageDocument), [pageDocument]);
+
+    if (import.meta.env.DEV) {
+        return <section className={styles.description}><p className={styles.error}>Shikimori недоступен в DEV сборке!</p></section>;
+    }
 
     const {
         error,
@@ -63,8 +67,8 @@ const AnimeDescription: FC<AnimeDescriptionProps> = () => {
             <header className={styles.header}>
                 <h4>Информация</h4>
                 <a className={styles.shikimoriLink}
-                   href={data ? ApiLinks.get("shikimori") + data.url : undefined}
-                   target={"_blank"}
+                    href={data ? ApiLinks.get("shikimori") + data.url : undefined}
+                    target={"_blank"}
                 >
                     <img className={styles.shikimoriLogo} src={shikimoriLogoExt || shikimoriLogo} alt={"Shikimori"} />
                 </a>
@@ -90,8 +94,8 @@ const AnimeDescription: FC<AnimeDescriptionProps> = () => {
                                         <div className={styles.status} children={shikimoriStatusMap.get(data.status)} />
                                         <DotSplitter />
                                         <div className={styles.ageRating}
-                                             title={shikimoriAgeRatingMap.get(data.rating)!.explained}
-                                             children={shikimoriAgeRatingMap.get(data.rating)!.short}
+                                            title={shikimoriAgeRatingMap.get(data.rating)!.explained}
+                                            children={shikimoriAgeRatingMap.get(data.rating)!.short}
                                         />
                                     </div>
                                     {data.aired_on ? <div children={(data.status === "ongoing" || data.released_on
@@ -101,13 +105,12 @@ const AnimeDescription: FC<AnimeDescriptionProps> = () => {
                                     {data.released_on ? <div children={`по ${humanizeShikimoriDate(data.released_on)}`}
                                     /> : ""}
                                     <div className={styles.episodesAndDuration}>
-                                        {`${plural(data.episodes || data.episodes_aired, '', '%d эпизода по', '%d эпизодов по')} ${
-                                            plural(data.duration, '%d минуте', '%d минуты', '%d мин.')}`}
+                                        {`${plural(data.episodes || data.episodes_aired, '', '%d эпизода по', '%d эпизодов по')} ${plural(data.duration, '%d минуте', '%d минуты', '%d мин.')}`}
                                     </div>
                                     <div className={styles.studios}>
                                         <span>{data.studios.length > 1 ? "Студии: " : "Студия - "}</span>
-                                            {data.studios.map((s, i) => 
-                                                (<span key={i} children={s.name + (data.studios.at(i)?.name !== data.studios.at(-1)?.name ? ", " : "")} />))}
+                                        {data.studios.map((s, i) =>
+                                            (<span key={i} children={s.name + (data.studios.at(i)?.name !== data.studios.at(-1)?.name ? ", " : "")} />))}
                                     </div>
                                     <div className={styles.genres}>
                                         {data.genres.map((g, i) => (<div className={styles.genre} children={`${g.russian}`} key={i} />))}
