@@ -3,6 +3,13 @@
   display: flex;
   overflow: hidden;
   border-radius: var(--roundness);
+  -webkit-perspective: 1000;
+  -webkit-backface-visibility: hidden;
+  -webkit-transform: translate3d(0, 0, 0);
+  -webkit-background-clip: padding-box;
+  outline: none;
+  border: none;
+  text-decoration: none;
 }
 
 .image {
@@ -10,6 +17,14 @@
   height: 100%;
   opacity: 1;
   transition: var(--transition-opacity-fast);
+  border-radius: var(--roundness);
+  -webkit-perspective: 1000;
+  -webkit-backface-visibility: hidden;
+  -webkit-transform: translate3d(0, 0, 0);
+  -webkit-background-clip: padding-box;
+  outline: none;
+  border: none;
+  text-decoration: none;
 }
 
 .loading {

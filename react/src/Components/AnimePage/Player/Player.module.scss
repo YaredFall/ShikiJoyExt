@@ -6,8 +6,8 @@
   grid-template-columns: var(--main3cols-grid-template-cols);
   grid-template-rows: min-content auto;
   grid-template-areas:
-        ". t ."
-        "l m r";
+    ". t ."
+    "l m r";
 }
 
 .topSection {
@@ -26,7 +26,7 @@
   align-items: stretch;
   text-transform: capitalize;
 
-  & > .currentEpWatched {
+  &>.currentEpWatched {
     color: var(--primary-a50);
     display: flex;
     align-items: flex-end;
@@ -34,12 +34,12 @@
     font-size: 0.75rem;
     padding: 0.125rem 0.25rem;
 
-    & > svg {
+    &>svg {
       opacity: 0;
       transition: opacity 100ms ease;
     }
 
-    &:hover > svg {
+    &:hover>svg {
       opacity: 1;
     }
   }
@@ -60,6 +60,10 @@
   font-weight: normal;
   background-color: var(--secondary);
   width: 10rem;
+
+  // & > :global(.select-options) {
+  //   min-height: 500%;
+  // }
 }
 
 .playerIframe {
@@ -75,18 +79,25 @@
   display: flex;
   overflow: hidden;
   border-radius: var(--roundness);
-  background-color: var(--primary-a12p5);
   margin: 1px;
+  height: 100%;
+  width: 100%;
+  place-content: center;
+  place-items: center;
+  font-size: 1.5rem;
+  text-align: center;
 
   &.loading {
     animation: var(--animation-pulse);
+    background-color: var(--primary-a12p5);
   }
 
-  &.loading > iframe {
+  &.loading>iframe {
     opacity: 0;
     pointer-events: none;
   }
-  &.loaded > iframe {
+
+  &.loaded>iframe {
     transition: var(--transition-opacity-fast);
     transition-delay: 100ms;
     opacity: 1;
@@ -134,13 +145,13 @@
     box-shadow: 0 0 0.25rem 0 #ffffff07;
   }
 
-  & > .wrapper {
+  &>.wrapper {
     position: relative;
     display: flex;
     align-items: center;
     outline: none !important;
 
-    &  > .hint {
+    &>.hint {
       opacity: 0;
       transition: opacity 125ms ease 0ms;
       font-size: 0.75rem;
@@ -155,7 +166,7 @@
 }
 
 @media (min-width: 480px) {
-  :is(.rightSection, .leftSection):is(:hover, :focus-visible) > .wrapper > .hint {
+  :is(.rightSection, .leftSection):is(:hover, :focus-visible)>.wrapper>.hint {
     opacity: 1;
     transition-duration: 250ms;
     transition-delay: 1000ms;

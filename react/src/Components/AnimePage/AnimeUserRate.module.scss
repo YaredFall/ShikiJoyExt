@@ -74,7 +74,7 @@
   justify-content: end;
   background: linear-gradient(to top, rgba(0, 0, 0, 0.825), rgba(0, 0, 0, 0.825) calc(6 * 35px), transparent);
   padding-block: 0.25rem;
-  border-radius: calc(var(--roundness) - 1px);
+  border-radius: var(--roundness);
   
   button {
     padding: 0.5rem 1rem;
