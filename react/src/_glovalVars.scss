@@ -1,13 +1,27 @@
 :root {
-  --primary: #ffffff;
-  --primary-a75: rgba(255, 255, 255, 0.75);;
-  --primary-a50: rgba(255, 255, 255, 0.5);
-  --primary-a25: rgba(255, 255, 255, 0.25);
-  --primary-a12p5: rgba(255, 255, 255, 0.125);
-  --secondary: #2F3037;
-  --tertiarty: #26272C;
+  // --primary: #ffffff;
+  // --primary-a75: rgba(255, 255, 255, 0.75);;
+  // --primary-a50: rgba(255, 255, 255, 0.5);
+  // --primary-a25: rgba(255, 255, 255, 0.25);
+  // --primary-a12p5: rgba(255, 255, 255, 0.125);
+  // --secondary: #2F3037;
+  // --tertiary: #26272C;
+  // --accent-pink: #FF7B79;
+  // --accent-blue: #17BEBB;
+
+
+  --primary-rgb: 247, 247, 247;  //#f7f7f7
+  --primary: rgba(var(--primary-rgb), 1);
+  --primary-a75: rgba(var(--primary-rgb), 0.75);
+  --primary-a50: rgba(var(--primary-rgb), 0.50);
+  --primary-a25: rgba(var(--primary-rgb), 0.25);
+  --primary-a12p5: rgba(var(--primary-rgb), 0.125);
+  --secondary: #2a2a2a;
+  --tertiary: #242424;
+  --accent-neutral: #5c5c5c;
   --accent-pink: #FF7B79;
-  --accent-blue: #17BEBB;
+  --accent-blue: #FF7B79;
+
 
 
   --navbar-width: 5.25rem;
