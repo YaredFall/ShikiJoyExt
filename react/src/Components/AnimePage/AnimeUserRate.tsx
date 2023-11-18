@@ -13,6 +13,8 @@ import { useParams } from "react-router-dom";
 import { NewRate, useRateMutation } from '../../Hooks/useShikimoriRateMutation';
 import { PiSpinnerGapLight } from "react-icons/pi";
 import { ShikimoriUserRateStatus } from '../../types';
+import { TbStarFilled } from 'react-icons/tb';
+import clsx from 'clsx';
 
 type AnimeUserRateProps = {};
 
@@ -167,19 +169,14 @@ const AnimeUserRate: FC<AnimeUserRateProps> = () => {
                 </div>
                 {data.user_rate &&
                     <div className={styles.scoreStars}
-                        style={{ "--score": (hoveredScore ?? data.user_rate?.score! - 1) || undefined } as CSSProperties}
+                        style={{ "--score": (hoveredScore ?? data.user_rate?.score!) || 0 } as CSSProperties}
                         onMouseLeave={() => {
                             setHoveredScore(undefined);
                         }}
                     >
-                        {
-                            [...new Array(5)].map((_, i) => (
-                                <div key={i}
-                                    className={`${styles.star} ${((hoveredScore! + 1 || (data.user_rate?.score ?? -1))) / 2 >= i + 1 ?
-                                        styles.full : ((hoveredScore! + 1 || (data.user_rate?.score || -1))) / 2 > i ? styles.half : ""}`}
-                                />
-                            ))
-                        }
+                        <Stars className={styles.starsFront} score={hoveredScore !== undefined ? hoveredScore + 1 : data.user_rate?.score ?? undefined} />
+                        {hoveredScore !== undefined && <Stars className={styles.starsGhost} score={data.user_rate?.score ?? undefined} />}
+                        <Stars className={styles.starsBack} />
                         <div className={styles.starHoverBoxes}>
                             {
                                 USER_RATE_SCORES.map((e, i) => (
@@ -223,4 +220,23 @@ function fixOnClickFocus() {
             document.activeElement.blur();
         }
     });
+}
+
+type StarsProps = {
+    score?: number;
+    className?: string;
+};
+
+function Stars({ className, score }: StarsProps) {
+    return (
+        <div className={className}>
+            {
+                [...new Array(5)].map((_, i) => (
+                    <TbStarFilled key={i}
+                        className={clsx(styles.star, score && score / 2 - i >= 1 && styles.full, score && score / 2 - i === 0.5 && styles.half)}
+                    />
+                ))
+            }
+        </div>
+    );
 }
